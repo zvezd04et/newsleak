@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">exercise_2</string>
+    <string name="app_name">exercise #2</string>
+
+    <string name="description">Anton has been developing information systems based on 1C since 2012.
+        Nowadays, he is lead developer of document management system at Samolet Development.
+        Anton has 11 certificates for standard solutions 1C.</string>
+
+    <string name="email_address" translatable="false">a.petronenko@gmail.com</string>
+    <string name="vk_url" translatable="false">https://vk.com/id1748403</string>
+    <string name="email_subject">Hello, Anton!</string>
+    <string name="warning_empty_message">Please enter your message</string>
+    <string name="error_no_email_app">No Email apps were found.</string>
+    <string name="input_hint">Enter message...</string>
+    <string name="preview_action_email">Send message</string>
+    <string name="position">1c team lead</string>
+    <string name="disclaimer" translatable="false">© 2018 Petronenko</string>
 </resources>

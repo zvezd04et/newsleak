@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/iv_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/photo_height_portrait"
+        android:layout_width="@dimen/photo_width_landscape"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerCrop"
@@ -19,8 +19,7 @@
     <include
         layout="@layout/common_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/iv_photo" />
+        android:layout_height="match_parent"
+        android:layout_toEndOf="@+id/iv_photo" />
 
 </RelativeLayout>
