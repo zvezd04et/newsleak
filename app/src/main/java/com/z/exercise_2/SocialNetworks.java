@@ -25,7 +25,7 @@ public enum SocialNetworks {
         this.url = url;
     }
 
-    @NonNull
+    @Nullable
     public String[] getAppPackages() {
         return appPackages;
     }
