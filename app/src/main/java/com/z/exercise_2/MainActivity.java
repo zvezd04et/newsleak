@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
             final String messageString = messageEdit.getText().toString();
             if (messageString.isEmpty()){
-                Toast.makeText(MainActivity.this, R.string.warning_empty_message, Toast.LENGTH_LONG).show();
+                Snackbar.make(rlBase, R.string.warning_empty_message, Snackbar.LENGTH_SHORT).show();
                 return;
             }
             openEmailApp(messageString);

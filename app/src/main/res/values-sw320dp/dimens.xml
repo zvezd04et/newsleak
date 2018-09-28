@@ -2,7 +2,7 @@
 <resources>
     <dimen name="text_size">14sp</dimen>
     <dimen name="margin_indent">40dp</dimen>
-    <dimen name="logo_height">24dp</dimen>
+    <dimen name="logo_size">24dp</dimen>
     <dimen name="space_size">8dp</dimen>
     <dimen name="space_half_size">4dp</dimen>
     <dimen name="disclaimer_size">4dp</dimen>
