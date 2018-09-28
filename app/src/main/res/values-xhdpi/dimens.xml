@@ -8,5 +8,5 @@
     <dimen name="disclaimer_size">4dp</dimen>
     <dimen name="company_logo_width">40dp</dimen>
     <dimen name="photo_height_portrait">220dp</dimen>
-    <dimen name="photo_width_landscape">240dp</dimen>
+    <dimen name="photo_width_landscape">232dp</dimen>
 </resources>

@@ -10,6 +10,7 @@
     <string name="email_subject">Hello, Anton!</string>
     <string name="warning_empty_message">Please enter your message</string>
     <string name="error_no_email_app">No Email apps were found.</string>
+    <string name="error_no_browser_app">No browser apps were found.</string>
     <string name="input_hint">Enter message...</string>
     <string name="preview_action_email">Send message</string>
     <string name="position">1c team lead</string>

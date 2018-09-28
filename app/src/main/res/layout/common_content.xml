@@ -16,22 +16,14 @@
         android:layout_marginTop="@dimen/space_size"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/iv_company_logo"
-            android:layout_width="@dimen/company_logo_width"
-            android:layout_height="@dimen/logo_height"
-            android:layout_marginStart="@dimen/margin_indent"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/logo"
-            tools:ignore="ContentDescription" />
-
         <TextView
             android:id="@+id/tv_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/space_size"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="@dimen/margin_indent"
             android:layout_weight="1"
+            android:drawableLeft="@drawable/logo"
+            android:drawablePadding="@dimen/space_half_size"
             android:text="@string/position"
             android:textSize="@dimen/text_size" />
 
@@ -48,7 +40,8 @@
         android:layout_marginTop="@dimen/space_half_size"
         android:orientation="vertical">
 
-        <View style="@style/Separator" />
+        <View style="@style/Separator"
+            android:layout_marginStart="@dimen/margin_indent"/>
 
         <TextView
             android:id="@+id/tv_description"
@@ -60,7 +53,8 @@
             android:text="@string/description"
             android:textSize="@dimen/text_size" />
 
-        <View style="@style/Separator" />
+        <View style="@style/Separator"
+            android:layout_marginStart="@dimen/margin_indent"/>
     </LinearLayout>
 
     <LinearLayout
@@ -99,28 +93,39 @@
 
     <LinearLayout
         android:id="@+id/ll_social"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_feedback"
+        android:layout_centerHorizontal="true"
         android:layout_marginEnd="@dimen/space_size"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/iv_logo_vk"
+            android:id="@+id/iv_vk_logo"
             android:layout_width="0dp"
             android:layout_height="@dimen/logo_height"
             android:layout_marginTop="@dimen/space_half_size"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_vk_logo"
             tools:ignore="ContentDescription" />
-    </LinearLayout>
 
-    <!--<TextView-->
-        <!--android:id="@+id/textView2"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:text="TextView" />-->
+        <ImageView
+            android:id="@+id/iv_telegram_logo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/logo_height"
+            android:layout_marginTop="@dimen/space_half_size"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_telegram_logo"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/iv_github_logo"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/logo_height"
+            android:layout_marginTop="@dimen/space_half_size"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/ic_github_logo"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
 
 </RelativeLayout>
