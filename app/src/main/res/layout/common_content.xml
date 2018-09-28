@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_indent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/logo"
             android:drawablePadding="@dimen/space_half_size"
+            android:drawableStart="@drawable/logo"
             android:text="@string/position"
             android:textSize="@dimen/text_size" />
 
@@ -40,8 +40,9 @@
         android:layout_marginTop="@dimen/space_half_size"
         android:orientation="vertical">
 
-        <View style="@style/Separator"
-            android:layout_marginStart="@dimen/margin_indent"/>
+        <View
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/margin_indent" />
 
         <TextView
             android:id="@+id/tv_description"
@@ -53,8 +54,9 @@
             android:text="@string/description"
             android:textSize="@dimen/text_size" />
 
-        <View style="@style/Separator"
-            android:layout_marginStart="@dimen/margin_indent"/>
+        <View
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/margin_indent" />
     </LinearLayout>
 
     <LinearLayout

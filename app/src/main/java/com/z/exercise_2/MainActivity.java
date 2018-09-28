@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         emailBtn.setOnClickListener(btn -> {
 
             final String messageString = messageEdit.getText().toString();
-            if (messageString.isEmpty()){
+            if (messageString.isEmpty()) {
                 Snackbar.make(rlBase, R.string.warning_empty_message, Snackbar.LENGTH_SHORT).show();
                 return;
             }
@@ -62,14 +62,14 @@ public class MainActivity extends AppCompatActivity {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
         tv.setTextColor(ContextCompat.getColor(this, R.color.colorCorporate));
 
-        RelativeLayout.LayoutParams layoutParams  = new RelativeLayout.LayoutParams(
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, // width
                 ViewGroup.LayoutParams.WRAP_CONTENT); // height
 
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
         layoutParams.setMargins(margin, margin, margin, margin);
-        tv.setLayoutParams(layoutParams );
+        tv.setLayoutParams(layoutParams);
 
         myLayout.addView(tv);
 
@@ -124,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
         for (String appPackage : appPackages) {
             if (openSpecificApp(url, appPackage)) {
-                return;}
+                return;
+            }
         }
         openBrowser(url);
     }
