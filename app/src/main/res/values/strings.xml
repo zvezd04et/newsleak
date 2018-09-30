@@ -6,7 +6,6 @@
         Anton has 11 certificates for standard solutions 1C.</string>
 
     <string name="email_address" translatable="false">a.petronenko@gmail.com</string>
-    <string name="vk_url" translatable="false">https://vk.com/id1748403</string>
     <string name="email_subject">Hello, Anton!</string>
     <string name="warning_empty_message">Please enter your message</string>
     <string name="error_no_email_app">No Email apps were found.</string>

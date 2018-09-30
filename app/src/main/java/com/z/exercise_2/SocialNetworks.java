@@ -9,7 +9,9 @@ public enum SocialNetworks {
     TELEGRAM("https://t.me/pantusov/", new String[]{"org.telegram.messenger", "org.thunderdog.challegram"}),
     VK("https://vk.com/id1748403", new String[]{"com.vkontakte.android"});
 
+    @Nullable
     private final String[] appPackages;
+    @NonNull
     private final String url;
 
     SocialNetworks(@NonNull String url) {
