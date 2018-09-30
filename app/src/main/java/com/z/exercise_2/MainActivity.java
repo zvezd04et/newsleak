@@ -76,10 +76,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openEmailApp(@NonNull String messageString) {
-        final Intent intent = new Intent(Intent.ACTION_SENDTO)
-                .setData(Uri.parse(String.format("mailto:%s", getString(R.string.email_address))))
-                .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
-                .putExtra(Intent.EXTRA_TEXT, messageString);
+
+        String mailto = "mailto:" + getString(R.string.email_address) + "?cc=" +
+                "&subject=" + Uri.encode(getString(R.string.email_subject)) +
+                "&body=" + Uri.encode(messageString);
+
+        final Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse(mailto));
 
         // Check if the system can handle this type of intent or startActivity will crash otherwise.
         if (intent.resolveActivity(getPackageManager()) == null) {
@@ -102,8 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean openSpecificApp(@NonNull String stringUrl, @NonNull String appPackage) {
 
-        final Uri uri = Uri.parse(stringUrl);
-        final Intent intent = new Intent(Intent.ACTION_VIEW, uri).setPackage(appPackage);
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(stringUrl));
+        intent.setPackage(appPackage);
 
         if (intent.resolveActivity(getPackageManager()) == null) {
             return false;
