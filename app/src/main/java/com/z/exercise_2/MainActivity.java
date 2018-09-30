@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addDisclaimer() {
 
-        RelativeLayout myLayout = findViewById(R.id.rl_content);
+        final RelativeLayout myLayout = findViewById(R.id.rl_content);
         int margin = getResources().getDimensionPixelOffset(R.dimen.space_half_size);
         int size = getResources().getDimensionPixelOffset(R.dimen.disclaimer_size);
 
@@ -102,8 +102,8 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean openSpecificApp(@NonNull String stringUrl, @NonNull String appPackage) {
 
-        Uri uri = Uri.parse(stringUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri).setPackage(appPackage);
+        final Uri uri = Uri.parse(stringUrl);
+        final Intent intent = new Intent(Intent.ACTION_VIEW, uri).setPackage(appPackage);
 
         if (intent.resolveActivity(getPackageManager()) == null) {
             return false;
