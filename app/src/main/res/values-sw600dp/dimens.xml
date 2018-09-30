@@ -7,6 +7,6 @@
     <dimen name="space_half_size">8dp</dimen>
     <dimen name="disclaimer_size">8dp</dimen>
     <dimen name="company_logo_width">48dp</dimen>
-    <dimen name="photo_height_portrait">220dp</dimen>
-    <dimen name="photo_width_landscape">280dp</dimen>
+    <dimen name="photo_height_portrait">420dp</dimen>
+    <dimen name="photo_width_landscape">380dp</dimen>
 </resources>
