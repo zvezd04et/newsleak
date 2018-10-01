@@ -1,4 +1,4 @@
-package com.z.exercise_2;
+package com.z.newsleak;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
