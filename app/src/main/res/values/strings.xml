@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">exercise #2</string>
+    <string name="app_name" translatable="false">Newsleak</string>
 
     <string name="description">Anton has been developing information systems based on 1C since 2012.
         Nowadays, he is lead developer of document management system at Samolet Development.
@@ -14,4 +14,8 @@
     <string name="preview_action_email">Send message</string>
     <string name="position">1c team lead</string>
     <string name="disclaimer" translatable="false">© 2018 Petronenko</string>
+
+    <string name="title_author">Author</string>
+    <string name="menu_action_about">About</string>
+
 </resources>

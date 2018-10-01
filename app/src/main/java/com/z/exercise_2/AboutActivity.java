@@ -16,14 +16,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
 
     private RelativeLayout rlBase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_about);
 
         rlBase = findViewById(R.id.rl_base);
         addDisclaimer();

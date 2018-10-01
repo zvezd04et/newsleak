@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Занятие №2</string>
     <string name="description">"Занимаюсь разработкой информационных систем на базе 1С с 2012 года. В настоящий момент руковожу разработкой системы электонного докуменнооборота в ГК Самолоет. Сдал 11 сертификационных экзаменов по типовым решениям 1С."</string>
     <string name="email_subject">Привет, Антон!</string>
     <string name="warning_empty_message">Пожалуйста, введите сообщение</string>
@@ -8,4 +7,7 @@
     <string name="input_hint">Введите сообщение</string>
     <string name="preview_action_email">Отправить</string>
     <string name="position">Ведущий программист 1С</string>
+    <string name="menu_action_about">Об авторе</string>
+    <string name="error_no_browser_app">Браузер не обнаружен</string>
+    <string name="title_author">Автор</string>
 </resources>
