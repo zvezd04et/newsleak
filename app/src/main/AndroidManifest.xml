@@ -13,16 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name="com.z.newsleak.NewsListActivity">
+        <activity android:name=".NewsListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.z.newsleak.AboutActivity"
-            android:label="@string/title_author"/>
+            android:name=".AboutActivity"
+            android:label="@string/title_author" />
+        <activity android:name=".NewsDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -1,8 +1,9 @@
 package com.z.newsleak.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class NewsItem {
+public class NewsItem implements Serializable {
 
     private final String title;
     private final String imageUrl;

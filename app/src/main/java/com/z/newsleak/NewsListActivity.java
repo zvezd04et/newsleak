@@ -17,9 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListActivity extends AppCompatActivity {
 
-    private final NewsListAdapter.OnItemClickListener clickListener = actor -> {
+    private final NewsListAdapter.OnItemClickListener clickListener = newsItem -> {
         String clickMessage = "click";
+
         Toast.makeText(this, clickMessage, Toast.LENGTH_SHORT).show();
+        NewsDetailsActivity.start(NewsListActivity.this, newsItem);
+
     };
 
     @Override
