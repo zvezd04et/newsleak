@@ -5,8 +5,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class DataUtils {
 
+    @NonNull
     public static List<NewsItem> generateNews() {
         final Category darwinAwards = new Category(1, "Darwin Awards");
         final Category criminal = new Category(2, "Criminal");
@@ -18,7 +21,7 @@ public class DataUtils {
                 "Tourist filmed sitting on 5m-long crocodile",
                 "https://e3.365dm.com/18/09/736x414/skynews-crocodile-australia_4433218.jpg",
                 darwinAwards,
-                createDate(2018, 9, 26, 10, 34),
+                createDate(2018, 10, 5, 10, 34),
                 "\"It was dangerous, I know. It is a scary feeling sitting on something that could kill you in a fraction of a "
                         + "second,\" he says.",
                 "A Danish tourist has admitted he took his life in his hands by sitting on a large crocodile in Australia.\n\n"

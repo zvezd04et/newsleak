@@ -1,6 +1,7 @@
 package com.z.newsleak;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     private final OnItemClickListener clickListener;
     @NonNull
     private final RequestManager imageLoader;
+
 
     public NewsListAdapter(@NonNull Context context, @NonNull List<NewsItem> newsItems,
                            @Nullable OnItemClickListener clickListener) {
@@ -65,6 +67,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
         private final ImageView photoView;
         private final TextView previewView;
+        private final TextView categoryView;
+        private final TextView titleView;
+        private final TextView publishDateView;
 
         public ViewHolder(@NonNull View itemView, @Nullable OnItemClickListener listener) {
             super(itemView);
@@ -77,11 +82,22 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
             photoView = itemView.findViewById(R.id.iv_news_photo);
             previewView = itemView.findViewById(R.id.tv_news_preview);
+            categoryView = itemView.findViewById(R.id.tv_news_category);
+            titleView = itemView.findViewById(R.id.tv_news_title);
+            publishDateView = itemView.findViewById(R.id.tv_news_publish_date);
+
         }
 
-        void bind(NewsItem newsItem) {
+        void bind(@NonNull NewsItem newsItem) {
             imageLoader.load(newsItem.getImageUrl()).into(photoView);
             previewView.setText(newsItem.getPreviewText());
+            categoryView.setText(newsItem.getCategory().getName());
+            titleView.setText(newsItem.getTitle());
+            CharSequence relativeDate;
+            relativeDate = DateUtils.getRelativeTimeSpanString(newsItem.getPublishDate().getTime(),
+                    System.currentTimeMillis(),
+                    DateUtils.DAY_IN_MILLIS);
+            publishDateView.setText(relativeDate);
         }
     }
 }

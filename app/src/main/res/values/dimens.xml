@@ -3,17 +3,18 @@
     <dimen name="text_size">16sp</dimen>
     <dimen name="margin_indent">50dp</dimen>
     <dimen name="logo_height">28dp</dimen>
+    <dimen name="logo_size">24dp</dimen>
     <dimen name="space_size">16dp</dimen>
     <dimen name="space_half_size">8dp</dimen>
     <dimen name="disclaimer_size">8dp</dimen>
     <dimen name="company_logo_width">48dp</dimen>
     <dimen name="photo_height_portrait">240dp</dimen>
     <dimen name="photo_width_landscape">280dp</dimen>
-    <dimen name="item_height">108dp</dimen>
+    <dimen name="item_height">168dp</dimen>
     <dimen name="item_padding">4dp</dimen>
     <dimen name="card_margin">5dp</dimen>
-    <dimen name="news_photo_size">100dp</dimen>
-    <dimen name="news_preview_padding">16dp</dimen>
+    <dimen name="news_photo_size">96dp</dimen>
+    <dimen name="news_preview_padding">8dp</dimen>
     <dimen name="card_corner_radius">4dp</dimen>
 
 </resources>

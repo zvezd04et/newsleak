@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.z.newsleak.data.DataUtils;
 
@@ -12,17 +11,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListActivity extends AppCompatActivity {
 
     private final NewsListAdapter.OnItemClickListener clickListener = newsItem -> {
-        String clickMessage = "click";
-
-        Toast.makeText(this, clickMessage, Toast.LENGTH_SHORT).show();
         NewsDetailsActivity.start(NewsListActivity.this, newsItem);
-
     };
 
     @Override
@@ -37,7 +32,10 @@ public class NewsListActivity extends AppCompatActivity {
 
         RecyclerView list = findViewById(R.id.news_recycler);
         list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(), clickListener));
-        list.setLayoutManager(new LinearLayoutManager(this));
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, ScreenUtils.getDisplayColumns(this));
+        list.setLayoutManager(gridLayoutManager);
+
     }
 
     @Override
