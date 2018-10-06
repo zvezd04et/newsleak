@@ -6,4 +6,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewsListActivity"
-    tools:listitem="@layout/item_news" />
+    tools:listitem="@layout/animal_item_news" />

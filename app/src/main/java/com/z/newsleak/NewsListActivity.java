@@ -16,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListActivity extends AppCompatActivity {
 
-    private final NewsListAdapter.OnItemClickListener clickListener = newsItem -> {
-        NewsDetailsActivity.start(NewsListActivity.this, newsItem);
-    };
+    private final NewsListAdapter.OnItemClickListener clickListener = newsItem ->
+            NewsDetailsActivity.start(NewsListActivity.this, newsItem);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class NewsListActivity extends AppCompatActivity {
         RecyclerView list = findViewById(R.id.news_list_rv);
         list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(), clickListener));
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, ScreenUtils.getDisplayColumns(this));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SupportUtils.getDisplayColumns(this));
         list.setLayoutManager(gridLayoutManager);
 
     }

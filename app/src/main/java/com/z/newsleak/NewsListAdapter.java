@@ -1,16 +1,13 @@
 package com.z.newsleak;
 
 import android.content.Context;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
 import com.z.newsleak.data.NewsItem;
 
 import java.util.List;
@@ -20,6 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
+
+    private final static int DEFAULT_VIEW = 0;
+    private final static int ANIMAL_VIEW = 1;
 
     @NonNull
     private final List<NewsItem> newsItems;
@@ -36,18 +36,22 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         this.newsItems = newsItems;
         this.clickListener = clickListener;
         this.inflater = LayoutInflater.from(context);
-
-        RequestOptions imageOption = new RequestOptions()
-                .placeholder(R.drawable.preview_placeholder)
-                .fallback(R.drawable.preview_placeholder)
-                .centerCrop();
-        this.imageLoader = Glide.with(context).applyDefaultRequestOptions(imageOption);
+        this.imageLoader = SupportUtils.getImageLoader(context);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(inflater.inflate(R.layout.item_news, parent, false), clickListener);
+        int layoutRes = 0;
+        switch (viewType) {
+            case ANIMAL_VIEW:
+                layoutRes = R.layout.animal_item_news;
+                break;
+            case DEFAULT_VIEW:
+                layoutRes = R.layout.default_item_news;
+                break;
+        }
+        return new ViewHolder(inflater.inflate(layoutRes, parent, false), clickListener);
     }
 
     @Override
@@ -58,6 +62,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @Override
     public int getItemCount() {
         return newsItems.size();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        //return super.getItemViewType(position);
+        switch(newsItems.get(position).getCategory().getId()) {
+            case 3:
+                return ANIMAL_VIEW;
+            default:
+                return DEFAULT_VIEW;
+        }
     }
 
     public interface OnItemClickListener {
@@ -93,11 +108,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             previewView.setText(newsItem.getPreviewText());
             categoryView.setText(newsItem.getCategory().getName());
             titleView.setText(newsItem.getTitle());
-            CharSequence relativeDate;
-            relativeDate = DateUtils.getRelativeTimeSpanString(newsItem.getPublishDate().getTime(),
-                    System.currentTimeMillis(),
-                    DateUtils.DAY_IN_MILLIS);
-            publishDateView.setText(relativeDate);
+            publishDateView.setText(SupportUtils.getFormatPublishDate(newsItem.getPublishDate()));
         }
     }
 }

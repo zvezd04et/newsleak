@@ -9,4 +9,17 @@
     <dimen name="company_logo_width">48dp</dimen>
     <dimen name="photo_height_portrait">420dp</dimen>
     <dimen name="photo_width_landscape">380dp</dimen>
+
+    <dimen name="news_item_height">176dp</dimen>
+    <dimen name="news_item_padding">8dp</dimen>
+    <dimen name="news_item_corner_radius">8dp</dimen>
+    <dimen name="news_item_elevation">8dp</dimen>
+    <dimen name="news_card_margin">8dp</dimen>
+    <dimen name="news_photo_size">96dp</dimen>
+    <dimen name="news_preview_padding">8dp</dimen>
+
+    <dimen name="news_details_margin">8dp</dimen>
+    <dimen name="news_details_title_text_size">24sp</dimen>
+    <dimen name="news_details_photo_height">360dp</dimen>
+
 </resources>

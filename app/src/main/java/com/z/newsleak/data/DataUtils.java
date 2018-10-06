@@ -21,7 +21,7 @@ public class DataUtils {
                 "Tourist filmed sitting on 5m-long crocodile",
                 "https://e3.365dm.com/18/09/736x414/skynews-crocodile-australia_4433218.jpg",
                 darwinAwards,
-                createDate(2018, 10, 5, 10, 34),
+                createDate(2018, 10, 6, 10, 34),
                 "\"It was dangerous, I know. It is a scary feeling sitting on something that could kill you in a fraction of a "
                         + "second,\" he says.",
                 "A Danish tourist has admitted he took his life in his hands by sitting on a large crocodile in Australia.\n\n"
@@ -40,7 +40,7 @@ public class DataUtils {
                 "Police warn daredevil cliff jumpers who are 'risking their lives for likes'",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-cliff-jumping-greg-milam_4433647.jpg",
                 criminal,
-                createDate(2018, 9, 25, 12, 45),
+                createDate(2018, 10, 5, 12, 45),
                 "Police in Los Angeles say they are spending hundreds of thousands of dollars airlifting cliff jumpers out of "
                         + "dangerous spots.",
                 "Daredevils attempting dangerous cliff dives in a quest for likes has led to an increase in costly helicopter "
@@ -58,7 +58,7 @@ public class DataUtils {
                 "Bear saved after getting his head stuck in milk can",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-bear-minnesota_4419111.jpg",
                 animals,
-                createDate(2018, 9, 20, 14, 4),
+                createDate(2018, 10, 4, 14, 4),
                 "Firefighters used the Jaws of Life to free the young black bear, a tool which is normally used to extricate car"
                         + " accident victims.",
                 "A bear has been freed after getting his head stuck in a milk can.\n\n"
