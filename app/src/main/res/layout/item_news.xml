@@ -8,7 +8,7 @@
     tools:showIn="@layout/activity_news_list">
 
     <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/card_view"
+        android:id="@+id/item_news_cv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -22,7 +22,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/iv_news_photo"
+                android:id="@+id/item_news_iv_photo"
                 android:layout_width="@dimen/news_photo_size"
                 android:layout_height="@dimen/news_photo_size"
                 android:layout_marginStart="@dimen/news_preview_padding"
@@ -38,7 +38,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_news_category"
+                    android:id="@+id/item_news_tv_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/news_preview_padding"
@@ -49,7 +49,7 @@
                     tools:text="Category" />
 
                 <TextView
-                    android:id="@+id/tv_news_title"
+                    android:id="@+id/item_news_tv_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/news_preview_padding"
@@ -59,7 +59,7 @@
                     tools:text="News title" />
 
                 <TextView
-                    android:id="@+id/tv_news_preview"
+                    android:id="@+id/item_news_tv_preview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/news_preview_padding"
@@ -70,7 +70,7 @@
                     tools:text="@tools:sample/cities" />
 
                 <TextView
-                    android:id="@+id/tv_news_publish_date"
+                    android:id="@+id/item_news_tv_publish_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/news_preview_padding"

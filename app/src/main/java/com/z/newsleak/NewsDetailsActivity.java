@@ -26,7 +26,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_details);
 
         NewsItem newsItem = (NewsItem) getIntent().getSerializableExtra(EXTRA_NEWS);
-        final TextView previewText = findViewById(R.id.tv_title);
+        final TextView previewText = findViewById(R.id.news_details_tv_title);
         previewText.setText(newsItem.getTitle());
     }
 }

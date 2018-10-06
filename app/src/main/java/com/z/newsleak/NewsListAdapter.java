@@ -80,11 +80,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
                 }
             });
 
-            photoView = itemView.findViewById(R.id.iv_news_photo);
-            previewView = itemView.findViewById(R.id.tv_news_preview);
-            categoryView = itemView.findViewById(R.id.tv_news_category);
-            titleView = itemView.findViewById(R.id.tv_news_title);
-            publishDateView = itemView.findViewById(R.id.tv_news_publish_date);
+            photoView = itemView.findViewById(R.id.item_news_iv_photo);
+            previewView = itemView.findViewById(R.id.item_news_tv_preview);
+            categoryView = itemView.findViewById(R.id.item_news_tv_category);
+            titleView = itemView.findViewById(R.id.item_news_tv_title);
+            publishDateView = itemView.findViewById(R.id.item_news_tv_publish_date);
 
         }
 

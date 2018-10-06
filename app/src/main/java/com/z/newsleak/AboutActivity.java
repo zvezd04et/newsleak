@@ -25,11 +25,11 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        rlBase = findViewById(R.id.rl_base);
+        rlBase = findViewById(R.id.about_rl_root);
         addDisclaimer();
 
-        final EditText messageEdit = findViewById(R.id.et_message);
-        final Button emailBtn = findViewById(R.id.btn_email);
+        final EditText messageEdit = findViewById(R.id.about_et_message);
+        final Button emailBtn = findViewById(R.id.about_btn_email);
         emailBtn.setOnClickListener(btn -> {
 
             final String messageString = messageEdit.getText().toString();
@@ -40,13 +40,13 @@ public class AboutActivity extends AppCompatActivity {
             openEmailApp(messageString);
         });
 
-        final ImageView vkLogo = findViewById(R.id.iv_vk_logo);
+        final ImageView vkLogo = findViewById(R.id.about_iv_vk_logo);
         vkLogo.setOnClickListener(iv -> openSocialNetwork(SocialNetworks.VK));
 
-        final ImageView tmLogo = findViewById(R.id.iv_telegram_logo);
+        final ImageView tmLogo = findViewById(R.id.about_iv_telegram_logo);
         tmLogo.setOnClickListener(iv -> openSocialNetwork(SocialNetworks.TELEGRAM));
 
-        final ImageView gitLogo = findViewById(R.id.iv_github_logo);
+        final ImageView gitLogo = findViewById(R.id.about_iv_github_logo);
         gitLogo.setOnClickListener(iv -> openSocialNetwork(SocialNetworks.GITHUB));
 
     }
