@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 
 public class DataUtils {
 
+    public static final int ANIMAL_ID = 3;
+
     @NonNull
     public static List<NewsItem> generateNews() {
         final Category darwinAwards = new Category(1, "Darwin Awards");

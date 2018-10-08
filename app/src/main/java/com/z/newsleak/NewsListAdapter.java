@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
+import com.z.newsleak.data.DataUtils;
 import com.z.newsleak.data.NewsItem;
 
 import java.util.List;
@@ -66,9 +67,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        //return super.getItemViewType(position);
+
         switch(newsItems.get(position).getCategory().getId()) {
-            case 3:
+            case DataUtils.ANIMAL_ID:
                 return ANIMAL_VIEW;
             default:
                 return DEFAULT_VIEW;
