@@ -24,5 +24,6 @@
     <dimen name="news_details_photo_height">200dp</dimen>
 
     <dimen name="zero_size">0dp</dimen>
+    <dimen name="vertical_divider_height">4dp</dimen>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.z.newsleak;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,11 +32,18 @@ public class NewsListActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
-        RecyclerView list = findViewById(R.id.news_list_rv);
+        final RecyclerView list = findViewById(R.id.news_list_rv);
         list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(), clickListener));
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, SupportUtils.getDisplayColumns(this));
+        final GridLayoutManager gridLayoutManager
+                = new GridLayoutManager(this, SupportUtils.getDisplayColumns(this));
         list.setLayoutManager(gridLayoutManager);
+
+        final DividerItemDecoration verticalDivider
+                = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        final Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.vertical_divider);
+        verticalDivider.setDrawable(dividerDrawable);
+        list.addItemDecoration(verticalDivider);
 
     }
 
