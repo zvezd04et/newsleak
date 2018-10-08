@@ -60,13 +60,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         holder.bind(newsItems.get(position));
     }
 
+    @NonNull
     @Override
     public int getItemCount() {
         return newsItems.size();
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(@NonNull int position) {
 
         switch(newsItems.get(position).getCategory().getId()) {
             case DataUtils.ANIMAL_ID:
@@ -77,7 +78,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     }
 
     public interface OnItemClickListener {
-        void onItemClick(NewsItem newsItem);
+        void onItemClick(@NonNull NewsItem newsItem);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

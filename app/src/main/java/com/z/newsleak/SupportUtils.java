@@ -17,12 +17,14 @@ import androidx.annotation.NonNull;
 
 public class SupportUtils {
 
+    @NonNull
     public static boolean isTablet(@NonNull Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
         boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
     }
 
+    @NonNull
     public static int getDisplayColumns(@NonNull Activity activity) {
         int columnCount = 1;
         if (isTablet(activity)) {
@@ -35,6 +37,7 @@ public class SupportUtils {
         return columnCount;
     }
 
+    @NonNull
     public static String getFormatPublishDate(@NonNull Date publishDate) {
 
         CharSequence relativeDate;
@@ -48,6 +51,7 @@ public class SupportUtils {
         return relativeDate.toString() + " " + formattedTime ;
     }
 
+    @NonNull
     public static RequestManager getImageLoader(@NonNull Context context) {
         RequestOptions imageOption = new RequestOptions()
                 .placeholder(R.drawable.preview_placeholder)
