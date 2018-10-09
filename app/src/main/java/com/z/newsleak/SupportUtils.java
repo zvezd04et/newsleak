@@ -17,6 +17,10 @@ import androidx.annotation.NonNull;
 
 public class SupportUtils {
 
+    private SupportUtils() {
+        throw new IllegalAccessError("It's util class");
+    }
+
     @NonNull
     public static boolean isTablet(@NonNull Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
