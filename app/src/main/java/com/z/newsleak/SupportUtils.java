@@ -17,6 +17,9 @@ import androidx.annotation.NonNull;
 
 public class SupportUtils {
 
+    @NonNull
+    private static DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
+
     private SupportUtils() {
         throw new IllegalAccessError("It's util class");
     }
@@ -52,7 +55,6 @@ public class SupportUtils {
                 System.currentTimeMillis(),
                 DateUtils.DAY_IN_MILLIS);
 
-        DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.getDefault());
         String formattedTime = timeInstance.format(publishDate);
 
         return relativeDate.toString() + " " + formattedTime ;
