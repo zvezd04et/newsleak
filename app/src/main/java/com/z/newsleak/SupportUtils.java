@@ -23,8 +23,11 @@ public class SupportUtils {
 
     @NonNull
     public static boolean isTablet(@NonNull Context context) {
-        boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == 4);
-        boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
+
+        int screenLayoutSizeMask = context.getResources().getConfiguration().screenLayout &
+                Configuration.SCREENLAYOUT_SIZE_MASK;
+        boolean xlarge = (screenLayoutSizeMask == Configuration.SCREENLAYOUT_SIZE_XLARGE);
+        boolean large = (screenLayoutSizeMask == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
     }
 
