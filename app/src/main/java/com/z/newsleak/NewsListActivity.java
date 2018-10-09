@@ -58,7 +58,7 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                startActivity(new Intent(this, AboutActivity.class));
+                AboutActivity.start(this);
                 return true;
 
             default:

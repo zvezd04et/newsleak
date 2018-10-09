@@ -1,10 +1,12 @@
 package com.z.newsleak;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
+
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +21,11 @@ import android.widget.TextView;
 public class AboutActivity extends AppCompatActivity {
 
     private RelativeLayout rlBase;
+
+    public static void start(@NonNull Activity activity) {
+        final Intent intent = new Intent(activity, AboutActivity.class);
+        activity.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
