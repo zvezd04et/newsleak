@@ -56,7 +56,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             default:
                 Log.d("ViewType", "Get unknown view type");
         }
-        return new ViewHolder(inflater.inflate(layoutRes, parent, false), clickListener);
+        return new ViewHolder(inflater.inflate(layoutRes, parent, false));
     }
 
     @Override
@@ -97,12 +97,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         @NonNull
         private final TextView publishDateView;
 
-        public ViewHolder(@NonNull View itemView, @Nullable OnItemClickListener listener) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
-                if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(newsItems.get(position));
+                if (clickListener != null && position != RecyclerView.NO_POSITION) {
+                    clickListener.onItemClick(newsItems.get(position));
                 }
             });
 
