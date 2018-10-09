@@ -140,7 +140,8 @@ public class DataUtils {
         return news;
     }
 
-    private static Date createDate(int year, int month, int date, int hrs, int min) {
+    @NonNull
+    private static Date createDate(@NonNull int year, @NonNull int month, @NonNull int date, @NonNull int hrs, @NonNull int min) {
         return new GregorianCalendar(year, month - 1, date, hrs, min).getTime();
     }
 }
