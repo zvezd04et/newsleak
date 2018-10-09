@@ -82,10 +82,15 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        @NonNull
         private final ImageView photoView;
+        @NonNull
         private final TextView previewView;
+        @NonNull
         private final TextView categoryView;
+        @NonNull
         private final TextView titleView;
+        @NonNull
         private final TextView publishDateView;
 
         public ViewHolder(@NonNull View itemView, @Nullable OnItemClickListener listener) {
