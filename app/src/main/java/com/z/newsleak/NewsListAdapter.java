@@ -1,6 +1,7 @@
 package com.z.newsleak;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             case DEFAULT_VIEW:
                 layoutRes = R.layout.default_item_news;
                 break;
+
+            default:
+                Log.d("ViewType", "Get unknown view type");
         }
         return new ViewHolder(inflater.inflate(layoutRes, parent, false), clickListener);
     }
