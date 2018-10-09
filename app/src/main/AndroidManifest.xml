@@ -23,7 +23,7 @@
         <activity
             android:name=".AboutActivity"
             android:label="@string/title_author" />
-        <activity android:name=".NewsDetailsActivity"></activity>
+        <activity android:name=".NewsDetailsActivity" />
     </application>
 
 </manifest>
