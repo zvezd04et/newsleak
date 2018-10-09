@@ -3,6 +3,7 @@ package com.z.newsleak;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -59,7 +60,9 @@ public class NewsListActivity extends AppCompatActivity {
             case R.id.action_about:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
+
             default:
+                Log.d("Menu", "Selected unknown menu item");
                 return super.onOptionsItemSelected(item);
         }
     }
