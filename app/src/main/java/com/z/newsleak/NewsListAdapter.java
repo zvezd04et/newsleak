@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.RequestManager;
 import com.z.newsleak.data.DataUtils;
 import com.z.newsleak.data.NewsItem;
+import com.z.newsleak.utils.DateFormatUtils;
+import com.z.newsleak.utils.ImageLoadUtils;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         this.newsItems = newsItems;
         this.clickListener = clickListener;
         this.inflater = LayoutInflater.from(context);
-        this.imageLoader = SupportUtils.getImageLoader(context);
+        this.imageLoader = ImageLoadUtils.getImageLoader(context);
     }
 
     @NonNull
@@ -119,7 +121,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             previewView.setText(newsItem.getPreviewText());
             categoryView.setText(newsItem.getCategory().getName());
             titleView.setText(newsItem.getTitle());
-            publishDateView.setText(SupportUtils.getFormatPublishDate(newsItem.getPublishDate()));
+            publishDateView.setText(DateFormatUtils.getRelativeDateWithMinutes(newsItem.getPublishDate()));
         }
     }
 }

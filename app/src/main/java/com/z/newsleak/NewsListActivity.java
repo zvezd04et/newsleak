@@ -1,6 +1,5 @@
 package com.z.newsleak;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.z.newsleak.data.DataUtils;
+import com.z.newsleak.utils.SupportUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

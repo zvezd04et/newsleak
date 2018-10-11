@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.z.newsleak.data.NewsItem;
+import com.z.newsleak.utils.DateFormatUtils;
+import com.z.newsleak.utils.ImageLoadUtils;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
@@ -36,12 +38,12 @@ public class NewsDetailsActivity extends AppCompatActivity {
         final TextView fullTextView = findViewById(R.id.news_details_tv_full_text);
         fullTextView.setText(newsItem.getFullText());
 
-        final RequestManager imageLoader = SupportUtils.getImageLoader(this);
+        final RequestManager imageLoader = ImageLoadUtils.getImageLoader(this);
         final ImageView photoView = findViewById(R.id.news_details_iv_photo);
         imageLoader.load(newsItem.getImageUrl()).into(photoView);
 
         final TextView publishDateView = findViewById(R.id.news_details_tv_publish_date);
-        publishDateView.setText(SupportUtils.getFormatPublishDate(newsItem.getPublishDate()));
+        publishDateView.setText(DateFormatUtils.getRelativeDateWithMinutes(newsItem.getPublishDate()));
 
     }
 }
