@@ -1,95 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_news_cv"
     android:layout_width="match_parent"
     android:layout_height="@dimen/news_item_height"
-    android:orientation="horizontal"
-    android:padding="@dimen/news_item_padding"
-    tools:showIn="@layout/activity_news_list">
+    android:layout_margin="@dimen/news_preview_padding"
+    card_view:cardCornerRadius="@dimen/news_item_corner_radius"
+    card_view:cardElevation="@dimen/news_item_elevation">
 
-    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/item_news_cv"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/news_preview_padding"
-        card_view:cardCornerRadius="@dimen/news_item_corner_radius"
-        card_view:cardElevation="@dimen/news_item_elevation">
+        android:orientation="horizontal">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/item_news_iv_photo"
+            android:layout_width="@dimen/news_photo_size"
+            android:layout_height="@dimen/news_photo_size"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/news_preview_padding"
+            android:layout_marginEnd="@dimen/news_preview_padding"
+            android:contentDescription="@null"
+            android:scaleType="centerCrop"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_marginStart="@dimen/news_preview_padding"
+            android:layout_marginEnd="@dimen/news_preview_padding"
+            android:layout_marginBottom="@dimen/news_preview_padding">
 
-            <ImageView
-                android:id="@+id/item_news_iv_photo"
-                android:layout_width="@dimen/news_photo_size"
-                android:layout_height="@dimen/news_photo_size"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/news_preview_padding"
-                android:layout_marginEnd="@dimen/news_preview_padding"
-                android:contentDescription="@null"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-            <RelativeLayout
+            <TextView
+                android:id="@+id/item_news_tv_category"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/news_preview_padding"
-                android:layout_marginEnd="@dimen/news_preview_padding"
-                android:layout_marginBottom="@dimen/news_preview_padding">
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:fontFamily="monospace"
+                android:textAllCaps="true"
+                android:textSize="@dimen/text_size"
+                tools:text="Category" />
 
-                <TextView
-                    android:id="@+id/item_news_tv_category"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:fontFamily="monospace"
-                    android:textAllCaps="true"
-                    android:textSize="@dimen/text_size"
-                    tools:text="Category" />
+            <TextView
+                android:id="@+id/item_news_tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_news_tv_category"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold"
+                tools:text="News title" />
 
-                <TextView
-                    android:id="@+id/item_news_tv_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/item_news_tv_category"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:textSize="@dimen/text_size"
-                    android:textStyle="bold"
-                    tools:text="News title" />
+            <TextView
+                android:id="@+id/item_news_tv_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/item_news_tv_title"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="4"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textSize="@dimen/text_size"
+                tools:text="@tools:sample/cities" />
 
-                <TextView
-                    android:id="@+id/item_news_tv_preview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/item_news_tv_title"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="4"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textSize="@dimen/text_size"
-                    tools:text="@tools:sample/cities" />
+            <TextView
+                android:id="@+id/item_news_tv_publish_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="@dimen/news_preview_padding"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size"
+                tools:text="Yesterday" />
 
-                <TextView
-                    android:id="@+id/item_news_tv_publish_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="@dimen/news_preview_padding"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="@dimen/text_size"
-                    tools:text="Yesterday" />
-
-            </RelativeLayout>
+        </RelativeLayout>
 
 
-        </LinearLayout>
+    </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
-
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>
