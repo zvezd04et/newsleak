@@ -22,8 +22,6 @@ allprojects {
     }
 }
 
-apply from: "$project.rootDir/code_quality_tools/pmd.gradle"
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
