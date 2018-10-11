@@ -20,9 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListActivity extends AppCompatActivity {
 
-    private final NewsListAdapter.OnItemClickListener clickListener = newsItem ->
-            NewsDetailsActivity.start(NewsListActivity.this, newsItem);
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +30,8 @@ public class NewsListActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
+        final NewsListAdapter.OnItemClickListener clickListener = newsItem ->
+                NewsDetailsActivity.start(NewsListActivity.this, newsItem);
         final RecyclerView list = findViewById(R.id.news_list_rv);
         list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(), clickListener));
 
