@@ -9,20 +9,14 @@ import androidx.annotation.NonNull;
 
 public class DataUtils {
 
-    public static final int ANIMAL_ID = 3;
-
     @NonNull
     public static List<NewsItem> generateNews() {
-        final Category darwinAwards = new Category(1, "Darwin Awards");
-        final Category criminal = new Category(2, "Criminal");
-        final Category animals = new Category(3, "Animals");
-        final Category music = new Category(4, "Music");
 
         List<NewsItem> news = new ArrayList<>();
         news.add(new NewsItem(
                 "Tourist filmed sitting on 5m-long crocodile",
                 "https://e3.365dm.com/18/09/736x414/skynews-crocodile-australia_4433218.jpg",
-                darwinAwards,
+                Category.DARWIN_AWARDS,
                 createDate(2018, 10, 6, 10, 34),
                 "\"It was dangerous, I know. It is a scary feeling sitting on something that could kill you in a fraction of a "
                         + "second,\" he says.",
@@ -41,7 +35,7 @@ public class DataUtils {
         news.add(new NewsItem(
                 "Police warn daredevil cliff jumpers who are 'risking their lives for likes'",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-cliff-jumping-greg-milam_4433647.jpg",
-                criminal,
+                Category.CRIMINAL,
                 createDate(2018, 10, 5, 12, 45),
                 "Police in Los Angeles say they are spending hundreds of thousands of dollars airlifting cliff jumpers out of "
                         + "dangerous spots.",
@@ -59,7 +53,7 @@ public class DataUtils {
         news.add(new NewsItem(
                 "Bear saved after getting his head stuck in milk can",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-bear-minnesota_4419111.jpg",
-                animals,
+                Category.ANIMALS,
                 createDate(2018, 10, 4, 14, 4),
                 "Firefighters used the Jaws of Life to free the young black bear, a tool which is normally used to extricate car"
                         + " accident victims.",
@@ -76,7 +70,7 @@ public class DataUtils {
         news.add(new NewsItem(
                 "Nearly $18m of cocaine seized in donated boxes of bananas",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-texas-bananas-drugs_4430760.jpg",
-                criminal,
+                Category.CRIMINAL,
                 createDate(2018, 9, 18, 4, 4),
                 "Massive quantities of the drug were found in boxes of fruit that had been donated to the Texas Department of "
                         + "Criminal Justice.",
@@ -96,7 +90,7 @@ public class DataUtils {
         news.add(new NewsItem(
                 "US government hacker jailed after losing secrets",
                 "https://e3.365dm.com/17/09/736x414/d55722dc4eb37f6959d2e047c14710d586aab99f90aa1e4acfd9f992125294f5_4107038.jpg",
-                criminal,
+                Category.CRIMINAL,
                 createDate(2018, 9, 17, 12, 45),
                 "Nghia Hoang Pho, 68, who developed hacking tools for the National Security Agency, illegally stored material "
                         + "on his home computer.",
@@ -120,7 +114,7 @@ public class DataUtils {
         news.add(new NewsItem(
                 "Wet Wet Wet announce Liberty X star Kevin Simm as new frontman",
                 "https://e3.365dm.com/18/09/2048x1152/skynews-wet-wet-wet-kevin-simm_4433314.jpg",
-                music,
+                Category.MUSIC,
                 createDate(2018, 9, 17, 12, 45),
                 "The Voice 2016 winner says he was \"really taken aback\" by the opportunity after singing the band's songs "
                         + "early in his career.",
