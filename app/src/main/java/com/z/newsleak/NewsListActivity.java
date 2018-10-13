@@ -27,11 +27,6 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setDisplayHomeAsUpEnabled(true);
-        }
-
         final RecyclerView list = findViewById(R.id.news_list_rv);
         list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(),
                 newsItem -> NewsDetailsActivity.start(this, newsItem)));
