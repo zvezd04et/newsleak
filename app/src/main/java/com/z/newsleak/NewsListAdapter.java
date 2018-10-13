@@ -58,7 +58,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @Override
     public int getItemViewType(@NonNull int position) {
 
-        switch(newsItems.get(position).getCategory()) {
+        switch (newsItems.get(position).getCategory()) {
             case ANIMALS:
                 return R.layout.animal_item_news;
             default:

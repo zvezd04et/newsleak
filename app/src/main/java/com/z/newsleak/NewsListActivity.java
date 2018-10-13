@@ -32,10 +32,9 @@ public class NewsListActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
         }
 
-        final NewsListAdapter.OnItemClickListener clickListener = newsItem ->
-                NewsDetailsActivity.start(NewsListActivity.this, newsItem);
         final RecyclerView list = findViewById(R.id.news_list_rv);
-        list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(), clickListener));
+        list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(),
+                newsItem -> NewsDetailsActivity.start(this, newsItem)));
 
         final GridLayoutManager gridLayoutManager
                 = new GridLayoutManager(this, SupportUtils.getDisplayColumns(this));
