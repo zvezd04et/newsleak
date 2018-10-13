@@ -13,10 +13,6 @@ import static android.text.format.DateUtils.HOUR_IN_MILLIS;
 
 public class DateFormatUtils {
 
-    private DateFormatUtils() {
-        throw new IllegalAccessError("Attempt to instantiate utility class.");
-    }
-
     @NonNull
     public static CharSequence getRelativeDateTime(@NonNull Context context, @NonNull Date date) {
 
@@ -27,5 +23,9 @@ public class DateFormatUtils {
                 5 * DAY_IN_MILLIS,
                 FORMAT_ABBREV_RELATIVE
         );
+    }
+
+    private DateFormatUtils() {
+        throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
 }

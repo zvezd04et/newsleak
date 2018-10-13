@@ -30,7 +30,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        NewsItem newsItem = (NewsItem) getIntent().getSerializableExtra(EXTRA_NEWS);
+        final NewsItem newsItem = (NewsItem) getIntent().getSerializableExtra(EXTRA_NEWS);
         setTitle(newsItem.getCategory().getName());
 
         final TextView titleView = findViewById(R.id.news_details_tv_title);

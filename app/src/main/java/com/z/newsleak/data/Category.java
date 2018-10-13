@@ -2,6 +2,8 @@ package com.z.newsleak.data;
 
 import java.io.Serializable;
 
+import androidx.annotation.NonNull;
+
 public enum Category implements Serializable {
 
     DARWIN_AWARDS(1, "Darwin Awards"),
@@ -10,6 +12,7 @@ public enum Category implements Serializable {
     MUSIC(4, "Music");
 
     private final int id;
+    @NonNull
     private final String name;
 
     Category(int id, String name) {
@@ -21,6 +24,7 @@ public enum Category implements Serializable {
         return id;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }

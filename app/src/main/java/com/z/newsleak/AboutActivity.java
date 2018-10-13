@@ -61,15 +61,15 @@ public class AboutActivity extends AppCompatActivity {
     private void addDisclaimer() {
 
         final RelativeLayout myLayout = findViewById(R.id.rl_content);
-        int margin = getResources().getDimensionPixelOffset(R.dimen.space_half_size);
-        int size = getResources().getDimensionPixelOffset(R.dimen.disclaimer_size);
+        final int margin = getResources().getDimensionPixelOffset(R.dimen.space_half_size);
+        final int size = getResources().getDimensionPixelOffset(R.dimen.disclaimer_size);
 
-        TextView tv = new TextView(this);
+        final TextView tv = new TextView(this);
         tv.setText(R.string.disclaimer);
         tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
         tv.setTextColor(ContextCompat.getColor(this, R.color.colorCorporate));
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+        final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, // width
                 ViewGroup.LayoutParams.WRAP_CONTENT); // height
 
@@ -84,7 +84,7 @@ public class AboutActivity extends AppCompatActivity {
 
     private void openEmailApp(@NonNull String messageString) {
 
-        String mailto = "mailto:" + getString(R.string.email_address) + "?cc=" +
+        final String mailto = "mailto:" + getString(R.string.email_address) + "?cc=" +
                 "&subject=" + Uri.encode(getString(R.string.email_subject)) +
                 "&body=" + Uri.encode(messageString);
 
@@ -126,8 +126,8 @@ public class AboutActivity extends AppCompatActivity {
 
     private void openSocialNetwork(@NonNull SocialNetworks socialNetwork) {
 
-        String[] appPackages = socialNetwork.getAppPackages();
-        String url = socialNetwork.getUrl();
+        final String[] appPackages = socialNetwork.getAppPackages();
+        final String url = socialNetwork.getUrl();
         if (appPackages == null) {
             openBrowser(url);
             return;

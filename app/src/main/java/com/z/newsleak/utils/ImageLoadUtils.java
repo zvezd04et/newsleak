@@ -11,16 +11,16 @@ import androidx.annotation.NonNull;
 
 public class ImageLoadUtils {
 
-    private ImageLoadUtils() {
-        throw new IllegalAccessError("Attempt to instantiate utility class.");
-    }
-
     @NonNull
     public static RequestManager getImageLoader(@NonNull Context context) {
         RequestOptions imageOption = new RequestOptions()
                 .placeholder(R.drawable.preview_placeholder)
                 .fallback(R.drawable.preview_placeholder)
                 .centerCrop();
-        return  Glide.with(context).applyDefaultRequestOptions(imageOption);
+        return Glide.with(context).applyDefaultRequestOptions(imageOption);
+    }
+
+    private ImageLoadUtils() {
+        throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
 }
