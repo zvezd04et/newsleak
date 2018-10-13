@@ -11,7 +11,6 @@ import com.z.newsleak.utils.SupportUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -27,9 +26,10 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
+        final NewsListAdapter newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
+        newsAdapter.replaceItems(DataUtils.generateNews());
         final RecyclerView list = findViewById(R.id.news_list_rv);
-        list.setAdapter(new NewsListAdapter(this, DataUtils.generateNews(),
-                newsItem -> NewsDetailsActivity.start(this, newsItem)));
+        list.setAdapter(newsAdapter);
 
         final GridLayoutManager gridLayoutManager
                 = new GridLayoutManager(this, SupportUtils.getDisplayColumns(this));

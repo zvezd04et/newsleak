@@ -12,6 +12,7 @@ import com.z.newsleak.data.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
 
     @NonNull
-    private final List<NewsItem> newsItems;
+    private final List<NewsItem> newsItems = new ArrayList<>();
     @NonNull
     private final LayoutInflater inflater;
     @Nullable
@@ -30,9 +31,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     private final RequestManager imageLoader;
 
 
-    public NewsListAdapter(@NonNull Context context, @NonNull List<NewsItem> newsItems,
-                           @Nullable OnItemClickListener clickListener) {
-        this.newsItems = newsItems;
+    public NewsListAdapter(@NonNull Context context, @Nullable OnItemClickListener clickListener) {
         this.clickListener = clickListener;
         this.inflater = LayoutInflater.from(context);
         this.imageLoader = ImageLoadUtils.getImageLoader(context);
@@ -53,6 +52,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @Override
     public int getItemCount() {
         return newsItems.size();
+    }
+
+    public void replaceItems(@NonNull List<NewsItem> newItems) {
+        newsItems.clear();
+        newsItems.addAll(newItems);
+        notifyDataSetChanged();
     }
 
     @Override
