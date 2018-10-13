@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListActivity extends AppCompatActivity {
 
+    private static final String LOG_TAG = "NewsListActivity";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +63,7 @@ public class NewsListActivity extends AppCompatActivity {
                 return true;
 
             default:
-                Log.d("Menu", "Selected unknown menu item");
+                Log.d(LOG_TAG, "Selected unknown menu item");
                 return super.onOptionsItemSelected(item);
         }
     }
