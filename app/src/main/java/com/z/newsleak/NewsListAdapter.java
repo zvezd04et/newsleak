@@ -1,7 +1,6 @@
 package com.z.newsleak;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHolder> {
-
-    private final static int DEFAULT_VIEW = 0;
-    private final static int ANIMAL_VIEW = 1;
 
     @NonNull
     private final List<NewsItem> newsItems;
@@ -45,19 +41,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutRes = 0;
-        switch (viewType) {
-            case ANIMAL_VIEW:
-                layoutRes = R.layout.animal_item_news;
-                break;
-            case DEFAULT_VIEW:
-                layoutRes = R.layout.default_item_news;
-                break;
-
-            default:
-                Log.d("ViewType", "Get unknown view type");
-        }
-        return new ViewHolder(inflater.inflate(layoutRes, parent, false));
+        return new ViewHolder(inflater.inflate(viewType, parent, false));
     }
 
     @Override
@@ -76,9 +60,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
         switch(newsItems.get(position).getCategory()) {
             case ANIMALS:
-                return ANIMAL_VIEW;
+                return R.layout.animal_item_news;
             default:
-                return DEFAULT_VIEW;
+                return R.layout.default_item_news;
         }
     }
 
