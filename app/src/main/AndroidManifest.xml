@@ -22,8 +22,11 @@
         </activity>
         <activity
             android:name=".AboutActivity"
-            android:label="@string/title_author" />
-        <activity android:name=".NewsDetailsActivity" />
+            android:label="@string/title_author"
+            android:parentActivityName=".NewsListActivity" />
+        <activity
+            android:name=".NewsDetailsActivity"
+            android:parentActivityName=".NewsListActivity" />
     </application>
 
 </manifest>
