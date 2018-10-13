@@ -1,6 +1,6 @@
 package com.z.newsleak;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import androidx.annotation.NonNull;
@@ -22,9 +22,9 @@ public class AboutActivity extends AppCompatActivity {
 
     private RelativeLayout rlBase;
 
-    public static void start(@NonNull Activity activity) {
-        final Intent intent = new Intent(activity, AboutActivity.class);
-        activity.startActivity(intent);
+    public static void start(@NonNull Context context) {
+        final Intent intent = new Intent(context, AboutActivity.class);
+        context.startActivity(intent);
     }
 
     @Override

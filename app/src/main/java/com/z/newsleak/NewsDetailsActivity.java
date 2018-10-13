@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -19,10 +19,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     private static final String EXTRA_NEWS = "EXTRA_NEWS";
 
-    public static void start(@NonNull Activity activity, @NonNull NewsItem newsItem) {
-        final Intent intent = new Intent(activity, NewsDetailsActivity.class);
+    public static void start(@NonNull Context context, @NonNull NewsItem newsItem) {
+        final Intent intent = new Intent(context, NewsDetailsActivity.class);
         intent.putExtra(EXTRA_NEWS, newsItem);
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
     @Override
