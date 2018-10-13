@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListActivity extends AppCompatActivity {
@@ -31,9 +32,12 @@ public class NewsListActivity extends AppCompatActivity {
         final RecyclerView list = findViewById(R.id.news_list_rv);
         list.setAdapter(newsAdapter);
 
-        final GridLayoutManager gridLayoutManager
-                = new GridLayoutManager(this, SupportUtils.getDisplayColumns(this));
-        list.setLayoutManager(gridLayoutManager);
+        final int columnsCount = SupportUtils.getNewsColumnsCount(this);
+        if (columnsCount == 1) {
+            list.setLayoutManager(new LinearLayoutManager(this));
+        } else {
+            list.setLayoutManager(new GridLayoutManager(this, columnsCount));
+        }
 
         final DividerItemDecoration verticalDivider
                 = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
