@@ -43,7 +43,8 @@ public class NewsDetailsActivity extends AppCompatActivity {
         imageLoader.load(newsItem.getImageUrl()).into(photoView);
 
         final TextView publishDateView = findViewById(R.id.news_details_tv_publish_date);
-        publishDateView.setText(DateFormatUtils.getRelativeDateWithMinutes(newsItem.getPublishDate()));
+        publishDateView.setText(DateFormatUtils.getRelativeDateTime(this,
+                newsItem.getPublishDate()));
 
     }
 }
