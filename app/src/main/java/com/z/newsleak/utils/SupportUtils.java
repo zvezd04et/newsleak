@@ -11,7 +11,6 @@ public class SupportUtils {
         throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
 
-    @NonNull
     public static boolean isTablet(@NonNull Context context) {
 
         int screenLayoutSizeMask = context.getResources().getConfiguration().screenLayout &
@@ -21,7 +20,6 @@ public class SupportUtils {
         return (xlarge || large);
     }
 
-    @NonNull
     public static int getDisplayColumns(@NonNull Context context) {
         int columnCount = 1;
         if (isTablet(context)) {
