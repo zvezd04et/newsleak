@@ -1,4 +1,4 @@
-package com.z.newsleak;
+package com.z.newsleak.features.newsfeed;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
-import com.z.newsleak.data.NewsItem;
+import com.z.newsleak.R;
+import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
@@ -48,7 +49,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         holder.bind(newsItems.get(position));
     }
 
-    @NonNull
     @Override
     public int getItemCount() {
         return newsItems.size();
@@ -61,7 +61,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     }
 
     @Override
-    public int getItemViewType(@NonNull int position) {
+    public int getItemViewType(int position) {
 
         switch (newsItems.get(position).getCategory()) {
             case ANIMALS:
@@ -75,7 +75,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         void onItemClick(@NonNull NewsItem newsItem);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         @NonNull
         private final ImageView photoView;
         @NonNull

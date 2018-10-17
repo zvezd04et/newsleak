@@ -1,4 +1,4 @@
-package com.z.newsleak;
+package com.z.newsleak.features.news_details;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,7 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
-import com.z.newsleak.data.NewsItem;
+import com.z.newsleak.R;
+import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 

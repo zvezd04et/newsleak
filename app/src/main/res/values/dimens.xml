@@ -26,4 +26,6 @@
     <dimen name="zero_size">0dp</dimen>
     <dimen name="vertical_divider_height">4dp</dimen>
 
+    <dimen name="news_progress_size">50dp</dimen>
+
 </resources>

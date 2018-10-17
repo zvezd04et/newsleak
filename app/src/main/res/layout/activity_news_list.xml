@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/news_list_rv"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".NewsListActivity"
-    tools:listitem="@layout/animal_item_news" />
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/news_list_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".features.newsfeed.NewsListActivity"
+        tools:listitem="@layout/animal_item_news" />
+
+    <ProgressBar
+        android:id="@+id/news_list_progress"
+        android:layout_width="@dimen/news_progress_size"
+        android:layout_height="@dimen/news_progress_size"
+        android:layout_gravity="center"/>
+
+</FrameLayout>

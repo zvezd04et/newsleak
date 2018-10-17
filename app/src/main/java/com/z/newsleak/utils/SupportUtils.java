@@ -2,8 +2,10 @@ package com.z.newsleak.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SupportUtils {
 
@@ -20,6 +22,12 @@ public class SupportUtils {
         return (int) (screenWidthDp / COLUMN_WIDTH_DP);
     }
 
+    public static void setVisible(@Nullable View view, boolean isVisible) {
+        int visibility = isVisible ? View.VISIBLE : View.GONE;
+        if (view != null) {
+            view.setVisibility(visibility);
+        }
+    }
     private SupportUtils() {
         throw new IllegalAccessError("Attempt to instantiate utility class.");
     }

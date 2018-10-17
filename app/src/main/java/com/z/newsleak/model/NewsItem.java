@@ -1,4 +1,6 @@
-package com.z.newsleak.data;
+package com.z.newsleak.model;
+
+import com.z.newsleak.data.Category;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +22,8 @@ public class NewsItem implements Serializable {
     @NonNull
     private final String fullText;
 
-    public NewsItem(String title, String imageUrl, Category category, Date publishDate, String previewText, String fullText) {
+    public NewsItem(@NonNull String title, @NonNull String imageUrl, @NonNull Category category,
+                    @NonNull Date publishDate, @NonNull String previewText, @NonNull String fullText) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.category = category;

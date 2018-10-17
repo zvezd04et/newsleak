@@ -1,4 +1,7 @@
-package com.z.newsleak.data;
+package com.z.newsleak.utils;
+
+import com.z.newsleak.data.Category;
+import com.z.newsleak.model.NewsItem;
 
 import java.util.ArrayList;
 import java.util.Date;

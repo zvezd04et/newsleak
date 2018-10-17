@@ -1,4 +1,4 @@
-package com.z.newsleak;
+package com.z.newsleak.features.about_info;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,6 +6,8 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
+import com.z.newsleak.R;
+import com.z.newsleak.data.SocialNetworks;
 
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
