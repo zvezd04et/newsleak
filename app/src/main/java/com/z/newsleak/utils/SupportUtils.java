@@ -6,6 +6,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.reactivex.disposables.Disposable;
 
 public class SupportUtils {
 
@@ -26,6 +27,12 @@ public class SupportUtils {
         int visibility = isVisible ? View.VISIBLE : View.GONE;
         if (view != null) {
             view.setVisibility(visibility);
+        }
+    }
+
+    public static void disposeSafe(@Nullable Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
         }
     }
     private SupportUtils() {

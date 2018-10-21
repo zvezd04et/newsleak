@@ -2,7 +2,6 @@ package com.z.newsleak.features.newsfeed;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,10 +9,12 @@ import android.widget.ProgressBar;
 
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
+import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DataUtils;
 import com.z.newsleak.features.about_info.AboutActivity;
-import com.z.newsleak.utils.DataLoadUtils;
 import com.z.newsleak.utils.SupportUtils;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,16 +24,25 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class NewsListActivity extends AppCompatActivity implements NewsListView {
 
     private static final String LOG_TAG = "NewsListActivity";
 
     @Nullable
-    private Thread thread;
+    private RecyclerView list;
     @Nullable
     private ProgressBar progressBar;
-    private RecyclerView list;
+
+    @Nullable
+    private NewsListAdapter newsAdapter;
+
+    @Nullable
+    private Disposable disposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +50,12 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
         setContentView(R.layout.activity_news_list);
 
         progressBar = findViewById(R.id.news_list_progress);
+
         list = findViewById(R.id.news_list_rv);
+        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
+        if (list != null) {
+            list.setAdapter(newsAdapter);
+        }
 
         final int columnsCount = SupportUtils.getNewsColumnsCount(this);
         if (columnsCount == 1) {
@@ -63,25 +78,25 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
     protected void onStart() {
         super.onStart();
 
-        thread = new Thread(new DataLoadUtils(new Handler(), this));
-        thread.start();
-
-        showProgress(true);
+        loadNews();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (thread != null) {
-            thread.interrupt();
-        }
-        thread = null;
+
+        showProgress(false);
+
+        SupportUtils.disposeSafe(disposable);
+        disposable = null;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         progressBar = null;
+        list = null;
+        newsAdapter = null;
     }
 
     @Override
@@ -104,14 +119,26 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
     }
 
     @Override
+    public void loadNews() {
+        showProgress(true);
+        disposable = Observable.fromCallable(DataUtils::generateNews)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateNews);
+    }
+
+    @Override
+    public void updateNews(@Nullable List<NewsItem> news) {
+        if (newsAdapter != null && news != null) newsAdapter.replaceItems(news);
+
+        SupportUtils.setVisible(list, true);
+        SupportUtils.setVisible(progressBar, false);
+    }
+
+    @Override
     public void showProgress(boolean shouldShow) {
         SupportUtils.setVisible(progressBar, shouldShow);
     }
 
-    @Override
-    public void updateNews() {
-        final NewsListAdapter newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
-        newsAdapter.replaceItems(DataUtils.generateNews());
-        list.setAdapter(newsAdapter);
-    }
+
 }

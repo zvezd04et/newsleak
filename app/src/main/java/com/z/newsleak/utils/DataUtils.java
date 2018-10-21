@@ -1,5 +1,7 @@
 package com.z.newsleak.utils;
 
+import android.util.Log;
+
 import com.z.newsleak.data.Category;
 import com.z.newsleak.model.NewsItem;
 
@@ -12,8 +14,16 @@ import androidx.annotation.NonNull;
 
 public class DataUtils {
 
+    private static final String LOG_TAG = "DataUtils";
+
     @NonNull
     public static List<NewsItem> generateNews() {
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+        }
 
         List<NewsItem> news = new ArrayList<>();
         news.add(new NewsItem(
