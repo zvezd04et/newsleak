@@ -60,6 +60,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    @NonNull
+    public List<NewsItem> getNewsItems() {
+        return newsItems;
+    }
+
     @Override
     public int getItemViewType(int position) {
 

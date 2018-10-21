@@ -2,6 +2,7 @@ package com.z.newsleak.features.newsfeed;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import com.z.newsleak.utils.DataUtils;
 import com.z.newsleak.features.about_info.AboutActivity;
 import com.z.newsleak.utils.SupportUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -29,9 +31,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NewsListActivity extends AppCompatActivity implements NewsListView {
+public class NewsListActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = "NewsListActivity";
+    private static final String BUNDLE_LIST_KEY = "BUNDLE_LIST_KEY";
+    private static final String NEWS_ITEMS_KEY = "NEWS_ITEMS_KEY";
 
     @Nullable
     private RecyclerView list;
@@ -72,13 +76,14 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
         }
         list.addItemDecoration(verticalDivider);
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        loadNews();
+        if (savedInstanceState==null) {
+            loadNews();
+        } else {
+            Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
+            list.getLayoutManager().onRestoreInstanceState(listState);
+            List<NewsItem> newsItems = (List<NewsItem>) savedInstanceState.getSerializable(NEWS_ITEMS_KEY);
+            updateNews(newsItems);
+        }
     }
 
     @Override
@@ -89,6 +94,16 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
 
         SupportUtils.disposeSafe(disposable);
         disposable = null;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (list != null) {
+            outState.putParcelable(BUNDLE_LIST_KEY, list.getLayoutManager().onSaveInstanceState());
+            outState.putSerializable(NEWS_ITEMS_KEY, (Serializable) newsAdapter.getNewsItems());
+        }
     }
 
     @Override
@@ -118,8 +133,7 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
         }
     }
 
-    @Override
-    public void loadNews() {
+    private void loadNews() {
         showProgress(true);
         disposable = Observable.fromCallable(DataUtils::generateNews)
                 .subscribeOn(Schedulers.io())
@@ -127,16 +141,14 @@ public class NewsListActivity extends AppCompatActivity implements NewsListView 
                 .subscribe(this::updateNews);
     }
 
-    @Override
-    public void updateNews(@Nullable List<NewsItem> news) {
+    private void updateNews(@Nullable List<NewsItem> news) {
         if (newsAdapter != null && news != null) newsAdapter.replaceItems(news);
 
         SupportUtils.setVisible(list, true);
         SupportUtils.setVisible(progressBar, false);
     }
 
-    @Override
-    public void showProgress(boolean shouldShow) {
+    private void showProgress(boolean shouldShow) {
         SupportUtils.setVisible(progressBar, shouldShow);
     }
 
