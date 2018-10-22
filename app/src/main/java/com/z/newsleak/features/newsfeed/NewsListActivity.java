@@ -41,7 +41,6 @@ public class NewsListActivity extends AppCompatActivity {
     private RecyclerView list;
     @Nullable
     private ProgressBar progressBar;
-
     @Nullable
     private NewsListAdapter newsAdapter;
 
@@ -76,7 +75,7 @@ public class NewsListActivity extends AppCompatActivity {
         }
         list.addItemDecoration(verticalDivider);
 
-        if (savedInstanceState==null) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey(NEWS_ITEMS_KEY)) {
             loadNews();
         } else {
             Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
