@@ -30,7 +30,7 @@ public class SupportUtils {
         }
     }
 
-    public static void disposeSafe(@Nullable Disposable disposable) {
+    public static void disposeSafely(@Nullable Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }

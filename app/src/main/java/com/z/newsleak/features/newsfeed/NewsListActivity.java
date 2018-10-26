@@ -91,7 +91,7 @@ public class NewsListActivity extends AppCompatActivity {
 
         showProgress(false);
 
-        SupportUtils.disposeSafe(disposable);
+        SupportUtils.disposeSafely(disposable);
         disposable = null;
     }
 
