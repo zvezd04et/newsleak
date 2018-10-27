@@ -80,7 +80,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         void onItemClick(@NonNull NewsItem newsItem);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         @NonNull
         private final ImageView photoView;
         @NonNull
@@ -92,7 +92,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         @NonNull
         private final TextView publishDateView;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
