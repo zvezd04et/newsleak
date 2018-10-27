@@ -10,4 +10,6 @@
     <string name="menu_action_about">Об авторе</string>
     <string name="error_no_browser_app">Браузер не обнаружен</string>
     <string name="title_author">Автор</string>
+    <string name="error_loading_news">Ошибка при загрузке новостей</string>
+    <string name="error_action_retry">Повторить попытку</string>
 </resources>

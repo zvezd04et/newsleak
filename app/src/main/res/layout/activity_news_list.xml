@@ -17,4 +17,9 @@
         android:layout_height="@dimen/news_progress_size"
         android:layout_gravity="center" />
 
+    <include
+        android:id="@+id/error_content"
+        layout="@layout/error_content"
+        android:visibility="gone"/>
+
 </FrameLayout>

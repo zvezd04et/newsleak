@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
@@ -13,6 +15,7 @@ import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DataUtils;
 import com.z.newsleak.features.about_info.AboutActivity;
+import com.z.newsleak.utils.ErrorHandler;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.io.Serializable;
@@ -29,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewsListActivity extends AppCompatActivity {
@@ -43,6 +47,8 @@ public class NewsListActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     @Nullable
     private NewsListAdapter newsAdapter;
+    @Nullable
+    private View errorContent;
 
     @Nullable
     private Disposable disposable;
@@ -52,7 +58,13 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
+        RxJavaPlugins.setErrorHandler(ErrorHandler.get());
+
         progressBar = findViewById(R.id.news_list_progress);
+        errorContent = findViewById(R.id.error_content);
+
+        final Button retryBtn = findViewById(R.id.error_btn_retry);
+        retryBtn.setOnClickListener(btn -> loadNews());
 
         list = findViewById(R.id.news_list_rv);
         newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
@@ -83,6 +95,7 @@ public class NewsListActivity extends AppCompatActivity {
             List<NewsItem> newsItems = (List<NewsItem>) savedInstanceState.getSerializable(NEWS_ITEMS_KEY);
             updateNews(newsItems);
         }
+
     }
 
     @Override
@@ -137,7 +150,8 @@ public class NewsListActivity extends AppCompatActivity {
         disposable = Observable.fromCallable(DataUtils::generateNews)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateNews);
+                .subscribe(this::updateNews,
+                        this::handleError);
     }
 
     private void updateNews(@Nullable List<NewsItem> news) {
@@ -145,10 +159,21 @@ public class NewsListActivity extends AppCompatActivity {
 
         SupportUtils.setVisible(list, true);
         SupportUtils.setVisible(progressBar, false);
+        SupportUtils.setVisible(errorContent, false);
     }
 
     private void showProgress(boolean shouldShow) {
+        SupportUtils.setVisible(list, !shouldShow);
         SupportUtils.setVisible(progressBar, shouldShow);
+        SupportUtils.setVisible(errorContent, false);
+    }
+
+    private void handleError(@NonNull Throwable th) {
+        Log.e(LOG_TAG, th.getMessage(), th);
+
+        SupportUtils.setVisible(list, false);
+        SupportUtils.setVisible(progressBar, false);
+        SupportUtils.setVisible(errorContent, true);
     }
 
 

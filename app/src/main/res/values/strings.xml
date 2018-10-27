@@ -10,12 +10,15 @@
     <string name="warning_empty_message">Please enter your message</string>
     <string name="error_no_email_app">No Email apps were found.</string>
     <string name="error_no_browser_app">No browser apps were found.</string>
-    <string name="input_hint">Enter message...</string>
+    <string name="input_hint">Enter message…</string>
     <string name="preview_action_email">Send message</string>
     <string name="position">1c team lead</string>
     <string name="disclaimer" translatable="false">© 2018 Petronenko</string>
 
     <string name="title_author">Author</string>
     <string name="menu_action_about">About</string>
+
+    <string name="error_loading_news">Error loading news. Tap to retry</string>
+    <string name="error_action_retry">Retry</string>
 
 </resources>
