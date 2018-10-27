@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -147,7 +148,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void loadNews() {
         showProgress(true);
-        disposable = Observable.fromCallable(DataUtils::generateNews)
+        disposable = Single.fromCallable(DataUtils::generateNews)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateNews,
