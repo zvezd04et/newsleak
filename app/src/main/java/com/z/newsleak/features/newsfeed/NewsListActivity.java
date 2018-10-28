@@ -15,7 +15,6 @@ import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DataUtils;
 import com.z.newsleak.features.about_info.AboutActivity;
-import com.z.newsleak.utils.ErrorHandler;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.io.Serializable;
@@ -29,11 +28,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewsListActivity extends AppCompatActivity {
@@ -58,8 +55,6 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
-
-        RxJavaPlugins.setErrorHandler(ErrorHandler.get());
 
         progressBar = findViewById(R.id.news_list_progress);
         errorContent = findViewById(R.id.error_content);
