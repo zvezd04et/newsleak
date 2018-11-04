@@ -6,6 +6,8 @@ public class ImageDTO {
 
     @SerializedName("url")
     private String url;
+    @SerializedName("format")
+    private String format;
     @SerializedName("height")
     private int height;
     @SerializedName("width")
@@ -21,5 +23,9 @@ public class ImageDTO {
 
     public int getWidth() {
         return width;
+    }
+
+    public String getFormat() {
+        return format;
     }
 }

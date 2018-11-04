@@ -10,11 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.z.newsleak.data.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.utils.DataUtils;
+import com.z.newsleak.network.NewsResponse;
+import com.z.newsleak.network.api.RestApi;
+import com.z.newsleak.network.dto.NewsItemDTO;
 import com.z.newsleak.features.about_info.AboutActivity;
+import com.z.newsleak.utils.NewsItemConverter;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.io.Serializable;
@@ -28,10 +32,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 public class NewsListActivity extends AppCompatActivity {
 
@@ -50,6 +55,8 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Nullable
     private Disposable disposable;
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,7 +96,8 @@ public class NewsListActivity extends AppCompatActivity {
             Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
             list.getLayoutManager().onRestoreInstanceState(listState);
             List<NewsItem> newsItems = (List<NewsItem>) savedInstanceState.getSerializable(NEWS_ITEMS_KEY);
-            updateNews(newsItems);
+            if (newsAdapter != null && newsItems != null) newsAdapter.replaceItems(newsItems);
+            showState(LoadState.HAS_DATA);
         }
 
     }
@@ -97,11 +105,9 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-
-        showProgress(false);
-
         SupportUtils.disposeSafely(disposable);
         disposable = null;
+        showState(LoadState.HAS_DATA);
     }
 
     @Override
@@ -142,35 +148,77 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void loadNews() {
-        showProgress(true);
-        disposable = Single.fromCallable(DataUtils::generateNews)
+        final Disposable searchDisposable = RestApi.getInstance()
+                .getApi()
+                .getNews("home")
                 .subscribeOn(Schedulers.io())
+                .doOnSubscribe(disposable -> showState(LoadState.LOADING))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateNews,
-                        this::handleError);
+                .subscribe(this::processResponse, this::handleError);
+        compositeDisposable.add(searchDisposable);
     }
 
-    private void updateNews(@Nullable List<NewsItem> news) {
+    private void processResponse(@NonNull Response<NewsResponse> response) {
+
+        if (!response.isSuccessful()) {
+            showState(LoadState.SERVER_ERROR);
+            return;
+        }
+
+        final NewsResponse body = response.body();
+        if (body == null) {
+            showState(LoadState.HAS_NO_DATA);
+            return;
+        }
+
+        final List<NewsItemDTO> newsItemDTOs = body.getResults();
+        if (newsItemDTOs == null || newsItemDTOs.isEmpty()) {
+            showState(LoadState.HAS_NO_DATA);
+            return;
+        }
+
+        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs);
         if (newsAdapter != null && news != null) newsAdapter.replaceItems(news);
-
-        SupportUtils.setVisible(list, true);
-        SupportUtils.setVisible(progressBar, false);
-        SupportUtils.setVisible(errorContent, false);
-    }
-
-    private void showProgress(boolean shouldShow) {
-        SupportUtils.setVisible(list, !shouldShow);
-        SupportUtils.setVisible(progressBar, shouldShow);
-        SupportUtils.setVisible(errorContent, false);
+        showState(LoadState.HAS_DATA);
     }
 
     private void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
-
-        SupportUtils.setVisible(list, false);
-        SupportUtils.setVisible(progressBar, false);
-        SupportUtils.setVisible(errorContent, true);
+        showState(LoadState.SERVER_ERROR);
     }
 
+    public void showState(@NonNull LoadState state) {
+
+        switch (state) {
+            case HAS_DATA:
+                SupportUtils.setVisible(list, true);
+                SupportUtils.setVisible(progressBar, false);
+                SupportUtils.setVisible(errorContent, false);
+                break;
+            case HAS_NO_DATA:
+                SupportUtils.setVisible(list, false);
+                SupportUtils.setVisible(progressBar, false);
+                SupportUtils.setVisible(errorContent, true);
+                break;
+            case NETWORK_ERROR:
+                SupportUtils.setVisible(list, false);
+                SupportUtils.setVisible(progressBar, false);
+                SupportUtils.setVisible(errorContent, true);
+                break;
+            case SERVER_ERROR:
+                SupportUtils.setVisible(list, false);
+                SupportUtils.setVisible(progressBar, false);
+                SupportUtils.setVisible(errorContent, true);
+                break;
+            case LOADING:
+                SupportUtils.setVisible(list, false);
+                SupportUtils.setVisible(progressBar, true);
+                SupportUtils.setVisible(errorContent, false);
+                break;
+
+            default:
+                Log.d(LOG_TAG, "Unknown state: " + state);
+        }
+    }
 
 }

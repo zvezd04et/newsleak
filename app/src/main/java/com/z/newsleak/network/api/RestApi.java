@@ -8,11 +8,12 @@ import androidx.annotation.NonNull;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class RestApi {
 
-    private static final int TIMEOUT_IN_SECONDS = 2;
+    private static final int TIMEOUT_IN_SECONDS = 5;
     private static RestApi sRestApi;
 
     private final NewsEndpoint newsEndpoint;
@@ -38,6 +39,7 @@ public final class RestApi {
                 .baseUrl(Constant.API_HOST)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
@@ -56,7 +58,7 @@ public final class RestApi {
                 .build();
     }
 
-    public NewsEndpoint getNews() {
+    public NewsEndpoint getApi() {
         return newsEndpoint;
     }
 

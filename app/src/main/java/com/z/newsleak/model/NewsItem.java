@@ -16,6 +16,8 @@ public class NewsItem implements Serializable {
     @NonNull
     private final Category category;
     @NonNull
+    private final String section;
+    @NonNull
     private final Date publishDate;
     @NonNull
     private final String previewText;
@@ -30,6 +32,17 @@ public class NewsItem implements Serializable {
         this.publishDate = publishDate;
         this.previewText = previewText;
         this.fullText = fullText;
+        this.section = category.getName();
+    }
+
+    public NewsItem(@NonNull String title, @NonNull String imageUrl, @NonNull Category category, @NonNull String section, @NonNull Date publishDate, @NonNull String previewText, @NonNull String fullText) {
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.section = section;
+        this.publishDate = publishDate;
+        this.previewText = previewText;
+        this.fullText = fullText;
+        this.category = category;
     }
 
     @NonNull
@@ -62,4 +75,8 @@ public class NewsItem implements Serializable {
         return fullText;
     }
 
+    @NonNull
+    public String getSection() {
+        return section;
+    }
 }
