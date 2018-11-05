@@ -47,6 +47,11 @@ public enum Category implements Serializable {
         return name;
     }
 
+    @NonNull
+    public String getSection() {
+        return getName().replaceAll("\\s+","").toLowerCase();
+    }
+
     @Override
     public String toString() {
         return getName();

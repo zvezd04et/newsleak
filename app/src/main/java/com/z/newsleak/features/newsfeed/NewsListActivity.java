@@ -58,6 +58,7 @@ public class NewsListActivity extends AppCompatActivity {
     private LoadingScreenHolder loadingScreen;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private String currentSection;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,13 +67,13 @@ public class NewsListActivity extends AppCompatActivity {
 
         rvNewsfeed = findViewById(R.id.news_list_rv);
         setupRecyclerView(rvNewsfeed);
-        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> loadNews());
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> loadNews(currentSection));
 
         final Spinner spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
         if (savedInstanceState == null || !savedInstanceState.containsKey(NEWS_ITEMS_KEY)) {
-            loadNews();
+            loadNews(currentSection);
         } else {
             Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
             rvNewsfeed.getLayoutManager().onRestoreInstanceState(listState);
@@ -124,10 +125,10 @@ public class NewsListActivity extends AppCompatActivity {
         }
     }
 
-    private void loadNews() {
+    private void loadNews(String section) {
         final Disposable searchDisposable = RestApi.getInstance()
                 .getApi()
-                .getNews("home")
+                .getNews(section)
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> loadingScreen.showState(LoadState.LOADING))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -185,12 +186,17 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void setupSpinner(@NonNull Spinner spinner) {
-        ArrayAdapter<Category> adapter = new ArrayAdapter<>(this, R.layout.section_spinner_item, Category.values());
+        final ArrayAdapter<Category> adapter = new ArrayAdapter<>(this, R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                final String section = Category.values()[position].getSection();
+                if (!section.equals(currentSection)) {
+                    loadNews(section);
+                    currentSection = section;
+                }
             }
 
             @Override
