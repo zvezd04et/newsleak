@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".features.newsfeed.NewsListActivity"
-        tools:listitem="@layout/animal_item_news" />
+        tools:listitem="@layout/default_item_news" />
 
     <include
         android:id="@+id/loading_screen"
