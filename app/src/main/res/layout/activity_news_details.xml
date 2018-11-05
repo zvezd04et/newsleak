@@ -15,5 +15,11 @@
             android:id="@+id/news_details_wv_full_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/loading_screen"
+        layout="@layout/loading_screen" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
