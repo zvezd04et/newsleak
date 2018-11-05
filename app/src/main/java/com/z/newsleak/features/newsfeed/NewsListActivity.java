@@ -57,8 +57,8 @@ public class NewsListActivity extends AppCompatActivity {
 
     @NonNull
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    @Nullable
-    private String currentSection;
+    @NonNull
+    private Category currentCategory = Category.HOME;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,13 +67,13 @@ public class NewsListActivity extends AppCompatActivity {
 
         rvNewsfeed = findViewById(R.id.news_list_rv);
         setupRecyclerView(rvNewsfeed);
-        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> loadNews(currentSection));
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> loadNews(currentCategory));
 
         final Spinner spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
         if (savedInstanceState == null || !savedInstanceState.containsKey(NEWS_ITEMS_KEY)) {
-            loadNews(currentSection);
+            loadNews(currentCategory);
         } else {
             Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
             rvNewsfeed.getLayoutManager().onRestoreInstanceState(listState);
@@ -123,10 +123,10 @@ public class NewsListActivity extends AppCompatActivity {
         }
     }
 
-    private void loadNews(String section) {
+    private void loadNews(@NonNull Category category) {
         final Disposable searchDisposable = RestApi.getInstance()
                 .getApi()
-                .getNews(section)
+                .getNews(category.getSection())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> loadingScreen.showState(LoadState.LOADING))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -153,7 +153,7 @@ public class NewsListActivity extends AppCompatActivity {
             return;
         }
 
-        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs);
+        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs, currentCategory);
         if (newsAdapter != null && news != null) newsAdapter.replaceItems(news);
         loadingScreen.showState(LoadState.HAS_DATA);
     }
@@ -190,10 +190,10 @@ public class NewsListActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                final String section = Category.values()[position].getSection();
-                if (!section.equals(currentSection)) {
-                    loadNews(section);
-                    currentSection = section;
+                final Category category = Category.values()[position];
+                if (!category.equals(currentCategory)) {
+                    loadNews(category);
+                    currentCategory = category;
                 }
             }
 

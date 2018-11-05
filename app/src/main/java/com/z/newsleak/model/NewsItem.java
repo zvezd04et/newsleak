@@ -6,51 +6,43 @@ import java.io.Serializable;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class NewsItem implements Serializable {
 
-    @NonNull
+    @Nullable
     private final String title;
-    @NonNull
+    @Nullable
     private final String imageUrl;
     @NonNull
     private final Category category;
-    @NonNull
+    @Nullable
     private final String section;
-    @NonNull
+    @Nullable
     private final Date publishDate;
-    @NonNull
+    @Nullable
     private final String previewText;
-    @NonNull
-    private final String fullText;
+    @Nullable
+    private final String articleUrl;
 
-    public NewsItem(@NonNull String title, @NonNull String imageUrl, @NonNull Category category,
-                    @NonNull Date publishDate, @NonNull String previewText, @NonNull String fullText) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.category = category;
-        this.publishDate = publishDate;
-        this.previewText = previewText;
-        this.fullText = fullText;
-        this.section = category.getName();
-    }
-
-    public NewsItem(@NonNull String title, @NonNull String imageUrl, @NonNull Category category, @NonNull String section, @NonNull Date publishDate, @NonNull String previewText, @NonNull String fullText) {
+    public NewsItem(@Nullable String title, @Nullable String imageUrl, @NonNull Category category,
+                    @Nullable String section, @Nullable Date publishDate, @Nullable String previewText,
+                    @Nullable String articleUrl) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.section = section;
         this.publishDate = publishDate;
         this.previewText = previewText;
-        this.fullText = fullText;
+        this.articleUrl = articleUrl;
         this.category = category;
     }
 
-    @NonNull
+    @Nullable
     public String getTitle() {
         return title;
     }
 
-    @NonNull
+    @Nullable
     public String getImageUrl() {
         return imageUrl;
     }
@@ -60,22 +52,22 @@ public class NewsItem implements Serializable {
         return category;
     }
 
-    @NonNull
+    @Nullable
     public Date getPublishDate() {
         return publishDate;
     }
 
-    @NonNull
+    @Nullable
     public String getPreviewText() {
         return previewText;
     }
 
-    @NonNull
-    public String getFullText() {
-        return fullText;
+    @Nullable
+    public String getArticleUrl() {
+        return articleUrl;
     }
 
-    @NonNull
+    @Nullable
     public String getSection() {
         return section;
     }

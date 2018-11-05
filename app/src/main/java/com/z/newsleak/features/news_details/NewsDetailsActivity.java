@@ -7,18 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.RequestManager;
 import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadingScreenHolder;
-import com.z.newsleak.utils.DateFormatUtils;
-import com.z.newsleak.utils.ImageLoadUtils;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
@@ -41,6 +34,6 @@ public class NewsDetailsActivity extends AppCompatActivity {
         final WebView webView = findViewById(R.id.news_details_wv_full_text);
         final LoadingScreenHolder loadingScreen = new LoadingScreenHolder(webView, btn -> webView.reload());
         webView.setWebViewClient(new NewsWebViewClient(loadingScreen));
-        webView.loadUrl(newsItem.getFullText());
+        webView.loadUrl(newsItem.getArticleUrl());
     }
 }
