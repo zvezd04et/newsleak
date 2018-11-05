@@ -6,7 +6,12 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.z.newsleak.data.Category;
 import com.z.newsleak.data.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
@@ -79,6 +84,9 @@ public class NewsListActivity extends AppCompatActivity {
             verticalDivider.setDrawable(dividerDrawable);
         }
         list.addItemDecoration(verticalDivider);
+
+        final Spinner spinner = findViewById(R.id.news_list_sp_section);
+        setupSpinner(spinner);
 
         if (savedInstanceState == null || !savedInstanceState.containsKey(NEWS_ITEMS_KEY)) {
             loadNews();
@@ -173,4 +181,18 @@ public class NewsListActivity extends AppCompatActivity {
         loadingScreen.showState(LoadState.SERVER_ERROR);
     }
 
+    private void setupSpinner(@NonNull Spinner spinner) {
+        ArrayAdapter<Category> adapter = new ArrayAdapter<>(this, R.layout.section_spinner_item, Category.values());
+        adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
 }

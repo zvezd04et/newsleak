@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/checkedTextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:background="@color/colorPrimaryDark"
+    android:paddingStart="@dimen/section_spinner_padding_horizontal"
+    android:paddingTop="@dimen/section_spinner_padding_vertical"
+    android:paddingEnd="@dimen/section_spinner_padding_horizontal"
+    android:paddingBottom="@dimen/section_spinner_padding_vertical"
+    android:textSize="@dimen/section_spinner_text_size"
+    tools:text="Home" />

@@ -28,4 +28,8 @@
 
     <dimen name="news_progress_size">50dp</dimen>
 
+    <dimen name="section_spinner_padding_vertical">8dp</dimen>
+    <dimen name="section_spinner_padding_horizontal">16dp</dimen>
+    <dimen name="section_spinner_text_size">24sp</dimen>
+
 </resources>

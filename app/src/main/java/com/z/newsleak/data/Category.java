@@ -1,6 +1,8 @@
 package com.z.newsleak.data;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 
@@ -54,5 +56,10 @@ public enum Category implements Serializable {
     @NonNull
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }
