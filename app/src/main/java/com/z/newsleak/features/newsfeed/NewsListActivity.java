@@ -51,13 +51,13 @@ public class NewsListActivity extends AppCompatActivity {
     private RecyclerView rvNewsfeed;
     @Nullable
     private NewsListAdapter newsAdapter;
-    @Nullable
-    private Disposable disposable;
 
     @NonNull
     private LoadingScreenHolder loadingScreen;
 
+    @NonNull
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    @Nullable
     private String currentSection;
 
     @Override
@@ -87,8 +87,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        SupportUtils.disposeSafely(disposable);
-        disposable = null;
+        SupportUtils.disposeSafely(compositeDisposable);
         loadingScreen.showState(LoadState.HAS_DATA);
     }
 
@@ -103,7 +102,6 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        newsAdapter = null;
     }
 
     @Override
