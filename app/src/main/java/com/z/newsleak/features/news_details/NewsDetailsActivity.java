@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,20 +34,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_details);
 
         final NewsItem newsItem = (NewsItem) getIntent().getSerializableExtra(EXTRA_NEWS);
-        setTitle(newsItem.getCategory().getName());
+        setTitle(newsItem.getSection());
 
-        final TextView titleView = findViewById(R.id.news_details_tv_title);
-        titleView.setText(newsItem.getTitle());
-        final TextView fullTextView = findViewById(R.id.news_details_tv_full_text);
-        fullTextView.setText(newsItem.getFullText());
-
-        final RequestManager imageLoader = ImageLoadUtils.getImageLoader(this);
-        final ImageView photoView = findViewById(R.id.news_details_iv_photo);
-        imageLoader.load(newsItem.getImageUrl()).into(photoView);
-
-        final TextView publishDateView = findViewById(R.id.news_details_tv_publish_date);
-        publishDateView.setText(DateFormatUtils.getRelativeDateTime(this,
-                newsItem.getPublishDate()));
+        final WebView webView = findViewById(R.id.news_details_wv_full_text);
+        webView.setWebViewClient(new WebViewClient());
+        webView.loadUrl(newsItem.getFullText());
 
     }
 }
