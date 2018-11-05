@@ -6,6 +6,7 @@ import android.text.format.DateUtils;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static android.text.format.DateUtils.FORMAT_ABBREV_RELATIVE;
@@ -13,8 +14,12 @@ import static android.text.format.DateUtils.HOUR_IN_MILLIS;
 
 public class DateFormatUtils {
 
-    @NonNull
-    public static CharSequence getRelativeDateTime(@NonNull Context context, @NonNull Date date) {
+    @Nullable
+    public static CharSequence getRelativeDateTime(@NonNull Context context, @Nullable Date date) {
+
+        if (date == null) {
+            return null;
+        }
 
         return DateUtils.getRelativeDateTimeString(
                 context,
