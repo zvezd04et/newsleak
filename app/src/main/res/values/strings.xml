@@ -18,7 +18,9 @@
     <string name="title_author">Author</string>
     <string name="menu_action_about">About</string>
 
-    <string name="error_loading_news">Error loading news. Tap to retry</string>
+    <string name="error_loading_news_network">Network error loading news. Tap to retry</string>
+    <string name="error_loading_news_server">Server error loading news. Tap to retry</string>
+    <string name="error_loading_news_no_data">There is no data</string>
     <string name="error_action_retry">Retry</string>
 
 </resources>

@@ -11,15 +11,8 @@
         tools:context=".features.newsfeed.NewsListActivity"
         tools:listitem="@layout/animal_item_news" />
 
-    <ProgressBar
-        android:id="@+id/news_list_progress"
-        android:layout_width="@dimen/news_progress_size"
-        android:layout_height="@dimen/news_progress_size"
-        android:layout_gravity="center" />
-
     <include
-        android:id="@+id/error_content"
-        layout="@layout/error_content"
-        android:visibility="gone"/>
+        android:id="@+id/loading_screen"
+        layout="@layout/loading_screen"/>
 
 </FrameLayout>
