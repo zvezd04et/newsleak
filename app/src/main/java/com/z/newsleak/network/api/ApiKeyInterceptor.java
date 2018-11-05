@@ -28,10 +28,6 @@ public final class ApiKeyInterceptor implements Interceptor {
     public Response intercept(@NonNull Chain chain) throws IOException {
         final Request requestWithoutApiKey = chain.request();
 
-//        if (requestWithoutApiKey.body() == null || requestWithoutApiKey.header("Content-Encoding") != null) {
-//            return chain.proceed(requestWithoutApiKey);
-//        }
-
         final HttpUrl url = requestWithoutApiKey.url()
                 .newBuilder()
                 .addQueryParameter(PARAM_API_KEY, apiKey)
