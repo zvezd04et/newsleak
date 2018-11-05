@@ -15,11 +15,13 @@ import com.z.newsleak.ui.LoadingScreenHolder;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
-    private static final String EXTRA_NEWS = "EXTRA_NEWS";
+    private static final String EXTRA_NEWS_SECTION = "EXTRA_NEWS_TITLE";
+    private static final String EXTRA_NEWS_URL = "EXTRA_NEWS_URL";
 
     public static void start(@NonNull Context context, @NonNull NewsItem newsItem) {
         final Intent intent = new Intent(context, NewsDetailsActivity.class);
-        intent.putExtra(EXTRA_NEWS, newsItem);
+        intent.putExtra(EXTRA_NEWS_SECTION, newsItem.getSection());
+        intent.putExtra(EXTRA_NEWS_URL, newsItem.getArticleUrl());
         context.startActivity(intent);
     }
 
@@ -28,12 +30,13 @@ public class NewsDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        final NewsItem newsItem = (NewsItem) getIntent().getSerializableExtra(EXTRA_NEWS);
-        setTitle(newsItem.getSection());
+        final String section = getIntent().getStringExtra(EXTRA_NEWS_SECTION);
+        setTitle(section);
 
         final WebView webView = findViewById(R.id.news_details_wv_full_text);
         final LoadingScreenHolder loadingScreen = new LoadingScreenHolder(webView, btn -> webView.reload());
         webView.setWebViewClient(new NewsWebViewClient(loadingScreen));
-        webView.loadUrl(newsItem.getArticleUrl());
+        final String url = getIntent().getStringExtra(EXTRA_NEWS_URL);
+        webView.loadUrl(url);
     }
 }
