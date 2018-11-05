@@ -48,7 +48,7 @@ public class NewsListActivity extends AppCompatActivity {
     private static final String NEWS_ITEMS_KEY = "NEWS_ITEMS_KEY";
 
     @NonNull
-    private RecyclerView list;
+    private RecyclerView rvNewsfeed;
     @Nullable
     private NewsListAdapter newsAdapter;
     @Nullable
@@ -64,26 +64,9 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        list = findViewById(R.id.news_list_rv);
-        loadingScreen = new LoadingScreenHolder(list, btn -> loadNews());
-
-        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
-        list.setAdapter(newsAdapter);
-
-        final int columnsCount = SupportUtils.getNewsColumnsCount(this);
-        if (columnsCount == 1) {
-            list.setLayoutManager(new LinearLayoutManager(this));
-        } else {
-            list.setLayoutManager(new GridLayoutManager(this, columnsCount));
-        }
-
-        final DividerItemDecoration verticalDivider
-                = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        final Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.vertical_divider);
-        if (dividerDrawable != null) {
-            verticalDivider.setDrawable(dividerDrawable);
-        }
-        list.addItemDecoration(verticalDivider);
+        rvNewsfeed = findViewById(R.id.news_list_rv);
+        setupRecyclerView(rvNewsfeed);
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> loadNews());
 
         final Spinner spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
@@ -92,7 +75,7 @@ public class NewsListActivity extends AppCompatActivity {
             loadNews();
         } else {
             Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
-            list.getLayoutManager().onRestoreInstanceState(listState);
+            rvNewsfeed.getLayoutManager().onRestoreInstanceState(listState);
             List<NewsItem> newsItems = (List<NewsItem>) savedInstanceState.getSerializable(NEWS_ITEMS_KEY);
             if (newsAdapter != null && newsItems != null) newsAdapter.replaceItems(newsItems);
             loadingScreen.showState(LoadState.HAS_DATA);
@@ -112,7 +95,7 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putParcelable(BUNDLE_LIST_KEY, list.getLayoutManager().onSaveInstanceState());
+        outState.putParcelable(BUNDLE_LIST_KEY, rvNewsfeed.getLayoutManager().onSaveInstanceState());
         outState.putSerializable(NEWS_ITEMS_KEY, (Serializable) newsAdapter.getNewsItems());
     }
 
@@ -179,6 +162,26 @@ public class NewsListActivity extends AppCompatActivity {
     private void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
         loadingScreen.showState(LoadState.SERVER_ERROR);
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
+        recyclerView.setAdapter(newsAdapter);
+
+        final int columnsCount = SupportUtils.getNewsColumnsCount(this);
+        if (columnsCount == 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount));
+        }
+
+        final DividerItemDecoration verticalDivider
+                = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        final Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.vertical_divider);
+        if (dividerDrawable != null) {
+            verticalDivider.setDrawable(dividerDrawable);
+        }
+        recyclerView.addItemDecoration(verticalDivider);
     }
 
     private void setupSpinner(@NonNull Spinner spinner) {
