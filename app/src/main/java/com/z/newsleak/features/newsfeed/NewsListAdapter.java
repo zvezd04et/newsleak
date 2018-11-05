@@ -12,6 +12,7 @@ import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
+import com.z.newsleak.utils.SupportUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,11 +107,14 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
             categoryView = itemView.findViewById(R.id.item_news_tv_category);
             titleView = itemView.findViewById(R.id.item_news_tv_title);
             publishDateView = itemView.findViewById(R.id.item_news_tv_publish_date);
-
         }
 
         private void bind(@NonNull NewsItem newsItem) {
-            imageLoader.load(newsItem.getImageUrl()).into(photoView);
+
+            final boolean hasUrl = (newsItem.getImageUrl() != null);
+            SupportUtils.setVisible(photoView, hasUrl);
+            if (hasUrl) imageLoader.load(newsItem.getImageUrl()).into(photoView);
+
             previewView.setText(newsItem.getPreviewText());
             categoryView.setText(newsItem.getSection());
             titleView.setText(newsItem.getTitle());
