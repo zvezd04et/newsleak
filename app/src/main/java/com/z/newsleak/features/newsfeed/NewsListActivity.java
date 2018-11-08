@@ -85,7 +85,6 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
         return new NewsListPresenter();
     }
 
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
