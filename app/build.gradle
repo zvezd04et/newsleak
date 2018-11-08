@@ -38,6 +38,10 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+
+    implementation 'com.hannesdorfmann.mosby3:mvp-lce:3.1.0'
+    implementation 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.1.0'
+    implementation 'com.hannesdorfmann.mosby3:mvp-queuing-presenter:3.1.0'
 }
 
 android.applicationVariants.all { variant ->

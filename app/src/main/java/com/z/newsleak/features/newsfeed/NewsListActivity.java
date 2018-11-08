@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.z.newsleak.data.Category;
 import com.z.newsleak.data.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
@@ -41,7 +42,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresenter>
+        implements NewsListView {
 
     private static final String LOG_TAG = "NewsListActivity";
     private static final String BUNDLE_LIST_KEY = "BUNDLE_LIST_KEY";
@@ -67,13 +69,13 @@ public class NewsListActivity extends AppCompatActivity {
 
         rvNewsfeed = findViewById(R.id.news_list_rv);
         setupRecyclerView(rvNewsfeed);
-        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> loadNews(currentCategory));
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> presenter.loadNews(currentCategory));
 
         final Spinner spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
         if (savedInstanceState == null || !savedInstanceState.containsKey(NEWS_ITEMS_KEY)) {
-            loadNews(currentCategory);
+            presenter.loadNews(currentCategory);
         } else {
             Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
             rvNewsfeed.getLayoutManager().onRestoreInstanceState(listState);
@@ -89,6 +91,12 @@ public class NewsListActivity extends AppCompatActivity {
         super.onStop();
         SupportUtils.disposeSafely(compositeDisposable);
         loadingScreen.showState(LoadState.HAS_DATA);
+    }
+
+    @NonNull
+    @Override
+    public NewsListPresenter createPresenter() {
+        return new NewsListPresenter();
     }
 
     @Override
@@ -123,18 +131,13 @@ public class NewsListActivity extends AppCompatActivity {
         }
     }
 
-    private void loadNews(@NonNull Category category) {
-        final Disposable searchDisposable = RestApi.getInstance()
-                .getApi()
-                .getNews(category.getSection())
-                .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> loadingScreen.showState(LoadState.LOADING))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::processResponse, this::handleError);
-        compositeDisposable.add(searchDisposable);
+    @Override
+    public void showLoading(){
+        loadingScreen.showState(LoadState.LOADING);
     }
 
-    private void processResponse(@NonNull Response<NewsResponse> response) {
+    @Override
+    public void processResponse(@NonNull Response<NewsResponse> response) {
 
         if (!response.isSuccessful()) {
             loadingScreen.showState(LoadState.SERVER_ERROR);
@@ -158,7 +161,8 @@ public class NewsListActivity extends AppCompatActivity {
         loadingScreen.showState(LoadState.HAS_DATA);
     }
 
-    private void handleError(@NonNull Throwable th) {
+    @Override
+    public void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
         loadingScreen.showState(LoadState.SERVER_ERROR);
     }
@@ -192,7 +196,7 @@ public class NewsListActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Category category = Category.values()[position];
                 if (!category.equals(currentCategory)) {
-                    loadNews(category);
+                    presenter.loadNews(category);
                     currentCategory = category;
                 }
             }
@@ -202,4 +206,5 @@ public class NewsListActivity extends AppCompatActivity {
             }
         });
     }
+
 }
