@@ -91,7 +91,7 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
         super.onSaveInstanceState(outState);
         final RecyclerView.LayoutManager layoutManager = rvNewsfeed.getLayoutManager();
         if (layoutManager != null) {
-            outState.putParcelable(BUNDLE_LIST_KEY, rvNewsfeed.getLayoutManager().onSaveInstanceState());
+            outState.putParcelable(BUNDLE_LIST_KEY, layoutManager.onSaveInstanceState());
         }
     }
 
@@ -108,7 +108,7 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
         super.onResume();
         final RecyclerView.LayoutManager layoutManager = rvNewsfeed.getLayoutManager();
         if (rvState != null && layoutManager != null) {
-            rvNewsfeed.getLayoutManager().onRestoreInstanceState(rvState);
+            layoutManager.onRestoreInstanceState(rvState);
         }
     }
 
