@@ -18,28 +18,22 @@ import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.network.NewsResponse;
-import com.z.newsleak.network.api.RestApi;
 import com.z.newsleak.network.dto.NewsItemDTO;
 import com.z.newsleak.features.about_info.AboutActivity;
 import com.z.newsleak.ui.LoadingScreenHolder;
 import com.z.newsleak.utils.NewsItemConverter;
 import com.z.newsleak.utils.SupportUtils;
 
-import java.io.Serializable;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Response;
 
 public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresenter>
@@ -47,10 +41,11 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
 
     private static final String LOG_TAG = "NewsListActivity";
     private static final String BUNDLE_LIST_KEY = "BUNDLE_LIST_KEY";
-    private static final String NEWS_ITEMS_KEY = "NEWS_ITEMS_KEY";
 
     @NonNull
     private RecyclerView rvNewsfeed;
+    @Nullable
+    private Parcelable rvState;
     @Nullable
     private NewsListAdapter newsAdapter;
 
@@ -74,16 +69,7 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
         final Spinner spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey(NEWS_ITEMS_KEY)) {
-            presenter.loadNews(currentCategory);
-        } else {
-            Parcelable listState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
-            rvNewsfeed.getLayoutManager().onRestoreInstanceState(listState);
-            List<NewsItem> newsItems = (List<NewsItem>) savedInstanceState.getSerializable(NEWS_ITEMS_KEY);
-            if (newsAdapter != null && newsItems != null) newsAdapter.replaceItems(newsItems);
-            loadingScreen.showState(LoadState.HAS_DATA);
-        }
-
+        presenter.loadNews(currentCategory);
     }
 
     @Override
@@ -99,12 +85,31 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
         return new NewsListPresenter();
     }
 
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        final RecyclerView.LayoutManager layoutManager = rvNewsfeed.getLayoutManager();
+        if (layoutManager != null) {
+            outState.putParcelable(BUNDLE_LIST_KEY, rvNewsfeed.getLayoutManager().onSaveInstanceState());
+        }
+    }
 
-        outState.putParcelable(BUNDLE_LIST_KEY, rvNewsfeed.getLayoutManager().onSaveInstanceState());
-        outState.putSerializable(NEWS_ITEMS_KEY, (Serializable) newsAdapter.getNewsItems());
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            rvState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final RecyclerView.LayoutManager layoutManager = rvNewsfeed.getLayoutManager();
+        if (rvState != null && layoutManager != null) {
+            rvNewsfeed.getLayoutManager().onRestoreInstanceState(rvState);
+        }
     }
 
     @Override
