@@ -149,20 +149,22 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
 
         final NewsResponse body = response.body();
         if (body == null) {
-            loadingScreen.showState(LoadState.HAS_NO_DATA);
+            showState(LoadState.HAS_NO_DATA);
             return;
         }
 
         final List<NewsItemDTO> newsItemDTOs = body.getResults();
         if (newsItemDTOs == null || newsItemDTOs.isEmpty()) {
-            loadingScreen.showState(LoadState.HAS_NO_DATA);
+            showState(LoadState.HAS_NO_DATA);
             return;
         }
 
         List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs, (Category) spinner.getSelectedItem());
-        if (newsAdapter != null && news != null) newsAdapter.replaceItems(news);
-        loadingScreen.showState(LoadState.HAS_DATA);
-        viewState.setResponse(response);
+        if (newsAdapter != null) {
+            newsAdapter.replaceItems(news);
+            loadingScreen.showState(LoadState.HAS_DATA);
+            viewState.setResponse(response);
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 
 public class NewsItemConverter {
 
+    @NonNull
     public static List<NewsItem> convertFromDtos(@NonNull List<NewsItemDTO> newsItemDTOs, @Nullable Category currentCategory) {
 
         final List<NewsItem> news = new ArrayList<>();
