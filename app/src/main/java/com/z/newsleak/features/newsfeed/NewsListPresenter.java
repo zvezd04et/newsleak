@@ -1,7 +1,10 @@
 package com.z.newsleak.features.newsfeed;
 
+import android.util.Log;
+
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.z.newsleak.data.Category;
+import com.z.newsleak.data.LoadState;
 import com.z.newsleak.network.api.RestApi;
 import com.z.newsleak.utils.SupportUtils;
 
@@ -16,14 +19,22 @@ import io.reactivex.schedulers.Schedulers;
 
 public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> implements NewsListContract.Presenter {
 
+    private static final String LOG_TAG = "NewsListPresenter";
+
     @NonNull
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Nullable
     private Category currentCategory = null;
 
-    public void loadNews(@NonNull Category category) {
+    @Override
+    public void destroy() {
+        super.destroy();
+        SupportUtils.disposeSafely(compositeDisposable);
+    }
 
+    @Override
+    public void loadNews(@NonNull Category category) {
         if (category.equals(currentCategory)) {
             return;
         }
@@ -32,19 +43,17 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
                 .getApi()
                 .getNews(category.getSection())
                 .subscribeOn(Schedulers.io())
-                .doOnSubscribe(disposable -> ifViewAttached(NewsListContract.View::showLoading))
+                .doOnSubscribe(disposable -> ifViewAttached(view -> view.showState(LoadState.LOADING)))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> ifViewAttached(view -> view.processResponse(response)),
-                        th -> ifViewAttached(view -> view.handleError(th)));
+                        this::handleError);
         compositeDisposable.add(searchDisposable);
 
         currentCategory = category;
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-        SupportUtils.disposeSafely(compositeDisposable);
+    private void handleError(@NonNull Throwable th) {
+        Log.e(LOG_TAG, th.getMessage(), th);
+        ifViewAttached(view -> view.showState(LoadState.NETWORK_ERROR));
     }
-
 }

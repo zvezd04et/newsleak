@@ -33,7 +33,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Response;
 
 public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View, NewsListContract.Presenter, NewsListViewState> implements NewsListContract.View {
@@ -45,18 +44,13 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     private RecyclerView rvNewsfeed;
     @NonNull
     private Spinner spinner;
+    @NonNull
+    private LoadingScreenHolder loadingScreen;
+
     @Nullable
     private Parcelable rvState;
     @Nullable
     private NewsListAdapter newsAdapter;
-
-    @NonNull
-    private LoadingScreenHolder loadingScreen;
-
-    @NonNull
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    @NonNull
-    private Category currentCategory = Category.HOME;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +69,6 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     @Override
     protected void onStop() {
         super.onStop();
-        SupportUtils.disposeSafely(compositeDisposable);
         loadingScreen.showState(LoadState.HAS_DATA);
     }
 
@@ -147,16 +140,10 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     }
 
     @Override
-    public void showLoading(){
-        loadingScreen.showState(LoadState.LOADING);
-        viewState.setSwowLoading();
-    }
-
-    @Override
     public void processResponse(@NonNull Response<NewsResponse> response) {
 
         if (!response.isSuccessful()) {
-            showError(LoadState.SERVER_ERROR);
+            showState(LoadState.SERVER_ERROR);
             return;
         }
 
@@ -179,15 +166,9 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     }
 
     @Override
-    public void handleError(@NonNull Throwable th) {
-        Log.e(LOG_TAG, th.getMessage(), th);
-        showError(LoadState.NETWORK_ERROR);
-    }
-
-    @Override
-    public void showError(LoadState stateError) {
-        loadingScreen.showState(stateError);
-        viewState.setSwowError(stateError);
+    public void showState(@NonNull LoadState state) {
+        loadingScreen.showState(state);
+        viewState.setState(state);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

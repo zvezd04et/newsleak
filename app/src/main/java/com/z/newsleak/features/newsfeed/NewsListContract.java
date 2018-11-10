@@ -13,13 +13,9 @@ public interface NewsListContract {
 
     interface View extends MvpView {
 
-        void showLoading();
+        void processResponse(@NonNull Response<NewsResponse> response);
 
-        void processResponse(Response<NewsResponse> response);
-
-        void handleError(Throwable th);
-
-        void showError(LoadState stateError);
+        void showState(@NonNull LoadState state);
     }
 
     interface Presenter extends MvpPresenter<View> {
