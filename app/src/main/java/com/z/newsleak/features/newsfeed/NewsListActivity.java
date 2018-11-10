@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.hannesdorfmann.mosby3.mvp.MvpActivity;
+import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
 import com.z.newsleak.data.Category;
 import com.z.newsleak.data.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
@@ -36,14 +36,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Response;
 
-public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresenter>
-        implements NewsListView {
+public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View, NewsListContract.Presenter, NewsListViewState> implements NewsListContract.View {
 
     private static final String LOG_TAG = "NewsListActivity";
     private static final String BUNDLE_LIST_KEY = "BUNDLE_LIST_KEY";
 
     @NonNull
     private RecyclerView rvNewsfeed;
+    @NonNull
+    private Spinner spinner;
     @Nullable
     private Parcelable rvState;
     @Nullable
@@ -64,12 +65,11 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
 
         rvNewsfeed = findViewById(R.id.news_list_rv);
         setupRecyclerView(rvNewsfeed);
-        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> presenter.loadNews(currentCategory));
 
-        final Spinner spinner = findViewById(R.id.news_list_sp_section);
+        spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
-        presenter.loadNews(currentCategory);
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> presenter.loadNews((Category) spinner.getSelectedItem()));
     }
 
     @Override
@@ -83,6 +83,17 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
     @Override
     public NewsListPresenter createPresenter() {
         return new NewsListPresenter();
+    }
+
+    @NonNull
+    @Override
+    public NewsListViewState createViewState() {
+        return new NewsListViewState();
+    }
+
+    @Override
+    public void onNewViewStateInstance() {
+
     }
 
     @Override
@@ -138,13 +149,14 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
     @Override
     public void showLoading(){
         loadingScreen.showState(LoadState.LOADING);
+        viewState.setSwowLoading();
     }
 
     @Override
     public void processResponse(@NonNull Response<NewsResponse> response) {
 
         if (!response.isSuccessful()) {
-            loadingScreen.showState(LoadState.SERVER_ERROR);
+            showError(LoadState.SERVER_ERROR);
             return;
         }
 
@@ -160,15 +172,22 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
             return;
         }
 
-        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs, currentCategory);
+        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs, (Category) spinner.getSelectedItem());
         if (newsAdapter != null && news != null) newsAdapter.replaceItems(news);
         loadingScreen.showState(LoadState.HAS_DATA);
+        viewState.setResponse(response);
     }
 
     @Override
     public void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
-        loadingScreen.showState(LoadState.SERVER_ERROR);
+        showError(LoadState.NETWORK_ERROR);
+    }
+
+    @Override
+    public void showError(LoadState stateError) {
+        loadingScreen.showState(stateError);
+        viewState.setSwowError(stateError);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -199,10 +218,7 @@ public class NewsListActivity extends MvpActivity<NewsListView, NewsListPresente
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Category category = Category.values()[position];
-                if (!category.equals(currentCategory)) {
-                    presenter.loadNews(category);
-                    currentCategory = category;
-                }
+                presenter.loadNews(category);
             }
 
             @Override
