@@ -2,13 +2,13 @@ package com.z.newsleak.features.newsfeed;
 
 import com.hannesdorfmann.mosby3.mvp.viewstate.ViewState;
 
+import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.network.NewsResponse;
 
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import retrofit2.Response;
 
 public class NewsListViewState implements ViewState<NewsListContract.View> {
 
@@ -16,26 +16,25 @@ public class NewsListViewState implements ViewState<NewsListContract.View> {
     private LoadState state = LoadState.HAS_NO_DATA;
 
     @Nullable
-    private Response<NewsResponse> response;
+    private List<NewsItem> news;
 
     @Override
     public void apply(@NonNull NewsListContract.View view, boolean retained) {
 
-        if (response == null) {
+        if (news == null) {
             view.showState(state);
         } else {
-            view.processResponse(response);
+            view.showNews(news);
         }
-
     }
 
     public void setState(@NonNull LoadState state) {
         this.state = state;
-        response = null;
+        news = null;
     }
 
-    public void setResponse(@NonNull Response<NewsResponse> response) {
-        this.response = response;
+    public void setNews(@NonNull List<NewsItem> news) {
+        this.news = news;
         state = LoadState.HAS_DATA;
     }
 }

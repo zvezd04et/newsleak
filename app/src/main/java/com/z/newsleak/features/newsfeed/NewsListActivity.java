@@ -17,11 +17,8 @@ import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.network.NewsResponse;
-import com.z.newsleak.network.dto.NewsItemDTO;
 import com.z.newsleak.features.about_info.AboutActivity;
 import com.z.newsleak.ui.LoadingScreenHolder;
-import com.z.newsleak.utils.NewsItemConverter;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.util.List;
@@ -33,7 +30,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Response;
 
 public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View, NewsListContract.Presenter, NewsListViewState> implements NewsListContract.View {
 
@@ -140,31 +136,13 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     }
 
     @Override
-    public void processResponse(@NonNull Response<NewsResponse> response) {
-
-        if (!response.isSuccessful()) {
-            showState(LoadState.SERVER_ERROR);
+    public void showNews(List<NewsItem> news) {
+        if (newsAdapter == null) {
             return;
         }
-
-        final NewsResponse body = response.body();
-        if (body == null) {
-            showState(LoadState.HAS_NO_DATA);
-            return;
-        }
-
-        final List<NewsItemDTO> newsItemDTOs = body.getResults();
-        if (newsItemDTOs == null || newsItemDTOs.isEmpty()) {
-            showState(LoadState.HAS_NO_DATA);
-            return;
-        }
-
-        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs, (Category) spinner.getSelectedItem());
-        if (newsAdapter != null) {
-            newsAdapter.replaceItems(news);
-            loadingScreen.showState(LoadState.HAS_DATA);
-            viewState.setResponse(response);
-        }
+        newsAdapter.replaceItems(news);
+        loadingScreen.showState(LoadState.HAS_DATA);
+        viewState.setNews(news);
     }
 
     @Override
