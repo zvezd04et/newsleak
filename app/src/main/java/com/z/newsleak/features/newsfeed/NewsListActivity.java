@@ -179,7 +179,7 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 final Category category = Category.values()[position];
-                presenter.loadNews(category);
+                presenter.onSpinnerCategorySelected(category);
             }
 
             @Override

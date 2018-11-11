@@ -9,6 +9,7 @@ import com.z.newsleak.ui.LoadState;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public interface NewsListContract {
 
@@ -20,6 +21,9 @@ public interface NewsListContract {
     }
 
     interface Presenter extends MvpPresenter<View> {
+
         void loadNews(@NonNull Category category);
+
+        void onSpinnerCategorySelected(@Nullable Category category);
     }
 }

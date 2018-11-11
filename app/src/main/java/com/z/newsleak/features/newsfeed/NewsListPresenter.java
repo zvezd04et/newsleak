@@ -37,9 +37,6 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
 
     @Override
     public void loadNews(@NonNull Category category) {
-        if (category.equals(currentCategory)) {
-            return;
-        }
 
         final Disposable searchDisposable = NYTimesApiProvider.getInstance()
                 .createApi()
@@ -53,6 +50,16 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
         compositeDisposable.add(searchDisposable);
 
         currentCategory = category;
+    }
+
+    public void onSpinnerCategorySelected(@Nullable Category category) {
+        if (category == null) {
+            return;
+        }
+        if (category.equals(currentCategory)) {
+            return;
+        }
+        loadNews(category);
     }
 
     private void processNews(@Nullable List<NewsItem> news) {
