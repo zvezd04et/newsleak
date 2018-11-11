@@ -1,4 +1,4 @@
-package com.z.newsleak.data;
+package com.z.newsleak.model;
 
 import java.io.Serializable;
 import java.util.Arrays;

@@ -1,7 +1,5 @@
 package com.z.newsleak.model;
 
-import com.z.newsleak.data.Category;
-
 import java.io.Serializable;
 import java.util.Date;
 

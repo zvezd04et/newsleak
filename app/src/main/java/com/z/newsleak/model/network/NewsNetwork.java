@@ -1,13 +1,12 @@
-package com.z.newsleak.network;
+package com.z.newsleak.model.network;
 
 import com.google.gson.annotations.SerializedName;
-import com.z.newsleak.network.dto.NewsItemNetwork;
 
 import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class NewsResponse {
+public class NewsNetwork {
 
     @SerializedName("status")
     @Nullable

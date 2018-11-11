@@ -1,9 +1,9 @@
 package com.z.newsleak.utils;
 
-import com.z.newsleak.data.Category;
+import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.network.dto.ImageNetwork;
-import com.z.newsleak.network.dto.NewsItemNetwork;
+import com.z.newsleak.model.network.ImageNetwork;
+import com.z.newsleak.model.network.NewsItemNetwork;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

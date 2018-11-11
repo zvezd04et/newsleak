@@ -3,12 +3,12 @@ package com.z.newsleak.features.newsfeed;
 import android.util.Log;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.z.newsleak.data.Category;
+import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.network.NewsResponse;
-import com.z.newsleak.network.dto.NewsItemNetwork;
+import com.z.newsleak.model.network.NewsResponse;
+import com.z.newsleak.model.network.NewsItemNetwork;
 import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.network.api.NYTimesApiProvider;
+import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.utils.NewsItemConverter;
 import com.z.newsleak.utils.SupportUtils;
 

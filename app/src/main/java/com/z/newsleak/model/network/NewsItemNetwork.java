@@ -1,4 +1,4 @@
-package com.z.newsleak.network.dto;
+package com.z.newsleak.model.network;
 
 import com.google.gson.annotations.SerializedName;
 

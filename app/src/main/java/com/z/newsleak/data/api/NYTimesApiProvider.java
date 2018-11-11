@@ -1,4 +1,4 @@
-package com.z.newsleak.network.api;
+package com.z.newsleak.data.api;
 
 import com.z.newsleak.Constant;
 

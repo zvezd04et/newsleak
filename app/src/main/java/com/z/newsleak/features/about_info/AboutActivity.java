@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.snackbar.Snackbar;
 import com.z.newsleak.R;
-import com.z.newsleak.data.SocialNetworks;
+import com.z.newsleak.model.SocialNetworks;
 
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
