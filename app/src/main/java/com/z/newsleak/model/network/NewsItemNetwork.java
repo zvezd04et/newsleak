@@ -2,6 +2,7 @@ package com.z.newsleak.model.network;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.Nullable;
@@ -30,7 +31,7 @@ public class NewsItemNetwork {
 
     @SerializedName("published_date")
     @Nullable
-    private String publishedDate;
+    private Date publishedDate;
 
     @SerializedName("multimedia")
     @Nullable
@@ -62,7 +63,7 @@ public class NewsItemNetwork {
     }
 
     @Nullable
-    public String getPublishedDate() {
+    public Date getPublishedDate() {
         return publishedDate;
     }
 

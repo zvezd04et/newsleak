@@ -5,12 +5,8 @@ import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.model.network.ImageNetwork;
 import com.z.newsleak.model.network.NewsItemNetwork;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +14,6 @@ import androidx.annotation.Nullable;
 public class NewsItemConverter {
 
     private final static String IMAGE_FORMAT = "Normal";
-    private final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     @NonNull
     public static List<NewsItem> convertFromNetwork(@NonNull List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
@@ -28,14 +23,13 @@ public class NewsItemConverter {
         for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
             final String previewImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
             final Category category = getCategory(newsItemNetwork.getSection(), currentCategory);
-            final Date publishDate = getPublishDate(newsItemNetwork.getPublishedDate());
 
             final NewsItem newsItem = new NewsItem.Builder(category)
                     .section(newsItemNetwork.getSection())
                     .title(newsItemNetwork.getTitle())
                     .imageUrl(previewImageUrl)
                     .previewText(newsItemNetwork.getAbstractField())
-                    .publishDate(publishDate)
+                    .publishDate(newsItemNetwork.getPublishedDate())
                     .articleUrl(newsItemNetwork.getUrl())
                     .build();
             news.add(newsItem);
@@ -79,20 +73,6 @@ public class NewsItemConverter {
         }
 
         return (currentCategory != null) ? currentCategory : Category.HOME;
-    }
-
-    @Nullable
-    private static Date getPublishDate(@Nullable String publishDate) {
-
-        final SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
-        Date formattedDate = null;
-        try {
-            formattedDate = formatter.parse(publishDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return formattedDate;
-
     }
 
     private NewsItemConverter() {
