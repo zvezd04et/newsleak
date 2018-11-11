@@ -17,7 +17,7 @@
         android:id="@+id/error_tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/error_loading_news_network"
+        android:text="@string/state_loading_msg_error"
         android:textColor="@android:color/darker_gray"
         android:layout_marginTop="@dimen/space_half_size"
         android:layout_marginBottom="@dimen/space_half_size"/>

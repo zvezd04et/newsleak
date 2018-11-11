@@ -48,24 +48,21 @@ public class LoadingScreenHolder {
                 SupportUtils.setVisible(progressBar, false);
                 SupportUtils.setVisible(errorContent, false);
                 break;
+
             case HAS_NO_DATA:
                 SupportUtils.setVisible(contentView, false);
                 SupportUtils.setVisible(progressBar, false);
                 SupportUtils.setVisible(errorContent, true);
-                SupportUtils.setText(tvError, context.getText(R.string.error_loading_news_no_data));
+                SupportUtils.setText(tvError, context.getText(R.string.state_loading_msg_no_data));
                 break;
-            case NETWORK_ERROR:
+
+            case ERROR:
                 SupportUtils.setVisible(contentView, false);
                 SupportUtils.setVisible(progressBar, false);
                 SupportUtils.setVisible(errorContent, true);
-                SupportUtils.setText(tvError, context.getText(R.string.error_loading_news_network));
+                SupportUtils.setText(tvError, context.getText(R.string.state_loading_msg_error));
                 break;
-            case SERVER_ERROR:
-                SupportUtils.setVisible(contentView, false);
-                SupportUtils.setVisible(progressBar, false);
-                SupportUtils.setVisible(errorContent, true);
-                SupportUtils.setText(tvError, context.getText(R.string.error_loading_news_server));
-                break;
+
             case LOADING:
                 SupportUtils.setVisible(contentView, false);
                 SupportUtils.setVisible(progressBar, true);

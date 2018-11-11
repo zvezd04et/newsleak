@@ -67,7 +67,7 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
 
     private void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
-        showViewState(LoadState.NETWORK_ERROR);
+        showViewState(LoadState.ERROR);
     }
 
     private void showViewState(LoadState state) {

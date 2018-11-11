@@ -11,9 +11,8 @@
     <string name="error_no_browser_app">Браузер не обнаружен</string>
     <string name="title_author">Автор</string>
 
-    <string name="error_loading_news_network">Ошибка сети при загрузке новостей</string>
-    <string name="error_loading_news_server">Ошибка сервера при загрузке новостей</string>
-    <string name="error_loading_news_no_data">Нет данных</string>
+    <string name="state_loading_msg_error">Ошибка сети при загрузке новостей</string>
+    <string name="state_loading_msg_no_data">Нет данных</string>
     <string name="error_action_retry">Повторить попытку</string>
 
 </resources>
