@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.z.newsleak.R;
@@ -38,5 +39,21 @@ public class NewsDetailsActivity extends AppCompatActivity {
         webView.setWebViewClient(new NewsWebViewClient(loadingScreen));
         final String url = getIntent().getStringExtra(EXTRA_NEWS_URL);
         webView.loadUrl(url);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
     }
 }

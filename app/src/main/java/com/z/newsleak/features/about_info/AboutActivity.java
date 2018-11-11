@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +58,22 @@ public class AboutActivity extends AppCompatActivity {
 
         final ImageView gitLogo = findViewById(R.id.about_iv_github_logo);
         gitLogo.setOnClickListener(iv -> openSocialNetwork(SocialNetworks.GITHUB));
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
 
     }
 
