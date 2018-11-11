@@ -38,7 +38,7 @@ public class NewsWebViewClient extends WebViewClient {
     public void onPageFinished(WebView view, String url) {
         super.onPageFinished(view, url);
         if (receivedError) {
-            loadingScreen.showState(LoadState.SERVER_ERROR);
+            loadingScreen.showState(LoadState.ERROR);
             return;
         }
         loadingScreen.showState(LoadState.HAS_DATA);
