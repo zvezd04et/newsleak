@@ -1,7 +1,7 @@
 package com.z.newsleak.network;
 
 import com.google.gson.annotations.SerializedName;
-import com.z.newsleak.network.dto.NewsItemDTO;
+import com.z.newsleak.network.dto.NewsItemNetwork;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class NewsResponse {
 
     @SerializedName("results")
     @Nullable
-    private List<NewsItemDTO> results;
+    private List<NewsItemNetwork> results;
 
     @Nullable
     public String getStatus() {
@@ -39,7 +39,7 @@ public class NewsResponse {
     }
 
     @Nullable
-    public List<NewsItemDTO> getResults() {
+    public List<NewsItemNetwork> getResults() {
         return results;
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class NewsDTO {
+public class NewsNetwork {
 
     @SerializedName("status")
     @Nullable
@@ -21,7 +21,7 @@ public class NewsDTO {
 
     @SerializedName("results")
     @Nullable
-    private List<NewsItemDTO> results;
+    private List<NewsItemNetwork> results;
 
     @Nullable
     public String getStatus() {
@@ -38,7 +38,7 @@ public class NewsDTO {
     }
 
     @Nullable
-    public List<NewsItemDTO> getResults() {
+    public List<NewsItemNetwork> getResults() {
         return results;
     }
 }

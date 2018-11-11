@@ -2,8 +2,8 @@ package com.z.newsleak.utils;
 
 import com.z.newsleak.data.Category;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.network.dto.ImageDTO;
-import com.z.newsleak.network.dto.NewsItemDTO;
+import com.z.newsleak.network.dto.ImageNetwork;
+import com.z.newsleak.network.dto.NewsItemNetwork;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,22 +21,22 @@ public class NewsItemConverter {
     private final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     @NonNull
-    public static List<NewsItem> convertFromDtos(@NonNull List<NewsItemDTO> newsItemDTOs, @Nullable Category currentCategory) {
+    public static List<NewsItem> convertFromNetwork(@NonNull List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
 
         final List<NewsItem> news = new ArrayList<>();
 
-        for (NewsItemDTO newsItemDTO : newsItemDTOs) {
-            final String previewImageUrl = getImageUrl(newsItemDTO.getMultimedia());
-            final Category category = getCategory(newsItemDTO.getSection(), currentCategory);
-            final Date publishDate = getPublishDate(newsItemDTO.getPublishedDate());
+        for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
+            final String previewImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
+            final Category category = getCategory(newsItemNetwork.getSection(), currentCategory);
+            final Date publishDate = getPublishDate(newsItemNetwork.getPublishedDate());
 
             final NewsItem newsItem = new NewsItem.Builder(category)
-                    .section(newsItemDTO.getSection())
-                    .title(newsItemDTO.getTitle())
+                    .section(newsItemNetwork.getSection())
+                    .title(newsItemNetwork.getTitle())
                     .imageUrl(previewImageUrl)
-                    .previewText(newsItemDTO.getAbstractField())
+                    .previewText(newsItemNetwork.getAbstractField())
                     .publishDate(publishDate)
-                    .articleUrl(newsItemDTO.getUrl())
+                    .articleUrl(newsItemNetwork.getUrl())
                     .build();
             news.add(newsItem);
         }
@@ -45,7 +45,7 @@ public class NewsItemConverter {
     }
 
     @Nullable
-    private static String getImageUrl(@Nullable List<ImageDTO> multimedia) {
+    private static String getImageUrl(@Nullable List<ImageNetwork> multimedia) {
 
         if (multimedia == null) {
             return null;
@@ -56,9 +56,9 @@ public class NewsItemConverter {
         }
 
         String previewImageUrl = null;
-        for (ImageDTO imageDTO : multimedia) {
-            if (IMAGE_FORMAT.equals(imageDTO.getFormat())) {
-                previewImageUrl = imageDTO.getUrl();
+        for (ImageNetwork imageNetwork : multimedia) {
+            if (IMAGE_FORMAT.equals(imageNetwork.getFormat())) {
+                previewImageUrl = imageNetwork.getUrl();
                 break;
             }
         }

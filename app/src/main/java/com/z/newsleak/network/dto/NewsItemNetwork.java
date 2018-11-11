@@ -6,7 +6,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 
-public class NewsItemDTO {
+public class NewsItemNetwork {
 
     @SerializedName("section")
     @Nullable
@@ -34,7 +34,7 @@ public class NewsItemDTO {
 
     @SerializedName("multimedia")
     @Nullable
-    private List<ImageDTO> multimedia;
+    private List<ImageNetwork> multimedia;
 
     @Nullable
     public String getSection() {
@@ -67,7 +67,7 @@ public class NewsItemDTO {
     }
 
     @Nullable
-    public List<ImageDTO> getMultimedia() {
+    public List<ImageNetwork> getMultimedia() {
         return multimedia;
     }
 }

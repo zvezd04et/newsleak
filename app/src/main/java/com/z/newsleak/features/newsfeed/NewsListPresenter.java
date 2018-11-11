@@ -6,7 +6,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.z.newsleak.data.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.network.NewsResponse;
-import com.z.newsleak.network.dto.NewsItemDTO;
+import com.z.newsleak.network.dto.NewsItemNetwork;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.network.api.NYTimesApiProvider;
 import com.z.newsleak.utils.NewsItemConverter;
@@ -70,13 +70,13 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
             return;
         }
 
-        final List<NewsItemDTO> newsItemDTOs = body.getResults();
-        if (newsItemDTOs == null || newsItemDTOs.isEmpty()) {
+        final List<NewsItemNetwork> newsItemsNetwork = body.getResults();
+        if (newsItemsNetwork == null || newsItemsNetwork.isEmpty()) {
             showViewState(LoadState.HAS_NO_DATA);
             return;
         }
 
-        List<NewsItem> news = NewsItemConverter.convertFromDtos(newsItemDTOs, currentCategory);
+        List<NewsItem> news = NewsItemConverter.convertFromNetwork(newsItemsNetwork, currentCategory);
         ifViewAttached(view -> view.showNews(news));
     }
 

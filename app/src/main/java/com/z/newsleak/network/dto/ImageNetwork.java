@@ -2,7 +2,7 @@ package com.z.newsleak.network.dto;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ImageDTO {
+public class ImageNetwork {
 
     @SerializedName("url")
     private String url;
