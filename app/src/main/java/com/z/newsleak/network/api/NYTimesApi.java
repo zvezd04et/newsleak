@@ -7,7 +7,7 @@ import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 
-public interface NewsEndpoint {
+public interface NYTimesApi {
 
     @GET("{section}.json")
     Single<Response<NewsResponse>> getNews(@Path("section") String section);

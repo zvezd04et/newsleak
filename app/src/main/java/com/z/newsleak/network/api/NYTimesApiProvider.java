@@ -11,26 +11,26 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public final class RestApi {
+public final class NYTimesApiProvider {
 
-    private static final int TIMEOUT_IN_SECONDS = 5;
-    private static RestApi sRestApi;
+    private static final int TIMEOUT_IN_SECONDS = 15;
+    private static NYTimesApiProvider apiProvider;
 
-    private final NewsEndpoint newsEndpoint;
+    private final NYTimesApi Api;
 
-    public static synchronized RestApi getInstance() {
-        if (sRestApi == null) {
-            sRestApi = new RestApi();
+    public static synchronized NYTimesApiProvider getInstance() {
+        if (apiProvider == null) {
+            apiProvider = new NYTimesApiProvider();
         }
-        return sRestApi;
+        return apiProvider;
     }
 
-    private RestApi() {
+    private NYTimesApiProvider() {
         final OkHttpClient httpClient = buildOkHttpClient();
         final Retrofit retrofit = buildRetrofitClient(httpClient);
 
         //init endpoints here. It's can be more then one endpoint
-        newsEndpoint = retrofit.create(NewsEndpoint.class);
+        Api = retrofit.create(NYTimesApi.class);
     }
 
     @NonNull
@@ -58,8 +58,8 @@ public final class RestApi {
                 .build();
     }
 
-    public NewsEndpoint getApi() {
-        return newsEndpoint;
+    public NYTimesApi createApi() {
+        return Api;
     }
 
 

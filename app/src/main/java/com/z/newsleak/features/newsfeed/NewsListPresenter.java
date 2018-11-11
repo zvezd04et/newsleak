@@ -8,7 +8,7 @@ import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.network.NewsResponse;
 import com.z.newsleak.network.dto.NewsItemDTO;
 import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.network.api.RestApi;
+import com.z.newsleak.network.api.NYTimesApiProvider;
 import com.z.newsleak.utils.NewsItemConverter;
 import com.z.newsleak.utils.SupportUtils;
 
@@ -44,8 +44,8 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
             return;
         }
 
-        final Disposable searchDisposable = RestApi.getInstance()
-                .getApi()
+        final Disposable searchDisposable = NYTimesApiProvider.getInstance()
+                .createApi()
                 .getNews(category.getSection())
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> showViewState(LoadState.LOADING))
@@ -57,7 +57,7 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
         currentCategory = category;
     }
 
-    public void processResponse(@NonNull Response<NewsResponse> response) {
+    private void processResponse(@NonNull Response<NewsResponse> response) {
 
         if (!response.isSuccessful()) {
             showViewState(LoadState.SERVER_ERROR);
