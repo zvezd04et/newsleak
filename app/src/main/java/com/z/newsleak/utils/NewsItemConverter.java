@@ -15,8 +15,12 @@ public class NewsItemConverter {
 
     private final static String IMAGE_FORMAT = "Normal";
 
-    @NonNull
-    public static List<NewsItem> convertFromNetwork(@NonNull List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
+    @Nullable
+    public static List<NewsItem> convertFromNetwork(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
+
+        if (newsItemsNetwork == null) {
+            return null;
+        }
 
         final List<NewsItem> news = new ArrayList<>();
 

@@ -5,8 +5,6 @@ import android.util.Log;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.model.network.NewsResponse;
-import com.z.newsleak.model.network.NewsItemNetwork;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.utils.NewsItemConverter;
@@ -20,7 +18,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Response;
 
 public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> implements NewsListContract.Presenter {
 
@@ -47,36 +44,24 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
         final Disposable searchDisposable = NYTimesApiProvider.getInstance()
                 .createApi()
                 .getNews(category.getSection())
+                .map(response -> NewsItemConverter.convertFromNetwork(response.getResults(), currentCategory))
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(disposable -> showViewState(LoadState.LOADING))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::processResponse,
+                .subscribe(this::processNews,
                         this::handleError);
         compositeDisposable.add(searchDisposable);
 
         currentCategory = category;
     }
 
-    private void processResponse(@NonNull Response<NewsResponse> response) {
+    private void processNews(@Nullable List<NewsItem> news) {
 
-        if (!response.isSuccessful()) {
-            showViewState(LoadState.SERVER_ERROR);
-            return;
-        }
-
-        final NewsResponse body = response.body();
-        if (body == null) {
+        if (news == null || news.isEmpty()) {
             showViewState(LoadState.HAS_NO_DATA);
             return;
         }
 
-        final List<NewsItemNetwork> newsItemsNetwork = body.getResults();
-        if (newsItemsNetwork == null || newsItemsNetwork.isEmpty()) {
-            showViewState(LoadState.HAS_NO_DATA);
-            return;
-        }
-
-        List<NewsItem> news = NewsItemConverter.convertFromNetwork(newsItemsNetwork, currentCategory);
         ifViewAttached(view -> view.showNews(news));
     }
 
