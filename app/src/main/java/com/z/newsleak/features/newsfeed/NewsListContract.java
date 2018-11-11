@@ -3,7 +3,7 @@ package com.z.newsleak.features.newsfeed;
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby3.mvp.MvpView;
 import com.z.newsleak.data.Category;
-import com.z.newsleak.data.LoadState;
+import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.network.NewsResponse;
 
 import androidx.annotation.NonNull;

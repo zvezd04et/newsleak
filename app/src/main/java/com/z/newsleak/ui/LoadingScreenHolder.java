@@ -8,7 +8,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.z.newsleak.R;
-import com.z.newsleak.data.LoadState;
 import com.z.newsleak.utils.SupportUtils;
 
 import androidx.annotation.NonNull;

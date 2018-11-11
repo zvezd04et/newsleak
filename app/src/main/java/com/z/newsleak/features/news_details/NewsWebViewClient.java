@@ -6,7 +6,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.z.newsleak.data.LoadState;
+import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.ui.LoadingScreenHolder;
 
 import androidx.annotation.NonNull;

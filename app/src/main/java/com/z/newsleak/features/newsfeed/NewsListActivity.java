@@ -13,7 +13,7 @@ import android.widget.Spinner;
 
 import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
 import com.z.newsleak.data.Category;
-import com.z.newsleak.data.LoadState;
+import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;

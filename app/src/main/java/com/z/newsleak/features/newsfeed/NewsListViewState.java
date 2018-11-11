@@ -2,7 +2,7 @@ package com.z.newsleak.features.newsfeed;
 
 import com.hannesdorfmann.mosby3.mvp.viewstate.ViewState;
 
-import com.z.newsleak.data.LoadState;
+import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.network.NewsResponse;
 
 

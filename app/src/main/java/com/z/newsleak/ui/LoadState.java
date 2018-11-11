@@ -1,4 +1,4 @@
-package com.z.newsleak.data;
+package com.z.newsleak.ui;
 
 public enum LoadState {
     HAS_DATA,

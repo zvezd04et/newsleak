@@ -4,11 +4,9 @@ import android.util.Log;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.z.newsleak.data.Category;
-import com.z.newsleak.data.LoadState;
+import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.network.api.RestApi;
 import com.z.newsleak.utils.SupportUtils;
-
-import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
