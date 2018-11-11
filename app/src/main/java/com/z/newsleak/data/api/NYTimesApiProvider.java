@@ -1,5 +1,6 @@
 package com.z.newsleak.data.api;
 
+import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
 
 import java.util.concurrent.TimeUnit;
@@ -45,13 +46,14 @@ public final class NYTimesApiProvider {
 
     @NonNull
     private OkHttpClient buildOkHttpClient() {
-        final HttpLoggingInterceptor networkLogInterceptor = new HttpLoggingInterceptor();
-        networkLogInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
+        if (BuildConfig.DEBUG) {
+            final HttpLoggingInterceptor networkLogInterceptor = new HttpLoggingInterceptor();
+            networkLogInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        }
 
         return new OkHttpClient.Builder()
                 .addInterceptor(ApiKeyInterceptor.create(Constant.API_KEY))
-                .addInterceptor(networkLogInterceptor)
                 .connectTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .writeTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .readTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
