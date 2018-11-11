@@ -17,6 +17,9 @@ import androidx.annotation.Nullable;
 
 public class NewsItemConverter {
 
+    private final static String IMAGE_FORMAT = "Normal";
+    private final static String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+
     @NonNull
     public static List<NewsItem> convertFromDtos(@NonNull List<NewsItemDTO> newsItemDTOs, @Nullable Category currentCategory) {
 
@@ -54,7 +57,7 @@ public class NewsItemConverter {
 
         String previewImageUrl = null;
         for (ImageDTO imageDTO : multimedia) {
-            if ("Normal".equals(imageDTO.getFormat())) {
+            if (IMAGE_FORMAT.equals(imageDTO.getFormat())) {
                 previewImageUrl = imageDTO.getUrl();
                 break;
             }
@@ -65,11 +68,11 @@ public class NewsItemConverter {
     @NonNull
     private static Category getCategory(@Nullable String section, @Nullable Category currentCategory) {
 
-        if (section==null){
+        if (section == null) {
             return Category.HOME;
         }
 
-        for (Category category: Category.values()){
+        for (Category category : Category.values()) {
             if (section.equals(category.getSection())) {
                 return category;
             }
@@ -81,7 +84,7 @@ public class NewsItemConverter {
     @Nullable
     private static Date getPublishDate(@Nullable String publishDate) {
 
-        final SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US);
+        final SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         Date formattedDate = null;
         try {
             formattedDate = formatter.parse(publishDate);
