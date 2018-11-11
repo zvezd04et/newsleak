@@ -27,8 +27,15 @@ public class NewsItemConverter {
             final Category category = getCategory(newsItemDTO.getSection(), currentCategory);
             final Date publishDate = getPublishDate(newsItemDTO.getPublishedDate());
 
-            news.add(new NewsItem(newsItemDTO.getTitle(), previewImageUrl, category, newsItemDTO.getSection(),
-                    publishDate, newsItemDTO.getAbstractField(), newsItemDTO.getUrl()));
+            final NewsItem newsItem = new NewsItem.Builder(category)
+                    .section(newsItemDTO.getSection())
+                    .title(newsItemDTO.getTitle())
+                    .imageUrl(previewImageUrl)
+                    .previewText(newsItemDTO.getAbstractField())
+                    .publishDate(publishDate)
+                    .articleUrl(newsItemDTO.getUrl())
+                    .build();
+            news.add(newsItem);
         }
 
         return news;
