@@ -48,8 +48,6 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
                 .subscribe(this::processNews,
                         this::handleError);
         compositeDisposable.add(searchDisposable);
-
-        currentCategory = category;
     }
 
     public void onSpinnerCategorySelected(@Nullable Category category) {
@@ -60,6 +58,7 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
             return;
         }
         loadNews(category);
+        currentCategory = category;
     }
 
     private void processNews(@Nullable List<NewsItem> news) {
