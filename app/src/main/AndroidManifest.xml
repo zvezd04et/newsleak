@@ -27,7 +27,8 @@
             android:parentActivityName=".features.newsfeed.NewsListActivity" />
         <activity
             android:name=".features.news_details.NewsDetailsActivity"
-            android:parentActivityName=".features.newsfeed.NewsListActivity" />
+            android:parentActivityName=".features.newsfeed.NewsListActivity"
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>
