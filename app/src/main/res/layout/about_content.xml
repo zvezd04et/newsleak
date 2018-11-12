@@ -23,7 +23,7 @@
             android:layout_marginStart="@dimen/margin_indent"
             android:layout_weight="1"
             android:drawablePadding="@dimen/space_half_size"
-            android:drawableStart="@drawable/logo"
+            android:drawableStart="@drawable/logo_samolet"
             android:text="@string/position"
             android:textSize="@dimen/text_size" />
 

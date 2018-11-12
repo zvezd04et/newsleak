@@ -1,5 +1,7 @@
 package com.z.newsleak.features.newsfeed;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -25,6 +27,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -47,6 +50,12 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     private Parcelable rvState;
     @Nullable
     private NewsListAdapter newsAdapter;
+
+
+    public static void start(@NonNull Context context) {
+        final Intent intent = new Intent(context, NewsListActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
