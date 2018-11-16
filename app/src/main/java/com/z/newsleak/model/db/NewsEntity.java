@@ -3,9 +3,10 @@ package com.z.newsleak.model.db;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "news_item")
+@Entity(tableName = "news")
 public class NewsEntity {
 
     @ColumnInfo(name = "id")
@@ -71,6 +72,7 @@ public class NewsEntity {
     }
 
     //builder
+    @Ignore
     public NewsEntity(Builder builder) {
         this.id = builder.id;
         this.section = builder.section;
