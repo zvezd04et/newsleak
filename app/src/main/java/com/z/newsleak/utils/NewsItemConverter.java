@@ -1,7 +1,5 @@
 package com.z.newsleak.utils;
 
-import android.util.Log;
-
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.model.db.NewsEntity;
@@ -60,9 +58,10 @@ public class NewsItemConverter {
                     .section(newsEntity.getSection())
                     .title(newsEntity.getTitle())
                     .imageUrl(newsEntity.getNormalImageUrl())
-                    .previewText(newsEntity.getAbstractField())
+                    .previewText(newsEntity.getPreviewText())
                     .publishDate(newsEntity.getPublishedDate())
                     .articleUrl(newsEntity.getUrl())
+                    .id(newsEntity.getId())
                     .build();
             news.add(newsItem);
         }
@@ -71,7 +70,7 @@ public class NewsItemConverter {
     }
 
     @Nullable
-    public static List<NewsEntity> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork) {
+    public static List<NewsEntity> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
 
         if (newsItemsNetwork == null) {
             return null;
@@ -81,8 +80,10 @@ public class NewsItemConverter {
 
         for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
 
+            final Category category = getCategory(newsItemNetwork.getSection(), currentCategory);
+
             final String normalImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
-            final NewsEntity newsEntity = new NewsEntity.Builder()
+            final NewsEntity newsEntity = new NewsEntity.Builder(category)
                     .section(newsItemNetwork.getSection())
                     .title(newsItemNetwork.getTitle())
                     .normalImageUrl(normalImageUrl)

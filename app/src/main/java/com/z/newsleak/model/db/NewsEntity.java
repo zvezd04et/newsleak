@@ -1,9 +1,11 @@
 package com.z.newsleak.model.db;
 
 import com.z.newsleak.data.db.DateConverter;
+import com.z.newsleak.model.Category;
 
 import java.util.Date;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -29,7 +31,7 @@ public class NewsEntity {
 
     @ColumnInfo(name = "abstract")
     @Nullable
-    private String abstractField;
+    private String previewText;
 
     @ColumnInfo(name = "url")
     @Nullable
@@ -42,6 +44,10 @@ public class NewsEntity {
     @ColumnInfo(name = "normal_image_url")
     @Nullable
     private String normalImageUrl;
+
+    @ColumnInfo(name = "category")
+    @NonNull
+    private Category category;
 
     public NewsEntity() {
     }
@@ -61,8 +67,8 @@ public class NewsEntity {
     }
 
     @Nullable
-    public String getAbstractField() {
-        return abstractField;
+    public String getPreviewText() {
+        return previewText;
     }
 
     @Nullable
@@ -80,6 +86,11 @@ public class NewsEntity {
         return normalImageUrl;
     }
 
+    @NonNull
+    public Category getCategory() {
+        return category;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -92,8 +103,8 @@ public class NewsEntity {
         this.title = title;
     }
 
-    public void setAbstractField(@Nullable String abstractField) {
-        this.abstractField = abstractField;
+    public void setPreviewText(@Nullable String previewText) {
+        this.previewText = previewText;
     }
 
     public void setUrl(@Nullable String url) {
@@ -108,15 +119,20 @@ public class NewsEntity {
         this.normalImageUrl = normalImageUrl;
     }
 
+    public void setCategory(@NonNull Category category) {
+        this.category = category;
+    }
+
     //builder
     @Ignore
     public NewsEntity(Builder builder) {
         this.section = builder.section;
         this.title = builder.title;
-        this.abstractField = builder.abstractField;
+        this.previewText = builder.abstractField;
         this.url = builder.url;
         this.publishedDate = builder.publishedDate;
         this.normalImageUrl = builder.normalImageUrl;
+        this.category = builder.category;
     }
 
     public static class Builder {
@@ -133,9 +149,11 @@ public class NewsEntity {
         private Date publishedDate;
         @Nullable
         private String normalImageUrl;
+        @NonNull
+        private Category category;
 
-        public Builder() {
-
+        public Builder(@NonNull Category category) {
+            this.category = category;
         }
 
         public Builder section(@Nullable String section) {
@@ -165,6 +183,11 @@ public class NewsEntity {
 
         public Builder normalImageUrl(@Nullable String normalImageUrl) {
             this.normalImageUrl = normalImageUrl;
+            return this;
+        }
+
+        public Builder category(@NonNull Category category) {
+            this.category = category;
             return this;
         }
 

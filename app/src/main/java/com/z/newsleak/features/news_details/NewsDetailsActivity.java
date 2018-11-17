@@ -3,26 +3,46 @@ package com.z.newsleak.features.news_details;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.RequestManager;
+import com.z.newsleak.App;
 import com.z.newsleak.R;
-import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.ui.LoadingScreenHolder;
+import com.z.newsleak.data.db.NewsDao;
+import com.z.newsleak.model.db.NewsEntity;
+import com.z.newsleak.utils.DateFormatUtils;
+import com.z.newsleak.utils.ImageLoadUtils;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
-    private static final String EXTRA_NEWS_SECTION = "EXTRA_NEWS_TITLE";
-    private static final String EXTRA_NEWS_URL = "EXTRA_NEWS_URL";
+    private static final String EXTRA_NEWS_ID = "EXTRA_NEWS_ID";
 
-    public static void start(@NonNull Context context, @NonNull NewsItem newsItem) {
+    @NonNull
+    private TextView titleView;
+    @NonNull
+    private TextView fullTextView;
+    @NonNull
+    private ImageView photoView;
+    @NonNull
+    private TextView publishDateView;
+
+    @Nullable
+    private Disposable disposable;
+
+    @NonNull
+    private NewsDao database = App.getDatabase().getNewsDao();
+
+    public static void start(@NonNull Context context, int id) {
         final Intent intent = new Intent(context, NewsDetailsActivity.class);
-        intent.putExtra(EXTRA_NEWS_SECTION, newsItem.getSection());
-        intent.putExtra(EXTRA_NEWS_URL, newsItem.getArticleUrl());
+        intent.putExtra(EXTRA_NEWS_ID, id);
         context.startActivity(intent);
     }
 
@@ -31,29 +51,28 @@ public class NewsDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        final String section = getIntent().getStringExtra(EXTRA_NEWS_SECTION);
-        setTitle(section);
+        final int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
 
-        final WebView webView = findViewById(R.id.news_details_wv_full_text);
-        final LoadingScreenHolder loadingScreen = new LoadingScreenHolder(webView, btn -> webView.reload());
-        webView.setWebViewClient(new NewsWebViewClient(loadingScreen));
-        final String url = getIntent().getStringExtra(EXTRA_NEWS_URL);
-        webView.loadUrl(url);
+        disposable = database.getNewsById(newsId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::showNewsDetails);
+
+        titleView = findViewById(R.id.news_details_tv_title);
+        fullTextView = findViewById(R.id.news_details_tv_full_text);
+        photoView = findViewById(R.id.news_details_iv_photo);
+        publishDateView = findViewById(R.id.news_details_tv_publish_date);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void showNewsDetails(NewsEntity newsItem) {
+        setTitle(newsItem.getCategory().getName());
 
-        switch (item.getItemId()) {
+        titleView.setText(newsItem.getTitle());
+        fullTextView.setText(newsItem.getPreviewText());
+        publishDateView.setText(DateFormatUtils.getRelativeDateTime(this,
+                newsItem.getPublishedDate()));
 
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
-
+        final RequestManager imageLoader = ImageLoadUtils.getImageLoader(this);
+        imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
     }
 }

@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 public class NewsItem implements Serializable {
 
+    private int id;
     @Nullable
     private final String title;
     @Nullable
@@ -58,6 +59,10 @@ public class NewsItem implements Serializable {
         return section;
     }
 
+    public int getId() {
+        return id;
+    }
+
     //builder
     private NewsItem(Builder builder) {
         this.title = builder.title;
@@ -67,10 +72,12 @@ public class NewsItem implements Serializable {
         this.previewText = builder.previewText;
         this.articleUrl = builder.articleUrl;
         this.category = builder.category;
+        this.id = builder.id;
     }
 
     public static class Builder {
 
+        private int id;
         @NonNull
         private Category category;
 
@@ -89,6 +96,12 @@ public class NewsItem implements Serializable {
 
         public Builder(@NonNull Category category) {
             this.category = category;
+        }
+
+        @NonNull
+        public Builder id(int id) {
+            this.id = id;
+            return this;
         }
 
         @NonNull

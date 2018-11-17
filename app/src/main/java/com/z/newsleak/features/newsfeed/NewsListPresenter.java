@@ -70,7 +70,7 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
         disposable = NYTimesApiProvider.getInstance()
                 .createApi()
                 .getNews(category.getSection())
-                .map(response -> NewsItemConverter.convertFromNetworkToDb(response.getResults()))
+                .map(response -> NewsItemConverter.convertFromNetworkToDb(response.getResults(), currentCategory))
                 .flatMapCompletable(this::saveData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

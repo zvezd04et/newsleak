@@ -166,7 +166,7 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
+        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem.getId()));
         recyclerView.setAdapter(newsAdapter);
 
         final int columnsCount = SupportUtils.getNewsColumnsCount(this);

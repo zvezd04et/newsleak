@@ -15,7 +15,7 @@ import io.reactivex.Single;
 @Dao
 public interface NewsDao {
 
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM news ORDER BY published_date DESC")
     Observable<List<NewsEntity>> getAll();
 
     @Query("SELECT * FROM news WHERE section = :section")
