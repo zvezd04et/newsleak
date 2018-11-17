@@ -14,5 +14,6 @@
     <string name="state_loading_msg_error">Ошибка сети при загрузке новостей</string>
     <string name="state_loading_msg_no_data">Нет данных</string>
     <string name="error_action_retry">Повторить попытку</string>
+    <string name="news_details_menu_action_delete">Удалить</string>
 
 </resources>

@@ -21,6 +21,8 @@
     <string name="state_loading_msg_error">Error loading news. Tap to retry</string>
     <string name="state_loading_msg_no_data">There is no data</string>
     <string name="error_action_retry">Retry</string>
-    <string name="title_activity_news_edit">NewsEditActivity</string>
+
+    <string name="news_details_menu_action_delete">Delete</string>
+
 
 </resources>
