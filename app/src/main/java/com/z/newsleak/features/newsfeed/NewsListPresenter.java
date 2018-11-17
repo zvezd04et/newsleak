@@ -7,7 +7,6 @@ import com.z.newsleak.App;
 import com.z.newsleak.data.db.NewsDao;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.model.db.NewsEntity;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.utils.NewsItemConverter;
@@ -53,7 +52,6 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
     public NewsListPresenter() {
 
         final Disposable disposable = database.getAll()
-                .map(newsEntities -> NewsItemConverter.convertFromDb(newsEntities, currentCategory))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processNews,
@@ -100,7 +98,7 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
         ifViewAttached(view -> view.showNews(newsList));
     }
 
-    public Completable saveData(final List<NewsEntity> newsList) {
+    private Completable saveData(final List<NewsItem> newsList) {
         return Completable.fromCallable((Callable<Void>) () -> {
             database.deleteAll();
             database.insertAll(newsList);

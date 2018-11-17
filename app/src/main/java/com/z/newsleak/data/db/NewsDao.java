@@ -1,6 +1,6 @@
 package com.z.newsleak.data.db;
 
-import com.z.newsleak.model.db.NewsEntity;
+import com.z.newsleak.model.NewsItem;
 
 import java.util.List;
 
@@ -16,19 +16,19 @@ import io.reactivex.Single;
 public interface NewsDao {
 
     @Query("SELECT * FROM news ORDER BY published_date DESC")
-    Observable<List<NewsEntity>> getAll();
+    Observable<List<NewsItem>> getAll();
 
     @Query("SELECT * FROM news WHERE section = :section")
-    Single<List<NewsEntity>> getNewsBySection(String section);
+    Single<List<NewsItem>> getNewsBySection(String section);
 
     @Query("SELECT * FROM news WHERE id = :id")
-    Single<NewsEntity> getNewsById(int id);
+    Single<NewsItem> getNewsById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(List<NewsEntity> news);
+    void insertAll(List<NewsItem> news);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable insert(NewsEntity newsEntity);
+    Completable insert(NewsItem newsItem);
 
     @Query("DELETE FROM news")
     void deleteAll();

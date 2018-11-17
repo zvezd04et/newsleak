@@ -17,7 +17,7 @@ import com.bumptech.glide.RequestManager;
 import com.z.newsleak.App;
 import com.z.newsleak.R;
 import com.z.newsleak.data.db.NewsDao;
-import com.z.newsleak.model.db.NewsEntity;
+import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
@@ -64,7 +64,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         publishDateView = findViewById(R.id.news_details_tv_publish_date);
     }
 
-    public void showNewsDetails(NewsEntity newsItem) {
+    public void showNewsDetails(NewsItem newsItem) {
         setTitle(newsItem.getCategory().getName());
 
         titleView.setText(newsItem.getTitle());
