@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.ui.LoadState;
@@ -27,7 +28,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -68,7 +68,12 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
         spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
-        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> presenter.loadNews((Category) spinner.getSelectedItem()));
+        final View.OnClickListener clickListener = btn ->presenter.loadNews((Category) spinner.getSelectedItem());
+
+        final FloatingActionButton fab = findViewById(R.id.news_list_fab_refresh);
+        fab.setOnClickListener(clickListener);
+
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, clickListener);
     }
 
     @Override
