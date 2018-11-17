@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
 import com.z.newsleak.App;
+import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.R;
 import com.z.newsleak.data.db.NewsDao;
 import com.z.newsleak.model.NewsItem;
@@ -85,9 +86,16 @@ public class NewsDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_delete:
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
+            case R.id.action_delete:
                 delete();
+                return true;
+
+            case R.id.action_edit:
+                NewsEditActivity.start(this, newsId);
                 return true;
 
             default:
@@ -115,6 +123,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private void handleDeleteError(Throwable throwable) {
         Log.e(LOG_TAG, throwable.toString());
     }
+
     public void showNewsDetails(NewsItem newsItem) {
         setTitle(newsItem.getCategory().getName());
 

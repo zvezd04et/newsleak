@@ -15,5 +15,9 @@
     <string name="state_loading_msg_no_data">Нет данных</string>
     <string name="error_action_retry">Повторить попытку</string>
     <string name="news_details_menu_action_delete">Удалить</string>
+    <string name="news_details_menu_action_edit">Править</string>
+    <string name="news_edit_menu_action_save">Сохранить</string>
+    <string name="news_edit_tv_title_text">Заголовок</string>
+    <string name="news_edit_et_hint">Введите заголовок статьи</string>
 
 </resources>

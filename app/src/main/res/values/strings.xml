@@ -23,6 +23,10 @@
     <string name="error_action_retry">Retry</string>
 
     <string name="news_details_menu_action_delete">Delete</string>
+    <string name="news_details_menu_action_edit">Edit</string>
 
+    <string name="news_edit_menu_action_save">Save</string>
+    <string name="news_edit_tv_title_text">Title</string>
+    <string name="news_edit_et_hint">Enter news title</string>
 
 </resources>
