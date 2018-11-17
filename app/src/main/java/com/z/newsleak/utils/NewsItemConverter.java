@@ -7,40 +7,44 @@ import com.z.newsleak.model.network.ImageNetwork;
 import com.z.newsleak.model.network.NewsItemNetwork;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.TypeConverter;
 
 public class NewsItemConverter {
 
     private final static String IMAGE_FORMAT = "Normal";
 
     @Nullable
-    public static List<NewsItem> convertFromNetwork(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
+    public static List<NewsEntity> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
 
         if (newsItemsNetwork == null) {
             return null;
         }
 
-        final List<NewsItem> news = new ArrayList<>(newsItemsNetwork.size());
+        final List<NewsEntity> newsEntities = new ArrayList<>(newsItemsNetwork.size());
 
         for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
-            final String previewImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
-            final Category category = getCategory(newsItemNetwork.getSection(), currentCategory);
 
-            final NewsItem newsItem = new NewsItem.Builder(category)
+            final Category category = getCategory(newsItemNetwork.getSection(), currentCategory);
+            final String normalImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
+
+            final NewsEntity newsEntity = new NewsEntity.Builder(category)
                     .section(newsItemNetwork.getSection())
                     .title(newsItemNetwork.getTitle())
-                    .imageUrl(previewImageUrl)
-                    .previewText(newsItemNetwork.getAbstractField())
-                    .publishDate(newsItemNetwork.getPublishedDate())
-                    .articleUrl(newsItemNetwork.getUrl())
+                    .normalImageUrl(normalImageUrl)
+                    .abstractField(newsItemNetwork.getAbstractField())
+                    .publishedDate(newsItemNetwork.getPublishedDate())
+                    .url(newsItemNetwork.getUrl())
                     .build();
-            news.add(newsItem);
+
+            newsEntities.add(newsEntity);
         }
 
-        return news;
+        return newsEntities;
     }
 
     @Nullable
@@ -69,35 +73,36 @@ public class NewsItemConverter {
         return news;
     }
 
-    @Nullable
-    public static List<NewsEntity> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
-
-        if (newsItemsNetwork == null) {
-            return null;
-        }
-
-        final List<NewsEntity> newsEntities = new ArrayList<>(newsItemsNetwork.size());
-
-        for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
-
-            final Category category = getCategory(newsItemNetwork.getSection(), currentCategory);
-
-            final String normalImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
-            final NewsEntity newsEntity = new NewsEntity.Builder(category)
-                    .section(newsItemNetwork.getSection())
-                    .title(newsItemNetwork.getTitle())
-                    .normalImageUrl(normalImageUrl)
-                    .abstractField(newsItemNetwork.getAbstractField())
-                    .publishedDate(newsItemNetwork.getPublishedDate())
-                    .url(newsItemNetwork.getUrl())
-                    .build();
-
-            newsEntities.add(newsEntity);
-        }
-
-        return newsEntities;
+    @TypeConverter
+    public static Date toDate(Long dateLong) {
+        return dateLong == null ? null : new Date(dateLong);
     }
 
+    @TypeConverter
+    public static Long fromDate(Date date) {
+        return date == null ? null : date.getTime();
+    }
+
+    @TypeConverter
+    public static Category toCategory(@Nullable String section) {
+
+        if (section == null) {
+            return Category.HOME;
+        }
+
+        for (Category category : Category.values()) {
+            if (section.equals(category.getSection())) {
+                return category;
+            }
+        }
+
+        return Category.HOME;
+    }
+
+    @TypeConverter
+    public static String fromCategory(Category category) {
+        return category == null ? null : category.getSection();
+    }
 
     @Nullable
     private static String getImageUrl(@Nullable List<ImageNetwork> multimedia) {

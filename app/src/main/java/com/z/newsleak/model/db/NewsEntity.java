@@ -1,7 +1,7 @@
 package com.z.newsleak.model.db;
 
-import com.z.newsleak.data.db.DateConverter;
 import com.z.newsleak.model.Category;
+import com.z.newsleak.utils.NewsItemConverter;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 @Entity(tableName = "news")
-@TypeConverters(DateConverter.class)
+@TypeConverters(NewsItemConverter.class)
 public class NewsEntity {
 
     @ColumnInfo(name = "id")
