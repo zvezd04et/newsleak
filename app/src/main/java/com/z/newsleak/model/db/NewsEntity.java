@@ -1,16 +1,22 @@
 package com.z.newsleak.model.db;
 
+import com.z.newsleak.data.db.DateConverter;
+
+import java.util.Date;
+
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 @Entity(tableName = "news")
+@TypeConverters(DateConverter.class)
 public class NewsEntity {
 
     @ColumnInfo(name = "id")
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "section")
@@ -31,11 +37,14 @@ public class NewsEntity {
 
     @ColumnInfo(name = "published_date")
     @Nullable
-    private String publishedDate;
+    private Date publishedDate;
 
     @ColumnInfo(name = "normal_image_url")
     @Nullable
     private String normalImageUrl;
+
+    public NewsEntity() {
+    }
 
     public int getId() {
         return id;
@@ -62,7 +71,7 @@ public class NewsEntity {
     }
 
     @Nullable
-    public String getPublishedDate() {
+    public Date getPublishedDate() {
         return publishedDate;
     }
 
@@ -71,10 +80,37 @@ public class NewsEntity {
         return normalImageUrl;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setSection(@Nullable String section) {
+        this.section = section;
+    }
+
+    public void setTitle(@Nullable String title) {
+        this.title = title;
+    }
+
+    public void setAbstractField(@Nullable String abstractField) {
+        this.abstractField = abstractField;
+    }
+
+    public void setUrl(@Nullable String url) {
+        this.url = url;
+    }
+
+    public void setPublishedDate(@Nullable Date publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public void setNormalImageUrl(@Nullable String normalImageUrl) {
+        this.normalImageUrl = normalImageUrl;
+    }
+
     //builder
     @Ignore
     public NewsEntity(Builder builder) {
-        this.id = builder.id;
         this.section = builder.section;
         this.title = builder.title;
         this.abstractField = builder.abstractField;
@@ -85,7 +121,6 @@ public class NewsEntity {
 
     public static class Builder {
 
-        private int id;
         @Nullable
         private String section;
         @Nullable
@@ -95,12 +130,12 @@ public class NewsEntity {
         @Nullable
         private String url;
         @Nullable
-        private String publishedDate;
+        private Date publishedDate;
         @Nullable
         private String normalImageUrl;
 
-        public Builder(int id) {
-            this.id = id;
+        public Builder() {
+
         }
 
         public Builder section(@Nullable String section) {
@@ -123,7 +158,7 @@ public class NewsEntity {
             return this;
         }
 
-        public Builder publishedDate(@Nullable String publishedDate) {
+        public Builder publishedDate(@Nullable Date publishedDate) {
             this.publishedDate = publishedDate;
             return this;
         }

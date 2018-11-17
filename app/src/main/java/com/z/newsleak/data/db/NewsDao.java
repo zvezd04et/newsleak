@@ -9,13 +9,14 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 @Dao
 public interface NewsDao {
 
     @Query("SELECT * FROM news")
-    Single<List<NewsEntity>> getAll();
+    Observable<List<NewsEntity>> getAll();
 
     @Query("SELECT * FROM news WHERE section = :section")
     Single<List<NewsEntity>> getNewsBySection(String section);
@@ -24,7 +25,7 @@ public interface NewsDao {
     Single<NewsEntity> getNewsById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(NewsEntity... newsEntities);
+    void insertAll(List<NewsEntity> news);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insert(NewsEntity newsEntity);

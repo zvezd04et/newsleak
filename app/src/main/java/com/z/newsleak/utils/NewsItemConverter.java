@@ -1,7 +1,10 @@
 package com.z.newsleak.utils;
 
+import android.util.Log;
+
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.model.db.NewsEntity;
 import com.z.newsleak.model.network.ImageNetwork;
 import com.z.newsleak.model.network.NewsItemNetwork;
 
@@ -22,7 +25,7 @@ public class NewsItemConverter {
             return null;
         }
 
-        final List<NewsItem> news = new ArrayList<>();
+        final List<NewsItem> news = new ArrayList<>(newsItemsNetwork.size());
 
         for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
             final String previewImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
@@ -41,6 +44,59 @@ public class NewsItemConverter {
 
         return news;
     }
+
+    @Nullable
+    public static List<NewsItem> convertFromDb(@Nullable List<NewsEntity> newsEntities, @Nullable Category currentCategory) {
+
+        if (newsEntities == null) {
+            return null;
+        }
+
+        final List<NewsItem> news = new ArrayList<>(newsEntities.size());
+        for (NewsEntity newsEntity : newsEntities) {
+            final Category category = getCategory(newsEntity.getSection(), currentCategory);
+
+            final NewsItem newsItem = new NewsItem.Builder(category)
+                    .section(newsEntity.getSection())
+                    .title(newsEntity.getTitle())
+                    .imageUrl(newsEntity.getNormalImageUrl())
+                    .previewText(newsEntity.getAbstractField())
+                    .publishDate(newsEntity.getPublishedDate())
+                    .articleUrl(newsEntity.getUrl())
+                    .build();
+            news.add(newsItem);
+        }
+
+        return news;
+    }
+
+    @Nullable
+    public static List<NewsEntity> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork) {
+
+        if (newsItemsNetwork == null) {
+            return null;
+        }
+
+        final List<NewsEntity> newsEntities = new ArrayList<>(newsItemsNetwork.size());
+
+        for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
+
+            final String normalImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
+            final NewsEntity newsEntity = new NewsEntity.Builder()
+                    .section(newsItemNetwork.getSection())
+                    .title(newsItemNetwork.getTitle())
+                    .normalImageUrl(normalImageUrl)
+                    .abstractField(newsItemNetwork.getAbstractField())
+                    .publishedDate(newsItemNetwork.getPublishedDate())
+                    .url(newsItemNetwork.getUrl())
+                    .build();
+
+            newsEntities.add(newsEntity);
+        }
+
+        return newsEntities;
+    }
+
 
     @Nullable
     private static String getImageUrl(@Nullable List<ImageNetwork> multimedia) {
