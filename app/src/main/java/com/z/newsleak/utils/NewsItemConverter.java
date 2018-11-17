@@ -64,12 +64,12 @@ public class NewsItemConverter {
         }
 
         for (Category category : Category.values()) {
-            if (section.equals(category.getSection())) {
+            if (section.toLowerCase().equals(category.getSection())) {
                 return category;
             }
         }
 
-        return Category.HOME;
+        return null;
     }
 
     @TypeConverter
