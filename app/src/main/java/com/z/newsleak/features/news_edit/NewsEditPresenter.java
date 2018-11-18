@@ -49,7 +49,7 @@ public class NewsEditPresenter extends MvpBasePresenter<NewsEditContract.View> i
     @Override
     public void saveData() {
 
-        if (newsItem != null) {
+        if (newsItem == null) {
             return;
         }
 
