@@ -150,6 +150,10 @@ public class NewsEditActivity extends AppCompatActivity {
     public void save() {
 
         newsItem.setTitle(titleEdit.getText().toString());
+        newsItem.setPreviewText(previewEdit.getText().toString());
+        newsItem.setUrl(urlEdit.getText().toString());
+        newsItem.setNormalImageUrl(urlPhotoEdit.getText().toString());
+        newsItem.setPublishedDate(calendar.getTime());
 
         Disposable disposable = database.insert(newsItem)
                 .subscribeOn(Schedulers.io())
