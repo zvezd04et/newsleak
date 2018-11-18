@@ -132,7 +132,7 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.menu_news_list, menu);
         return true;
     }
 
