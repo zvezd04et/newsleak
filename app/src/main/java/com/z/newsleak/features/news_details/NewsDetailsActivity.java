@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
+import com.hannesdorfmann.mosby3.mvp.MvpActivity;
 import com.z.newsleak.App;
 import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.R;
@@ -29,7 +30,7 @@ import com.z.newsleak.utils.ImageLoadUtils;
 
 import java.util.concurrent.Callable;
 
-public class NewsDetailsActivity extends AppCompatActivity {
+public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, NewsDetailsContract.Presenter> implements NewsDetailsContract.View {
 
     private static final String LOG_TAG = "NewsDetailsActivity";
     private static final String EXTRA_NEWS_ID = "EXTRA_NEWS_ID";
@@ -42,16 +43,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private ImageView photoView;
     @NonNull
     private TextView publishDateView;
-
-    @NonNull
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    @Nullable
-    private Disposable disposable;
-
     private int newsId;
-
-    @NonNull
-    private NewsDao database = App.getDatabase().getNewsDao();
 
     public static void start(@NonNull Context context, int id) {
         final Intent intent = new Intent(context, NewsDetailsActivity.class);
@@ -65,11 +57,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_details);
 
         newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-
-        disposable = database.getNewsById(newsId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showNewsDetails);
+        presenter.getData(newsId);
 
         titleView = findViewById(R.id.news_details_tv_title);
         fullTextView = findViewById(R.id.news_details_tv_full_text);
@@ -78,20 +66,20 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_news_detail, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
 
             case R.id.action_delete:
-                delete();
+                presenter.deleteData();
                 return true;
 
             case R.id.action_edit:
@@ -104,27 +92,14 @@ public class NewsDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void delete() {
-        Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
-            database.deleteById(newsId);
-            return null;
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onSuccessDelete, this::handleDeleteError);
-
-        compositeDisposable.add(disposable);
+    @NonNull
+    @Override
+    public NewsDetailsContract.Presenter createPresenter() {
+        return new NewsDetailsPresenter();
     }
 
-    private void onSuccessDelete() {
-        finish();
-    }
-
-    private void handleDeleteError(Throwable throwable) {
-        Log.e(LOG_TAG, throwable.toString());
-    }
-
-    public void showNewsDetails(NewsItem newsItem) {
+    @Override
+    public void setData(@NonNull NewsItem newsItem) {
         setTitle(newsItem.getCategory().getName());
 
         titleView.setText(newsItem.getTitle());
@@ -134,5 +109,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
         final RequestManager imageLoader = ImageLoadUtils.getImageLoader(this);
         imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
+    }
+
+    @Override
+    public void close() {
+        finish();
     }
 }
