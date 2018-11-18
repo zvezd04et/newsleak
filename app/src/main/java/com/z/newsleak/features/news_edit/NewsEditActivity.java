@@ -8,6 +8,7 @@ import com.z.newsleak.App;
 import com.z.newsleak.R;
 import com.z.newsleak.data.db.NewsDao;
 import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.utils.DateFormatUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class NewsEditActivity extends AppCompatActivity {
 
@@ -29,6 +31,16 @@ public class NewsEditActivity extends AppCompatActivity {
 
     @NonNull
     private EditText titleEdit;
+    @NonNull
+    private EditText previewEdit;
+    @NonNull
+    private EditText urlEdit;
+    @NonNull
+    private EditText urlPhotoEdit;
+    @NonNull
+    private TextView publishedDateView;
+    @NonNull
+    private TextView publishedTimeView;
 
     @Nullable
     private Disposable disposable;
@@ -55,7 +67,12 @@ public class NewsEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_edit);
 
-        titleEdit = findViewById(R.id.edit_et_title);
+        titleEdit = findViewById(R.id.news_edit_et_title);
+        previewEdit = findViewById(R.id.news_edit_et_preview_text);
+        urlEdit = findViewById(R.id.news_edit_et_url);
+        urlPhotoEdit = findViewById(R.id.news_edit_et_url_photo);
+        publishedDateView = findViewById(R.id.news_edit_tv_published_date);
+        publishedTimeView = findViewById(R.id.news_edit_tv_published_time);
 
         newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
         disposable = database.getNewsById(newsId)
@@ -74,6 +91,11 @@ public class NewsEditActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
             case R.id.action_save:
                 save();
                 return true;
@@ -97,10 +119,14 @@ public class NewsEditActivity extends AppCompatActivity {
     }
 
     public void showNewsDetails(NewsItem newsItem) {
-
         this.newsItem = newsItem;
-        setTitle(newsItem.getCategory().getName());
+
         titleEdit.setText(newsItem.getTitle());
+        previewEdit.setText(newsItem.getPreviewText());
+        urlEdit.setText(newsItem.getUrl());
+        urlPhotoEdit.setText(newsItem.getNormalImageUrl());
+        publishedDateView.setText(DateFormatUtils.getRelativeDate(newsItem.getPublishedDate()));
+        publishedTimeView.setText(DateFormatUtils.getRelativeTime(newsItem.getPublishedDate()));
     }
 
     private void onSuccessSave() {

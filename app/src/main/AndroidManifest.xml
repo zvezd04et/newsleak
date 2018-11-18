@@ -26,14 +26,16 @@
         <activity android:name=".features.newsfeed.NewsListActivity" />
         <activity
             android:name=".features.about_info.AboutActivity"
-            android:label="@string/title_author"
+            android:label="@string/about_title"
             android:parentActivityName=".features.newsfeed.NewsListActivity" />
         <activity
             android:name=".features.news_details.NewsDetailsActivity"
             android:configChanges="orientation|screenSize"
             android:parentActivityName=".features.newsfeed.NewsListActivity" />
         <activity
-            android:name=".features.news_edit.NewsEditActivity"/>
+            android:name=".features.news_edit.NewsEditActivity"
+            android:label="@string/news_edit_title"
+            android:parentActivityName=".features.news_details.NewsDetailsActivity"/>
     </application>
 
 </manifest>

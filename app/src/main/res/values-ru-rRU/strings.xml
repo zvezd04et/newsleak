@@ -9,7 +9,7 @@
     <string name="position">Ведущий программист 1С</string>
     <string name="menu_action_about">Об авторе</string>
     <string name="error_no_browser_app">Браузер не обнаружен</string>
-    <string name="title_author">Автор</string>
+    <string name="about_title">Автор</string>
 
     <string name="state_loading_msg_error">Ошибка сети при загрузке новостей</string>
     <string name="state_loading_msg_no_data">Нет данных</string>
@@ -18,6 +18,13 @@
     <string name="news_details_menu_action_edit">Править</string>
     <string name="news_edit_menu_action_save">Сохранить</string>
     <string name="news_edit_tv_title_text">Заголовок</string>
-    <string name="news_edit_et_hint">Введите заголовок статьи</string>
+    <string name="news_edit_et_title_hint">Введите заголовок статьи</string>
+    <string name="news_edit_tv_preview_text">Обзор</string>
+    <string name="news_edit_et_preview_hint">Напишите обзор новости</string>
+    <string name="news_edit_et_url_hint">Введите url новости</string>
+    <string name="news_edit_tv_url_photo_text">Url фото</string>
+    <string name="news_edit_et_url_photo_hint">Введите url для фото новости</string>
+    <string name="news_edit_tv_published_date_text">Дата публикации</string>
+    <string name="news_edit_title">Редактор</string>
 
 </resources>
