@@ -48,6 +48,10 @@ public class NewsItem implements Serializable {
     @Nullable
     private String normalImageUrl;
 
+    @ColumnInfo(name = "large_image_url")
+    @Nullable
+    private String largeImageUrl;
+
     public NewsItem() {
     }
 
@@ -90,6 +94,11 @@ public class NewsItem implements Serializable {
         return normalImageUrl;
     }
 
+    @Nullable
+    public String getLargeImageUrl() {
+        return largeImageUrl;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -122,6 +131,10 @@ public class NewsItem implements Serializable {
         this.normalImageUrl = normalImageUrl;
     }
 
+    public void setLargeImageUrl(@Nullable String largeImageUrl) {
+        this.largeImageUrl = largeImageUrl;
+    }
+
     //builder
     private NewsItem(Builder builder) {
         this.id = builder.id;
@@ -132,6 +145,7 @@ public class NewsItem implements Serializable {
         this.url = builder.url;
         this.publishedDate = builder.publishedDate;
         this.normalImageUrl = builder.normalImageUrl;
+        this.largeImageUrl = builder.largeImageUrl;
     }
 
     public static class Builder {
@@ -151,6 +165,8 @@ public class NewsItem implements Serializable {
         private Date publishedDate;
         @Nullable
         private String normalImageUrl;
+        @Nullable
+        private String largeImageUrl;
 
         public Builder(@NonNull Category category) {
             this.category = category;
@@ -195,6 +211,12 @@ public class NewsItem implements Serializable {
         @NonNull
         public Builder normalImageUrl(@Nullable String normalImageUrl) {
             this.normalImageUrl = normalImageUrl;
+            return this;
+        }
+
+        @NonNull
+        public Builder largeImageUrl(@Nullable String largeImageUrl) {
+            this.largeImageUrl = largeImageUrl;
             return this;
         }
 

@@ -108,7 +108,7 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
                 newsItem.getPublishedDate()));
 
         final RequestManager imageLoader = ImageLoadUtils.getImageLoader(this);
-        imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
+        imageLoader.load(newsItem.getLargeImageUrl()).into(photoView);
     }
 
     @Override

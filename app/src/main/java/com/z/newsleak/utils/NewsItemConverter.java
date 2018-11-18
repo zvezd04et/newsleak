@@ -15,7 +15,8 @@ import androidx.room.TypeConverter;
 
 public class NewsItemConverter {
 
-    private final static String IMAGE_FORMAT = "Normal";
+    private final static String NORMAL_FORMAT_IMAGE = "Normal";
+    private final static String LARGE_FORMAT_IMAGE = "superJumbo";
 
     @Nullable
     public static List<NewsItem> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
@@ -29,15 +30,17 @@ public class NewsItemConverter {
         for (NewsItemNetwork newsItemNetwork : newsItemsNetwork) {
 
             final Category category = toCategory(newsItemNetwork.getSection(), currentCategory);
-            final String normalImageUrl = getImageUrl(newsItemNetwork.getMultimedia());
+            final String normalImageUrl = getImageUrl(newsItemNetwork.getMultimedia(), NORMAL_FORMAT_IMAGE);
+            final String largeImageUrl = getImageUrl(newsItemNetwork.getMultimedia(), LARGE_FORMAT_IMAGE);
 
             final NewsItem newsItem = new NewsItem.Builder(category)
                     .section(newsItemNetwork.getSection())
                     .title(newsItemNetwork.getTitle())
-                    .normalImageUrl(normalImageUrl)
                     .previewText(newsItemNetwork.getAbstractField())
                     .publishedDate(newsItemNetwork.getPublishedDate())
                     .url(newsItemNetwork.getUrl())
+                    .normalImageUrl(normalImageUrl)
+                    .largeImageUrl(largeImageUrl)
                     .build();
 
             newsEntities.add(newsItem);
@@ -78,7 +81,7 @@ public class NewsItemConverter {
     }
 
     @Nullable
-    private static String getImageUrl(@Nullable List<ImageNetwork> multimedia) {
+    private static String getImageUrl(@Nullable List<ImageNetwork> multimedia, @NonNull String format) {
 
         if (multimedia == null) {
             return null;
@@ -90,7 +93,7 @@ public class NewsItemConverter {
 
         String previewImageUrl = null;
         for (ImageNetwork imageNetwork : multimedia) {
-            if (IMAGE_FORMAT.equals(imageNetwork.getFormat())) {
+            if (format.equals(imageNetwork.getFormat())) {
                 previewImageUrl = imageNetwork.getUrl();
                 break;
             }
