@@ -1,5 +1,7 @@
 package com.z.newsleak.features.news_edit;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,11 +20,16 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 public class NewsEditActivity extends AppCompatActivity {
 
@@ -51,6 +58,9 @@ public class NewsEditActivity extends AppCompatActivity {
     @NonNull
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    @NonNull
+    private Calendar calendar = Calendar.getInstance();
+
     private int newsId;
 
     @Nullable
@@ -73,6 +83,9 @@ public class NewsEditActivity extends AppCompatActivity {
         urlPhotoEdit = findViewById(R.id.news_edit_et_url_photo);
         publishedDateView = findViewById(R.id.news_edit_tv_published_date);
         publishedTimeView = findViewById(R.id.news_edit_tv_published_time);
+
+        publishedDateView.setOnClickListener(v -> showDatePickerDialog());
+        publishedTimeView.setOnClickListener(v -> showTimePickerDialog());
 
         newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
         disposable = database.getNewsById(newsId)
@@ -106,6 +119,34 @@ public class NewsEditActivity extends AppCompatActivity {
         }
     }
 
+    private void showDatePickerDialog() {
+        final int publishedYear = calendar.get(Calendar.YEAR);
+        final int publishedMonth = calendar.get(Calendar.MONTH);
+        final int publishedDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, monthOfYear);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    publishedDateView.setText(DateFormatUtils.getRelativeDate(calendar.getTime()));
+                }, publishedYear, publishedMonth, publishedDay);
+        datePickerDialog.show();
+    }
+
+    private void showTimePickerDialog() {
+        final int publishedHour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int publishedMinute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                (view, hourOfDay, minute) -> {
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    calendar.set(Calendar.MINUTE, minute);
+                    publishedTimeView.setText(DateFormatUtils.getRelativeTime(calendar.getTime()));
+                }, publishedHour, publishedMinute, DateFormat.is24HourFormat(this));
+        timePickerDialog.show();
+    }
+
     public void save() {
 
         newsItem.setTitle(titleEdit.getText().toString());
@@ -120,6 +161,8 @@ public class NewsEditActivity extends AppCompatActivity {
 
     public void showNewsDetails(NewsItem newsItem) {
         this.newsItem = newsItem;
+
+        calendar.setTime(newsItem.getPublishedDate());
 
         titleEdit.setText(newsItem.getTitle());
         previewEdit.setText(newsItem.getPreviewText());
