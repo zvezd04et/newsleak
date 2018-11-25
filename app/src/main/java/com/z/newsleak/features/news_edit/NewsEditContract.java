@@ -1,8 +1,8 @@
 package com.z.newsleak.features.news_edit;
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpView;
 import com.z.newsleak.features.base.BaseNewsItemView;
+import com.z.newsleak.model.NewsEditItem;
 import com.z.newsleak.model.NewsItem;
 
 import java.util.Calendar;
@@ -15,13 +15,11 @@ public interface NewsEditContract {
 
         void setCalendar(@NonNull Calendar calendar);
 
-        void updateData(@NonNull NewsItem newsItem);
-
     }
 
     interface Presenter extends MvpPresenter<NewsEditContract.View> {
 
-        void saveData();
+        void saveData(@NonNull NewsEditItem newsEditItem);
 
     }
 }

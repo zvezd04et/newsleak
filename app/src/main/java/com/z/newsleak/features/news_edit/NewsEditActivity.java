@@ -7,28 +7,19 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
-import com.z.newsleak.App;
 import com.z.newsleak.R;
-import com.z.newsleak.data.db.NewsDao;
+import com.z.newsleak.model.NewsEditItem;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.Calendar;
 
@@ -89,7 +80,7 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
                 return true;
 
             case R.id.action_save:
-                presenter.saveData();
+                saveData();
                 return true;
 
             default:
@@ -136,17 +127,22 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
     }
 
     @Override
-    public void updateData(@NonNull NewsItem newsItem) {
-        newsItem.setTitle(titleEdit.getText().toString());
-        newsItem.setPreviewText(previewEdit.getText().toString());
-        newsItem.setUrl(urlEdit.getText().toString());
-        newsItem.setNormalImageUrl(urlPhotoEdit.getText().toString());
-        newsItem.setPublishedDate(calendar.getTime());
-    }
-
-    @Override
     public void close() {
         finish();
+    }
+
+    private void saveData() {
+
+        final NewsEditItem newsEditItem = new NewsEditItem.Builder()
+                .title(titleEdit.getText().toString())
+                .previewText(previewEdit.getText().toString())
+                .url(urlEdit.getText().toString())
+                .normalImageUrl(urlPhotoEdit.getText().toString())
+                .publishedDate(calendar.getTime())
+                .build();
+
+        presenter.saveData(newsEditItem);
+
     }
 
     private void showDatePickerDialog() {
