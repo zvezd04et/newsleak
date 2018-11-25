@@ -1,7 +1,5 @@
 package com.z.newsleak.model;
 
-import com.z.newsleak.utils.NewsItemConverter;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -10,10 +8,8 @@ import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 @Entity(tableName = "news")
-@TypeConverters(NewsItemConverter.class)
 public class NewsItem implements Serializable {
 
     @ColumnInfo(name = "id")

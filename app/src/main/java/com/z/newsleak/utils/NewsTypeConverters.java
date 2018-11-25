@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.TypeConverter;
 
-public class NewsItemConverter {
+public class NewsTypeConverters {
 
     private final static String NORMAL_FORMAT_IMAGE = "Normal";
     private final static String LARGE_FORMAT_IMAGE = "superJumbo";
@@ -112,7 +112,7 @@ public class NewsItemConverter {
         return (currentCategory != null) ? currentCategory : Category.HOME;
     }
 
-    private NewsItemConverter() {
+    private NewsTypeConverters() {
         throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
 }

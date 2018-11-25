@@ -7,7 +7,7 @@ import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.data.api.NYTimesApiProvider;
-import com.z.newsleak.utils.NewsItemConverter;
+import com.z.newsleak.utils.NewsTypeConverters;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class NewsListPresenter extends BasePresenter<NewsListContract.View> impl
         disposable = NYTimesApiProvider.getInstance()
                 .createApi()
                 .getNews(category.getSection())
-                .map(response -> NewsItemConverter.convertFromNetworkToDb(response.getResults(), currentCategory))
+                .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
                 .flatMapCompletable(this::saveData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
