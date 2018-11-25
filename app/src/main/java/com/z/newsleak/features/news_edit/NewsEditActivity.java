@@ -115,7 +115,7 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
 
     @Override
     public void onNewViewStateInstance() {
-
+        //specify what to do on first Activity start
     }
 
     @Override
