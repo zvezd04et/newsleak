@@ -8,6 +8,7 @@ import com.z.newsleak.data.db.AppDatabase;
 import java.io.IOException;
 import java.net.SocketException;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
@@ -15,7 +16,13 @@ import io.reactivex.plugins.RxJavaPlugins;
 public class App extends Application {
 
     private static final String LOG_TAG = "RxErrorHandler";
+    @NonNull
     private static AppDatabase database;
+
+    @NonNull
+    public static AppDatabase getDatabase() {
+        return database;
+    }
 
     @Override
     public void onCreate() {
@@ -43,11 +50,7 @@ public class App extends Application {
             Log.d(LOG_TAG, "Undeliverable exception received, not sure what to do", e);
         });
 
-        database = Room.databaseBuilder(this, AppDatabase.class, AppDatabase.DATABASE_NAME)
-                .build();
+        database = AppDatabase.getInstance(this);
     }
 
-    public static AppDatabase getDatabase() {
-        return database;
-    }
 }

@@ -5,7 +5,6 @@ import android.util.Log;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.z.newsleak.App;
 import com.z.newsleak.data.db.NewsDao;
-import com.z.newsleak.features.news_edit.NewsEditContract;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.SupportUtils;
 
