@@ -2,49 +2,52 @@ package com.z.newsleak.features.intro;
 
 import android.os.Bundle;
 
+import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
 import com.z.newsleak.R;
-import com.z.newsleak.features.about_info.AboutActivity;
+import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.features.newsfeed.NewsListActivity;
 
-import java.util.concurrent.TimeUnit;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import io.reactivex.Completable;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 
-public class IntroActivity extends AppCompatActivity {
-
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-    private static final long TIME_DELAY = 2;
+public class IntroActivity extends MvpViewStateActivity<IntroContract.View, IntroContract.Presenter, IntroViewState> implements IntroContract.View {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_intro);
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
+    }
 
-        Disposable disposable = Completable.complete()
-                .delay(TIME_DELAY, TimeUnit.SECONDS)
-                .subscribe(this::startSecondActivity);
-        compositeDisposable.add(disposable);
+    @NonNull
+    @Override
+    public IntroContract.Presenter createPresenter() {
+        return new IntroPresenter(PreferencesManager.getInstance(this));
+    }
 
+    @NonNull
+    @Override
+    public IntroViewState createViewState() {
+        return new IntroViewState();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        compositeDisposable.dispose();
+    public void onNewViewStateInstance() {
+        presenter.makeDelay();
     }
 
-    private void startSecondActivity() {
+    @Override
+    public void setIntroLayout() {
+        setContentView(R.layout.activity_intro);
+        viewState.setIntroVisible(true);
+    }
+
+    @Override
+    public void startNextActivity() {
         NewsListActivity.start(this);
         finish();
     }
