@@ -21,7 +21,7 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditContract.Vi
 
         ifViewAttached(view -> view.updateData(newsItem));
 
-        final Disposable disposable = database.insert(newsItem)
+        final Disposable disposable = database.update(newsItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processSaving, this::handleError);
