@@ -25,10 +25,14 @@ public class NewsDetailsPresenter extends MvpBasePresenter<NewsDetailsContract.V
     @NonNull
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     @NonNull
-    private NewsDao database = App.getDatabase().getNewsDao();
+    private final NewsDao database = App.getDatabase().getNewsDao();
     @Nullable
     private NewsItem newsItem;
     private int id;
+
+    public NewsDetailsPresenter(int id) {
+        this.id = id;
+    }
 
     @Override
     public void destroy() {
@@ -37,7 +41,7 @@ public class NewsDetailsPresenter extends MvpBasePresenter<NewsDetailsContract.V
     }
 
     @Override
-    public void getData(int id) {
+    public void getData() {
 
         if (newsItem != null) {
             return;
@@ -59,16 +63,12 @@ public class NewsDetailsPresenter extends MvpBasePresenter<NewsDetailsContract.V
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processDeleting, this::handleError);
-
-        compositeDisposable.add(disposable);
-
         compositeDisposable.add(disposable);
     }
 
     private void processLoading(@NonNull NewsItem newsItem) {
         ifViewAttached(view -> view.setData(newsItem));
         this.newsItem = newsItem;
-        id = newsItem.getId();
     }
 
     private void processDeleting() {

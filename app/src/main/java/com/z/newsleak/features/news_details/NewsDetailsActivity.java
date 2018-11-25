@@ -56,8 +56,7 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        presenter.getData(newsId);
+        presenter.getData();
 
         titleView = findViewById(R.id.news_details_tv_title);
         fullTextView = findViewById(R.id.news_details_tv_full_text);
@@ -95,7 +94,8 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
     @NonNull
     @Override
     public NewsDetailsContract.Presenter createPresenter() {
-        return new NewsDetailsPresenter();
+        newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
+        return new NewsDetailsPresenter(newsId);
     }
 
     @Override

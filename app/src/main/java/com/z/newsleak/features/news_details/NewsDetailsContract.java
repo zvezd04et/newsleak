@@ -17,7 +17,7 @@ public interface NewsDetailsContract {
 
     interface Presenter extends MvpPresenter<NewsDetailsContract.View> {
 
-        void getData(int id);
+        void getData();
 
         void deleteData();
     }
