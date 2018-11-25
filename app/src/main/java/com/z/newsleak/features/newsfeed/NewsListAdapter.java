@@ -108,7 +108,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
             final boolean hasUrl = (newsItem.getNormalImageUrl() != null);
             SupportUtils.setVisible(photoView, hasUrl);
-            if (hasUrl) imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
+            if (hasUrl) {
+                imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
+            }
 
             previewView.setText(newsItem.getPreviewText());
             categoryView.setText(newsItem.getSection());
