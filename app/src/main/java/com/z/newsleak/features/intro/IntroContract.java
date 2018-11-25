@@ -12,6 +12,6 @@ public interface IntroContract {
     }
 
     interface Presenter extends MvpPresenter<View> {
-        void makeDelay();
+
     }
 }

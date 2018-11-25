@@ -2,9 +2,7 @@ package com.z.newsleak.features.newsfeed;
 
 import android.util.Log;
 
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.z.newsleak.App;
-import com.z.newsleak.data.db.NewsDao;
+import com.z.newsleak.features.base.BasePresenter;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
@@ -20,21 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> implements NewsListContract.Presenter {
+public class NewsListPresenter extends BasePresenter<NewsListContract.View> implements NewsListContract.Presenter {
 
     private static final String LOG_TAG = "NewsListPresenter";
 
-    @NonNull
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     @Nullable
     private Disposable disposable;
-
-    @NonNull
-    private NewsDao database = App.getDatabase().getNewsDao();
 
     @Nullable
     private Category currentCategory = null;
@@ -45,11 +37,12 @@ public class NewsListPresenter extends MvpBasePresenter<NewsListContract.View> i
     @Override
     public void destroy() {
         super.destroy();
-        SupportUtils.disposeSafely(compositeDisposable);
         SupportUtils.disposeSafely(disposable);
     }
 
-    public NewsListPresenter() {
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
 
         final Disposable disposable = database.getAll()
                 .subscribeOn(Schedulers.io())
