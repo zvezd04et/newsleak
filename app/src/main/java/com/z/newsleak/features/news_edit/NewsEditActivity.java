@@ -63,9 +63,6 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_edit);
 
-        final int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        presenter.getData(newsId);
-
         titleEdit = findViewById(R.id.news_edit_et_title);
         previewEdit = findViewById(R.id.news_edit_et_preview_text);
         urlEdit = findViewById(R.id.news_edit_et_url);
@@ -104,7 +101,8 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
     @NonNull
     @Override
     public NewsEditPresenter createPresenter() {
-        return new NewsEditPresenter();
+        final int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
+        return new NewsEditPresenter(newsId);
     }
 
     @NonNull

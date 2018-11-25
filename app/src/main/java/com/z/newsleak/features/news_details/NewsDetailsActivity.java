@@ -56,8 +56,6 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        presenter.getData();
-
         titleView = findViewById(R.id.news_details_tv_title);
         fullTextView = findViewById(R.id.news_details_tv_full_text);
         photoView = findViewById(R.id.news_details_iv_photo);
