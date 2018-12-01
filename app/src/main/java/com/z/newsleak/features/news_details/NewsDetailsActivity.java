@@ -2,12 +2,6 @@ package com.z.newsleak.features.news_details;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import io.reactivex.Completable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,19 +12,18 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.RequestManager;
-import com.hannesdorfmann.mosby3.mvp.MvpActivity;
-import com.z.newsleak.App;
+import com.z.newsleak.features.base.BaseNewsItemView;
 import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.R;
-import com.z.newsleak.data.db.NewsDao;
 import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.moxy.MvpAppCompatActivity;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
-import java.util.concurrent.Callable;
-
-public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, NewsDetailsContract.Presenter> implements NewsDetailsContract.View {
+public class NewsDetailsActivity extends MvpAppCompatActivity implements BaseNewsItemView {
 
     private static final String LOG_TAG = "NewsDetailsActivity";
     private static final String EXTRA_NEWS_ID = "EXTRA_NEWS_ID";
@@ -45,10 +38,19 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
     private TextView publishDateView;
     private int newsId;
 
+    @InjectPresenter
+    public NewsDetailsPresenter presenter;
+
     public static void start(@NonNull Context context, int id) {
         final Intent intent = new Intent(context, NewsDetailsActivity.class);
         intent.putExtra(EXTRA_NEWS_ID, id);
         context.startActivity(intent);
+    }
+
+    @ProvidePresenter
+    public NewsDetailsPresenter providePresenter() {
+        newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
+        return new NewsDetailsPresenter(newsId);
     }
 
     @Override
@@ -89,13 +91,6 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
         }
     }
 
-    @NonNull
-    @Override
-    public NewsDetailsContract.Presenter createPresenter() {
-        newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        return new NewsDetailsPresenter(newsId);
-    }
-
     @Override
     public void setData(@NonNull NewsItem newsItem) {
         setTitle(newsItem.getCategory().getName());
@@ -113,4 +108,5 @@ public class NewsDetailsActivity extends MvpActivity<NewsDetailsContract.View, N
     public void close() {
         finish();
     }
+
 }

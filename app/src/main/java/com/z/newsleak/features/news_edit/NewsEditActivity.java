@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.z.newsleak.R;
 import com.z.newsleak.model.NewsEditItem;
 import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.moxy.MvpAppCompatActivity;
 import com.z.newsleak.utils.DateFormatUtils;
 
 import androidx.annotation.NonNull;
@@ -23,7 +25,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View, NewsEditContract.Presenter, NewsEditViewState> implements NewsEditContract.View {
+public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditView {
 
     private static final String LOG_TAG = "NewsEditActivity";
     private static final String EXTRA_NEWS_ID = "EXTRA_NEWS_ID";
@@ -43,10 +45,19 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
     @NonNull
     private Calendar calendar = Calendar.getInstance();
 
+    @InjectPresenter
+    public NewsEditPresenter presenter;
+
     public static void start(@NonNull Context context, int id) {
         final Intent intent = new Intent(context, NewsEditActivity.class);
         intent.putExtra(EXTRA_NEWS_ID, id);
         context.startActivity(intent);
+    }
+
+    @ProvidePresenter
+    public NewsEditPresenter providePresenter() {
+        int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
+        return new NewsEditPresenter(newsId);
     }
 
     @Override
@@ -89,24 +100,6 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
         }
     }
 
-    @NonNull
-    @Override
-    public NewsEditPresenter createPresenter() {
-        final int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        return new NewsEditPresenter(newsId);
-    }
-
-    @NonNull
-    @Override
-    public NewsEditViewState createViewState() {
-        return new NewsEditViewState();
-    }
-
-    @Override
-    public void onNewViewStateInstance() {
-        //specify what to do on first Activity start
-    }
-
     @Override
     public void setCalendar(@NonNull Calendar calendar) {
         this.calendar = calendar;
@@ -123,7 +116,6 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
         urlPhotoEdit.setText(newsItem.getNormalImageUrl());
         publishedDateView.setText(DateFormatUtils.getRelativeDate(newsItem.getPublishedDate()));
         publishedTimeView.setText(DateFormatUtils.getRelativeTime(newsItem.getPublishedDate()));
-        viewState.setCalendar(calendar);
     }
 
     @Override
@@ -156,7 +148,6 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
                     calendar.set(Calendar.MONTH, monthOfYear);
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     publishedDateView.setText(DateFormatUtils.getRelativeDate(calendar.getTime()));
-                    viewState.setCalendar(calendar);
                 }, publishedYear, publishedMonth, publishedDay);
         datePickerDialog.show();
     }
@@ -170,7 +161,6 @@ public class NewsEditActivity extends MvpViewStateActivity<NewsEditContract.View
                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     calendar.set(Calendar.MINUTE, minute);
                     publishedTimeView.setText(DateFormatUtils.getRelativeTime(calendar.getTime()));
-                    viewState.setCalendar(calendar);
                 }, publishedHour, publishedMinute, DateFormat.is24HourFormat(this));
         timePickerDialog.show();
     }

@@ -5,7 +5,7 @@ buildscript {
     ext {
         jetVersion = '1.0.0'
         retrofitVersion = '2.4.0'
-        mosbyVersion = '3.1.0'
+        moxyVersion = '1.5.5'
         roomVersion = '2.1.0-alpha02'
     }
     

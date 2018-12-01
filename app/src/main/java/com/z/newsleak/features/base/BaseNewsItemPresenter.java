@@ -12,13 +12,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BaseNewsItemPresenter<V extends BaseNewsItemView> extends BasePresenter<V> {
 
-    private static final String LOG_TAG = "NewsEditPresenter";
+    private static final String LOG_TAG = "BaseNewsItemPresenter";
 
     @Nullable
     protected NewsItem newsItem;
     protected int id;
 
-    protected BaseNewsItemPresenter(int id) {
+    public BaseNewsItemPresenter(int id) {
         this.id = id;
     }
 
@@ -41,13 +41,14 @@ public class BaseNewsItemPresenter<V extends BaseNewsItemView> extends BasePrese
         compositeDisposable.add(disposable);
     }
 
-    private void processLoading(@NonNull NewsItem newsItem) {
-        ifViewAttached(view -> view.setData(newsItem));
+    protected void processLoading(@NonNull NewsItem newsItem) {
+        getViewState().setData(newsItem);
         this.newsItem = newsItem;
     }
 
     protected void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
-        ifViewAttached(BaseNewsItemView::close);
+        getViewState().close();
     }
+
 }

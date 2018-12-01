@@ -1,20 +1,35 @@
 package com.z.newsleak.features.news_edit;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.z.newsleak.features.base.BaseNewsItemPresenter;
 import com.z.newsleak.model.NewsEditItem;
+import com.z.newsleak.model.NewsItem;
+
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditContract.View> implements NewsEditContract.Presenter {
+@InjectViewState
+public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
+
+    @NonNull
+    private Calendar calendar = Calendar.getInstance();
 
     public NewsEditPresenter(int id) {
         super(id);
     }
 
     @Override
+    protected void processLoading(@NonNull NewsItem newsItem) {
+        super.processLoading(newsItem);
+
+        calendar.setTime(newsItem.getPublishedDate());
+        getViewState().setCalendar(calendar);
+    }
+
     public void saveData(@NonNull NewsEditItem newsEditItem) {
 
         if (newsItem == null) {
@@ -36,7 +51,7 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditContract.Vi
 
 
     private void processSaving() {
-        ifViewAttached(NewsEditContract.View::close);
+        getViewState().close();
     }
 
 }

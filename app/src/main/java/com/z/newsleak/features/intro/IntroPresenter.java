@@ -1,19 +1,23 @@
 package com.z.newsleak.features.intro;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.features.base.BasePresenter;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Completable;
 import io.reactivex.disposables.Disposable;
 
-public class IntroPresenter extends BasePresenter<IntroContract.View> implements IntroContract.Presenter {
+@InjectViewState
+public class IntroPresenter extends BasePresenter<IntroView> {
 
     private static final long TIME_DELAY = 2;
+    @NonNull
     private PreferencesManager preferencesManager;
 
-    public IntroPresenter(PreferencesManager preferencesManager) {
+    public IntroPresenter(@NonNull PreferencesManager preferencesManager) {
         this.preferencesManager = preferencesManager;
     }
 
@@ -24,14 +28,15 @@ public class IntroPresenter extends BasePresenter<IntroContract.View> implements
         boolean showIntro = preferencesManager.isIntroVisible();
 
         if (!showIntro) {
-            ifViewAttached(IntroContract.View::startNextActivity);
+            getViewState().startNextActivity();
             return;
         }
 
-        ifViewAttached(IntroContract.View::setIntroLayout);
+        getViewState().setIntroLayout();
         Disposable disposable = Completable.complete()
                 .delay(TIME_DELAY, TimeUnit.SECONDS)
-                .subscribe(() -> ifViewAttached(IntroContract.View::startNextActivity));
+                .subscribe(() -> getViewState().startNextActivity());
         compositeDisposable.add(disposable);
     }
+
 }

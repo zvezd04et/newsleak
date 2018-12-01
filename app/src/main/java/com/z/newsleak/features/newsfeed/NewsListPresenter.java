@@ -2,11 +2,12 @@ package com.z.newsleak.features.newsfeed;
 
 import android.util.Log;
 
+import com.arellomobile.mvp.InjectViewState;
+import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.features.base.BasePresenter;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.utils.NewsTypeConverters;
 import com.z.newsleak.utils.SupportUtils;
 
@@ -21,7 +22,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NewsListPresenter extends BasePresenter<NewsListContract.View> implements NewsListContract.Presenter {
+@InjectViewState
+public class NewsListPresenter extends BasePresenter<NewsListView> {
 
     private static final String LOG_TAG = "NewsListPresenter";
 
@@ -33,12 +35,6 @@ public class NewsListPresenter extends BasePresenter<NewsListContract.View> impl
 
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        SupportUtils.disposeSafely(disposable);
-    }
 
     @Override
     protected void onFirstViewAttach() {
@@ -54,9 +50,14 @@ public class NewsListPresenter extends BasePresenter<NewsListContract.View> impl
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SupportUtils.disposeSafely(disposable);
+    }
+
     public void loadNews(@NonNull Category category) {
 
-        showViewState(LoadState.LOADING);
+        getViewState().showState(LoadState.LOADING);
 
         disposable = NYTimesApiProvider.getInstance()
                 .createApi()
@@ -65,7 +66,7 @@ public class NewsListPresenter extends BasePresenter<NewsListContract.View> impl
                 .flatMapCompletable(this::saveData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> ifViewAttached(view -> view.showNews(newsList)),
+                .subscribe(() -> getViewState().showNews(newsList),
                         this::handleError);
     }
 
@@ -83,12 +84,17 @@ public class NewsListPresenter extends BasePresenter<NewsListContract.View> impl
     private void processNews(@Nullable List<NewsItem> news) {
 
         if (news == null || news.isEmpty()) {
-            showViewState(LoadState.HAS_NO_DATA);
+            getViewState().showState(LoadState.HAS_NO_DATA);
             return;
         }
 
         newsList = news;
-        ifViewAttached(view -> view.showNews(newsList));
+        getViewState().showNews(newsList);
+    }
+
+    private void handleError(@NonNull Throwable th) {
+        Log.e(LOG_TAG, th.getMessage(), th);
+        getViewState().showState(LoadState.ERROR);
     }
 
     private Completable saveData(final List<NewsItem> newsList) {
@@ -100,12 +106,4 @@ public class NewsListPresenter extends BasePresenter<NewsListContract.View> impl
         });
     }
 
-    private void handleError(@NonNull Throwable th) {
-        Log.e(LOG_TAG, th.getMessage(), th);
-        showViewState(LoadState.ERROR);
-    }
-
-    private void showViewState(LoadState state) {
-        ifViewAttached(view -> view.showState(state));
-    }
 }

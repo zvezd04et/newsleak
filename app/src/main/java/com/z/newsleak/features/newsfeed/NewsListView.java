@@ -1,19 +1,21 @@
-package com.z.newsleak.features.base;
+package com.z.newsleak.features.newsfeed;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
-import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.ui.LoadState;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
 
-public interface BaseNewsItemView extends MvpView {
+public interface NewsListView extends MvpView {
 
     @StateStrategyType(AddToEndSingleStrategy.class)
-    void setData(@NonNull NewsItem newsItem);
+    void showNews(@NonNull List<NewsItem> news);
 
-    @StateStrategyType(OneExecutionStateStrategy.class)
-    void close();
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void showState(@NonNull LoadState state);
 
 }

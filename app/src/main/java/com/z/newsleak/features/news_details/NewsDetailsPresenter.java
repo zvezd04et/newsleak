@@ -1,6 +1,8 @@
 package com.z.newsleak.features.news_details;
 
+import com.arellomobile.mvp.InjectViewState;
 import com.z.newsleak.features.base.BaseNewsItemPresenter;
+import com.z.newsleak.features.base.BaseNewsItemView;
 
 import java.util.concurrent.Callable;
 
@@ -9,13 +11,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NewsDetailsPresenter extends BaseNewsItemPresenter<NewsDetailsContract.View> implements NewsDetailsContract.Presenter {
+@InjectViewState
+public class NewsDetailsPresenter extends BaseNewsItemPresenter<BaseNewsItemView> {
 
     public NewsDetailsPresenter(int id) {
         super(id);
     }
 
-    @Override
     public void deleteData() {
         Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
             database.deleteById(id);
@@ -28,6 +30,7 @@ public class NewsDetailsPresenter extends BaseNewsItemPresenter<NewsDetailsContr
     }
 
     private void processDeleting() {
-        ifViewAttached(NewsDetailsContract.View::close);
+        getViewState().close();
     }
+
 }

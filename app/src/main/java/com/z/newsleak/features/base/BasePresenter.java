@@ -1,7 +1,7 @@
 package com.z.newsleak.features.base;
 
-import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import com.hannesdorfmann.mosby3.mvp.MvpView;
+import com.arellomobile.mvp.MvpPresenter;
+import com.arellomobile.mvp.MvpView;
 import com.z.newsleak.App;
 import com.z.newsleak.data.db.NewsDao;
 import com.z.newsleak.utils.SupportUtils;
@@ -9,9 +9,7 @@ import com.z.newsleak.utils.SupportUtils;
 import androidx.annotation.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class BasePresenter<V extends MvpView> extends MvpBasePresenter<V> {
-
-    private boolean firstLaunch = true;
+public class BasePresenter<V extends MvpView> extends MvpPresenter<V> {
 
     @NonNull
     protected final CompositeDisposable compositeDisposable = new CompositeDisposable();
@@ -19,23 +17,9 @@ public class BasePresenter<V extends MvpView> extends MvpBasePresenter<V> {
     protected final NewsDao database = App.getDatabase().getNewsDao();
 
     @Override
-    public void attachView(V view) {
-        super.attachView(view);
-
-        if (firstLaunch) {
-            firstLaunch = false;
-
-            onFirstViewAttach();
-        }
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
+    public void onDestroy() {
+        super.onDestroy();
         SupportUtils.disposeSafely(compositeDisposable);
     }
 
-    protected void onFirstViewAttach() {
-
-    }
 }
