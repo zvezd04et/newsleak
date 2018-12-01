@@ -1,8 +1,5 @@
 package com.z.newsleak.features.news_details;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,15 +12,17 @@ import android.widget.TextView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.RequestManager;
-import com.z.newsleak.features.base.BaseNewsItemView;
-import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.R;
+import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.moxy.MvpAppCompatActivity;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
-public class NewsDetailsActivity extends MvpAppCompatActivity implements BaseNewsItemView {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+public class NewsDetailsActivity extends MvpAppCompatActivity implements NewsDetailsView {
 
     private static final String LOG_TAG = "NewsDetailsActivity";
     private static final String EXTRA_NEWS_ID = "EXTRA_NEWS_ID";
@@ -36,21 +35,20 @@ public class NewsDetailsActivity extends MvpAppCompatActivity implements BaseNew
     private ImageView photoView;
     @NonNull
     private TextView publishDateView;
-    private int newsId;
 
     @InjectPresenter
     public NewsDetailsPresenter presenter;
+
+    @ProvidePresenter
+    public NewsDetailsPresenter providePresenter() {
+        final int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
+        return new NewsDetailsPresenter(newsId);
+    }
 
     public static void start(@NonNull Context context, int id) {
         final Intent intent = new Intent(context, NewsDetailsActivity.class);
         intent.putExtra(EXTRA_NEWS_ID, id);
         context.startActivity(intent);
-    }
-
-    @ProvidePresenter
-    public NewsDetailsPresenter providePresenter() {
-        newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        return new NewsDetailsPresenter(newsId);
     }
 
     @Override
@@ -78,11 +76,11 @@ public class NewsDetailsActivity extends MvpAppCompatActivity implements BaseNew
                 return true;
 
             case R.id.action_delete:
-                presenter.deleteData();
+                presenter.onDeleteSelected();
                 return true;
 
             case R.id.action_edit:
-                NewsEditActivity.start(this, newsId);
+                presenter.onEditSelected();
                 return true;
 
             default:
@@ -107,6 +105,11 @@ public class NewsDetailsActivity extends MvpAppCompatActivity implements BaseNew
     @Override
     public void close() {
         finish();
+    }
+
+    @Override
+    public void openEditorActivity(int newsId) {
+        NewsEditActivity.start(this, newsId);
     }
 
 }

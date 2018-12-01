@@ -2,7 +2,6 @@ package com.z.newsleak.features.news_details;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.z.newsleak.features.base.BaseNewsItemPresenter;
-import com.z.newsleak.features.base.BaseNewsItemView;
 
 import java.util.concurrent.Callable;
 
@@ -12,13 +11,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 @InjectViewState
-public class NewsDetailsPresenter extends BaseNewsItemPresenter<BaseNewsItemView> {
+public class NewsDetailsPresenter extends BaseNewsItemPresenter<NewsDetailsView> {
 
     public NewsDetailsPresenter(int id) {
         super(id);
     }
 
-    public void deleteData() {
+    public void onDeleteSelected() {
         Disposable disposable = Completable.fromCallable((Callable<Void>) () -> {
             database.deleteById(id);
             return null;
@@ -27,6 +26,10 @@ public class NewsDetailsPresenter extends BaseNewsItemPresenter<BaseNewsItemView
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processDeleting, this::handleError);
         compositeDisposable.add(disposable);
+    }
+
+    public void onEditSelected() {
+        getViewState().openEditorActivity(id);
     }
 
     private void processDeleting() {
