@@ -14,21 +14,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".features.newsfeed.NewsListActivity">
+        <activity
+            android:name=".features.intro.IntroActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".features.newsfeed.NewsListActivity" />
         <activity
             android:name=".features.about_info.AboutActivity"
-            android:label="@string/title_author"
+            android:label="@string/about_title"
             android:parentActivityName=".features.newsfeed.NewsListActivity" />
         <activity
             android:name=".features.news_details.NewsDetailsActivity"
-            android:parentActivityName=".features.newsfeed.NewsListActivity"
-            android:configChanges="orientation|screenSize"/>
+            android:parentActivityName=".features.newsfeed.NewsListActivity" />
+        <activity
+            android:name=".features.news_edit.NewsEditActivity"
+            android:label="@string/news_edit_title"
+            android:parentActivityName=".features.news_details.NewsDetailsActivity"/>
     </application>
 
 </manifest>

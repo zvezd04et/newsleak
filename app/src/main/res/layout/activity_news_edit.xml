@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".features.news_edit.NewsEditActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/news_edit_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:text="@string/news_edit_tv_title_text"
+            android:textColor="@color/colorCorporate"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/news_edit_separator_title"
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_tv_title" />
+
+        <EditText
+            android:id="@+id/news_edit_et_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:layout_weight="1"
+            android:elegantTextHeight="false"
+            android:gravity="top"
+            android:hint="@string/news_edit_et_title_hint"
+            android:inputType="textMultiLine"
+            android:lines="2"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_separator_title"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/news_edit_tv_preview_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:text="@string/news_edit_tv_preview_text"
+            android:textColor="@color/colorCorporate"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_et_title" />
+
+        <View
+            android:id="@+id/news_edit_separator_preview_text"
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_tv_preview_text" />
+
+        <EditText
+            android:id="@+id/news_edit_et_preview_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:layout_weight="1"
+            android:elegantTextHeight="false"
+            android:gravity="top"
+            android:hint="@string/news_edit_et_preview_hint"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_separator_preview_text"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/news_edit_tv_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:text="@string/news_edit_tv_url_text"
+            android:textColor="@color/colorCorporate"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_et_preview_text" />
+
+        <View
+            android:id="@+id/news_edit_separator_url"
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_tv_url" />
+
+        <EditText
+            android:id="@+id/news_edit_et_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:layout_weight="1"
+            android:elegantTextHeight="false"
+            android:gravity="top"
+            android:hint="@string/news_edit_et_url_hint"
+            android:inputType="textUri|textMultiLine"
+            android:lines="2"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_separator_url"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/news_edit_tv_url_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:text="@string/news_edit_tv_url_photo_text"
+            android:textColor="@color/colorCorporate"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_et_url" />
+
+        <View
+            android:id="@+id/news_edit_separator_url_photo"
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_tv_url_photo" />
+
+        <EditText
+            android:id="@+id/news_edit_et_url_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:hint="@string/news_edit_et_url_photo_hint"
+            android:inputType="textUri|textMultiLine"
+            android:lines="3"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_separator_url_photo"
+            tools:ignore="Autofill" />
+
+        <TextView
+            android:id="@+id/news_edit_tv_published"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin_half"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            android:text="@string/news_edit_tv_published_date_text"
+            android:textColor="@color/colorCorporate"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_et_url_photo" />
+
+        <View
+            android:id="@+id/news_edit_separator_published"
+            style="@style/Separator"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginEnd="@dimen/news_edit_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_tv_published" />
+
+        <TextView
+            android:id="@+id/news_edit_tv_published_date"
+            android:layout_width="@dimen/news_edit_tv_published_datetime_width"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin"
+            android:layout_marginTop="@dimen/news_edit_margin"
+            android:layout_marginBottom="@dimen/news_edit_margin"
+            android:drawableStart="@drawable/ic_date_range"
+            android:gravity="fill_vertical"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_separator_published"
+            tools:text="November 11" />
+
+        <TextView
+            android:id="@+id/news_edit_tv_published_time"
+            android:layout_width="@dimen/news_edit_tv_published_datetime_width"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/news_edit_margin_half"
+            android:layout_marginTop="@dimen/news_edit_margin"
+            android:layout_marginBottom="@dimen/news_edit_margin"
+            android:drawableStart="@drawable/ic_access_time"
+            android:gravity="fill_vertical"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/news_edit_tv_published_date"
+            app:layout_constraintTop_toBottomOf="@+id/news_edit_separator_published"
+            tools:text="10:22" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
+
+
+

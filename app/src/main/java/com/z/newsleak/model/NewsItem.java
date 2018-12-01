@@ -5,44 +5,54 @@ import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "news")
 public class NewsItem implements Serializable {
 
-    @Nullable
-    private final String title;
-    @Nullable
-    private final String imageUrl;
+    @ColumnInfo(name = "id")
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "category")
     @NonNull
-    private final Category category;
-    @Nullable
-    private final String section;
-    @Nullable
-    private final Date publishDate;
-    @Nullable
-    private final String previewText;
-    @Nullable
-    private final String articleUrl;
+    private Category category;
 
-    public NewsItem(@Nullable String title, @Nullable String imageUrl, @NonNull Category category,
-                    @Nullable String section, @Nullable Date publishDate, @Nullable String previewText,
-                    @Nullable String articleUrl) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.section = section;
-        this.publishDate = publishDate;
-        this.previewText = previewText;
-        this.articleUrl = articleUrl;
-        this.category = category;
+    @ColumnInfo(name = "section")
+    @Nullable
+    private String section;
+
+    @ColumnInfo(name = "title")
+    @Nullable
+    private String title;
+
+    @ColumnInfo(name = "preview_text")
+    @Nullable
+    private String previewText;
+
+    @ColumnInfo(name = "url")
+    @Nullable
+    private String url;
+
+    @ColumnInfo(name = "published_date")
+    @Nullable
+    private Date publishedDate;
+
+    @ColumnInfo(name = "normal_image_url")
+    @Nullable
+    private String normalImageUrl;
+
+    @ColumnInfo(name = "large_image_url")
+    @Nullable
+    private String largeImageUrl;
+
+    public NewsItem() {
     }
 
-    @Nullable
-    public String getTitle() {
-        return title;
-    }
-
-    @Nullable
-    public String getImageUrl() {
-        return imageUrl;
+    public int getId() {
+        return id;
     }
 
     @NonNull
@@ -51,8 +61,13 @@ public class NewsItem implements Serializable {
     }
 
     @Nullable
-    public Date getPublishDate() {
-        return publishDate;
+    public String getSection() {
+        return section;
+    }
+
+    @Nullable
+    public String getTitle() {
+        return title;
     }
 
     @Nullable
@@ -61,57 +76,101 @@ public class NewsItem implements Serializable {
     }
 
     @Nullable
-    public String getArticleUrl() {
-        return articleUrl;
+    public String getUrl() {
+        return url;
     }
 
     @Nullable
-    public String getSection() {
-        return section;
+    public Date getPublishedDate() {
+        return publishedDate;
+    }
+
+    @Nullable
+    public String getNormalImageUrl() {
+        return normalImageUrl;
+    }
+
+    @Nullable
+    public String getLargeImageUrl() {
+        return largeImageUrl;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setCategory(@NonNull Category category) {
+        this.category = category;
+    }
+
+    public void setSection(@Nullable String section) {
+        this.section = section;
+    }
+
+    public void setTitle(@Nullable String title) {
+        this.title = title;
+    }
+
+    public void setPreviewText(@Nullable String previewText) {
+        this.previewText = previewText;
+    }
+
+    public void setUrl(@Nullable String url) {
+        this.url = url;
+    }
+
+    public void setPublishedDate(@Nullable Date publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public void setNormalImageUrl(@Nullable String normalImageUrl) {
+        this.normalImageUrl = normalImageUrl;
+    }
+
+    public void setLargeImageUrl(@Nullable String largeImageUrl) {
+        this.largeImageUrl = largeImageUrl;
     }
 
     //builder
     private NewsItem(Builder builder) {
-        this.title = builder.title;
-        this.imageUrl = builder.imageUrl;
-        this.section = builder.section;
-        this.publishDate = builder.publishDate;
-        this.previewText = builder.previewText;
-        this.articleUrl = builder.articleUrl;
+        this.id = builder.id;
         this.category = builder.category;
+        this.section = builder.section;
+        this.title = builder.title;
+        this.previewText = builder.previewText;
+        this.url = builder.url;
+        this.publishedDate = builder.publishedDate;
+        this.normalImageUrl = builder.normalImageUrl;
+        this.largeImageUrl = builder.largeImageUrl;
     }
 
     public static class Builder {
 
+        private int id;
         @NonNull
         private Category category;
-
-        @Nullable
-        private String title;
-        @Nullable
-        private String imageUrl;
         @Nullable
         private String section;
         @Nullable
-        private Date publishDate;
+        private String title;
         @Nullable
         private String previewText;
         @Nullable
-        private String articleUrl;
+        private String url;
+        @Nullable
+        private Date publishedDate;
+        @Nullable
+        private String normalImageUrl;
+        @Nullable
+        private String largeImageUrl;
 
         public Builder(@NonNull Category category) {
             this.category = category;
         }
 
         @NonNull
-        public Builder title(@Nullable String title) {
-            this.title = title;
-            return this;
-        }
-
-        @NonNull
-        public Builder imageUrl(@Nullable String imageUrl) {
-            this.imageUrl = imageUrl;
+        public Builder id(int id) {
+            this.id = id;
             return this;
         }
 
@@ -122,8 +181,8 @@ public class NewsItem implements Serializable {
         }
 
         @NonNull
-        public Builder publishDate(@Nullable Date publishDate) {
-            this.publishDate = publishDate;
+        public Builder title(@Nullable String title) {
+            this.title = title;
             return this;
         }
 
@@ -134,8 +193,26 @@ public class NewsItem implements Serializable {
         }
 
         @NonNull
-        public Builder articleUrl(@Nullable String articleUrl) {
-            this.articleUrl = articleUrl;
+        public Builder url(@Nullable String url) {
+            this.url = url;
+            return this;
+        }
+
+        @NonNull
+        public Builder publishedDate(@Nullable Date publishedDate) {
+            this.publishedDate = publishedDate;
+            return this;
+        }
+
+        @NonNull
+        public Builder normalImageUrl(@Nullable String normalImageUrl) {
+            this.normalImageUrl = normalImageUrl;
+            return this;
+        }
+
+        @NonNull
+        public Builder largeImageUrl(@Nullable String largeImageUrl) {
+            this.largeImageUrl = largeImageUrl;
             return this;
         }
 

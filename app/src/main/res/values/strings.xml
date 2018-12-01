@@ -15,11 +15,27 @@
     <string name="position">1c team lead</string>
     <string name="disclaimer" translatable="false">© 2018 Petronenko</string>
 
-    <string name="title_author">Author</string>
+    <string name="about_title">Author</string>
     <string name="menu_action_about">About</string>
 
     <string name="state_loading_msg_error">Error loading news. Tap to retry</string>
     <string name="state_loading_msg_no_data">There is no data</string>
     <string name="error_action_retry">Retry</string>
+
+    <string name="news_details_menu_action_delete">Delete</string>
+    <string name="news_details_menu_action_edit">Edit</string>
+
+    <string name="news_edit_title">Editor</string>
+    <string name="news_edit_menu_action_save">Save</string>
+    <string name="news_edit_tv_title_text">Title</string>
+    <string name="news_edit_et_title_hint">Enter news title</string>
+    <string name="news_edit_tv_preview_text">Preview</string>
+    <string name="news_edit_et_preview_hint">Enter news preview</string>
+    <string name="news_edit_tv_url_text" translatable="false">Url</string>
+    <string name="news_edit_et_url_hint">Enter news url</string>
+    <string name="news_edit_tv_url_photo_text">Url photo</string>
+    <string name="news_edit_et_url_photo_hint">Enter news photo url</string>
+    <string name="news_edit_tv_published_date_text">Published date</string>
+
 
 </resources>

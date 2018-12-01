@@ -106,15 +106,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
 
         private void bind(@NonNull NewsItem newsItem) {
 
-            final boolean hasUrl = (newsItem.getImageUrl() != null);
+            final boolean hasUrl = (newsItem.getNormalImageUrl() != null);
             SupportUtils.setVisible(photoView, hasUrl);
-            if (hasUrl) imageLoader.load(newsItem.getImageUrl()).into(photoView);
+            if (hasUrl) {
+                imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
+            }
 
             previewView.setText(newsItem.getPreviewText());
             categoryView.setText(newsItem.getSection());
             titleView.setText(newsItem.getTitle());
             publishDateView.setText(DateFormatUtils.getRelativeDateTime(itemView.getContext(),
-                    newsItem.getPublishDate()));
+                    newsItem.getPublishedDate()));
         }
     }
 }

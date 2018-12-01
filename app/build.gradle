@@ -24,24 +24,29 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation "androidx.appcompat:appcompat:$jetVersion"
+    implementation "androidx.cardview:cardview:$jetVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$jetVersion"
+    implementation "com.google.android.material:material:$jetVersion"
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
     implementation 'com.github.bumptech.glide:glide:4.8.0'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 
-    implementation 'com.hannesdorfmann.mosby3:mvp-lce:3.1.0'
-    implementation 'com.hannesdorfmann.mosby3:mvp-nullobject-presenter:3.1.0'
-    implementation 'com.hannesdorfmann.mosby3:mvp-queuing-presenter:3.1.0'
+    implementation "com.arello-mobile:moxy:$moxyVersion"
+    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
+
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }
 
 android.applicationVariants.all { variant ->

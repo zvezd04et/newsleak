@@ -1,5 +1,7 @@
 package com.z.newsleak.features.newsfeed;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -11,8 +13,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.hannesdorfmann.mosby3.mvp.viewstate.MvpViewStateActivity;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.z.newsleak.model.Category;
+import com.z.newsleak.moxy.MvpAppCompatActivity;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
@@ -31,7 +35,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View, NewsListContract.Presenter, NewsListViewState> implements NewsListContract.View {
+public class NewsListActivity extends MvpAppCompatActivity implements NewsListView {
 
     private static final String LOG_TAG = "NewsListActivity";
     private static final String BUNDLE_LIST_KEY = "BUNDLE_LIST_KEY";
@@ -48,6 +52,14 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     @Nullable
     private NewsListAdapter newsAdapter;
 
+    @InjectPresenter
+    public NewsListPresenter presenter;
+
+    public static void start(@NonNull Context context) {
+        final Intent intent = new Intent(context, NewsListActivity.class);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,30 +71,18 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
         spinner = findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
-        loadingScreen = new LoadingScreenHolder(rvNewsfeed, btn -> presenter.loadNews((Category) spinner.getSelectedItem()));
+        final View.OnClickListener clickListener = btn -> presenter.loadNews((Category) spinner.getSelectedItem());
+
+        final FloatingActionButton fab = findViewById(R.id.news_list_fab_refresh);
+        fab.setOnClickListener(clickListener);
+
+        loadingScreen = new LoadingScreenHolder(rvNewsfeed, clickListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         loadingScreen.showState(LoadState.HAS_DATA);
-    }
-
-    @NonNull
-    @Override
-    public NewsListPresenter createPresenter() {
-        return new NewsListPresenter();
-    }
-
-    @NonNull
-    @Override
-    public NewsListViewState createViewState() {
-        return new NewsListViewState();
-    }
-
-    @Override
-    public void onNewViewStateInstance() {
-
     }
 
     @Override
@@ -118,7 +118,7 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
 
     @Override
     public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.menu_news_list, menu);
         return true;
     }
 
@@ -136,23 +136,21 @@ public class NewsListActivity extends MvpViewStateActivity<NewsListContract.View
     }
 
     @Override
-    public void showNews(List<NewsItem> news) {
+    public void showNews(@NonNull List<NewsItem> news) {
         if (newsAdapter == null) {
             return;
         }
         newsAdapter.replaceItems(news);
         loadingScreen.showState(LoadState.HAS_DATA);
-        viewState.setNews(news);
     }
 
     @Override
     public void showState(@NonNull LoadState state) {
         loadingScreen.showState(state);
-        viewState.setState(state);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem));
+        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem.getId()));
         recyclerView.setAdapter(newsAdapter);
 
         final int columnsCount = SupportUtils.getNewsColumnsCount(this);
