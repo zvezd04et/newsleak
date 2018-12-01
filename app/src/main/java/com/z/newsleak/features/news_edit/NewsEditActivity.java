@@ -15,6 +15,7 @@ import com.z.newsleak.moxy.MvpAppCompatActivity;
 import com.z.newsleak.utils.DateFormatUtils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -23,7 +24,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditView {
 
@@ -42,22 +43,21 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     private TextView publishedDateView;
     @NonNull
     private TextView publishedTimeView;
-    @NonNull
-    private Calendar calendar = Calendar.getInstance();
+
 
     @InjectPresenter
     public NewsEditPresenter presenter;
-
-    public static void start(@NonNull Context context, int id) {
-        final Intent intent = new Intent(context, NewsEditActivity.class);
-        intent.putExtra(EXTRA_NEWS_ID, id);
-        context.startActivity(intent);
-    }
 
     @ProvidePresenter
     public NewsEditPresenter providePresenter() {
         int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
         return new NewsEditPresenter(newsId);
+    }
+
+    public static void start(@NonNull Context context, int id) {
+        final Intent intent = new Intent(context, NewsEditActivity.class);
+        intent.putExtra(EXTRA_NEWS_ID, id);
+        context.startActivity(intent);
     }
 
     @Override
@@ -72,8 +72,8 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
         publishedDateView = findViewById(R.id.news_edit_tv_published_date);
         publishedTimeView = findViewById(R.id.news_edit_tv_published_time);
 
-        publishedDateView.setOnClickListener(v -> showDatePickerDialog());
-        publishedTimeView.setOnClickListener(v -> showTimePickerDialog());
+        publishedDateView.setOnClickListener(v -> presenter.onPublishedDateClicked());
+        publishedTimeView.setOnClickListener(v -> presenter.onPublishedTimeClicked());
     }
 
     @Override
@@ -101,21 +101,17 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     }
 
     @Override
-    public void setCalendar(@NonNull Calendar calendar) {
-        this.calendar = calendar;
-        publishedDateView.setText(DateFormatUtils.getRelativeDate(calendar.getTime()));
-        publishedTimeView.setText(DateFormatUtils.getRelativeTime(calendar.getTime()));
+    public void setPublishedDateTime(@Nullable Date publishedDate) {
+        publishedDateView.setText(DateFormatUtils.getRelativeDate(publishedDate));
+        publishedTimeView.setText(DateFormatUtils.getRelativeTime(publishedDate));
     }
 
     @Override
     public void setData(@NonNull NewsItem newsItem) {
-        calendar.setTime(newsItem.getPublishedDate());
         titleEdit.setText(newsItem.getTitle());
         previewEdit.setText(newsItem.getPreviewText());
         urlEdit.setText(newsItem.getUrl());
         urlPhotoEdit.setText(newsItem.getNormalImageUrl());
-        publishedDateView.setText(DateFormatUtils.getRelativeDate(newsItem.getPublishedDate()));
-        publishedTimeView.setText(DateFormatUtils.getRelativeTime(newsItem.getPublishedDate()));
     }
 
     @Override
@@ -124,44 +120,30 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     }
 
     private void saveData() {
-
         final NewsEditItem newsEditItem = new NewsEditItem.Builder()
                 .title(titleEdit.getText().toString())
                 .previewText(previewEdit.getText().toString())
                 .url(urlEdit.getText().toString())
                 .normalImageUrl(urlPhotoEdit.getText().toString())
-                .publishedDate(calendar.getTime())
                 .build();
 
         presenter.saveData(newsEditItem);
-
     }
 
-    private void showDatePickerDialog() {
-        final int publishedYear = calendar.get(Calendar.YEAR);
-        final int publishedMonth = calendar.get(Calendar.MONTH);
-        final int publishedDay = calendar.get(Calendar.DAY_OF_MONTH);
-
+    @Override
+    public void showDatePickerDialog(int publishedYear, int publishedMonth, int publishedDay) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                (view, year, monthOfYear, dayOfMonth) -> {
-                    calendar.set(Calendar.YEAR, year);
-                    calendar.set(Calendar.MONTH, monthOfYear);
-                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    publishedDateView.setText(DateFormatUtils.getRelativeDate(calendar.getTime()));
-                }, publishedYear, publishedMonth, publishedDay);
+                (view, year, monthOfYear, dayOfMonth) ->
+                        presenter.updateDate(year, monthOfYear, dayOfMonth),
+                publishedYear, publishedMonth, publishedDay);
         datePickerDialog.show();
     }
 
-    private void showTimePickerDialog() {
-        final int publishedHour = calendar.get(Calendar.HOUR_OF_DAY);
-        final int publishedMinute = calendar.get(Calendar.MINUTE);
-
+    @Override
+    public void showTimePickerDialog(int publishedHour, int publishedMinute) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                (view, hourOfDay, minute) -> {
-                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                    calendar.set(Calendar.MINUTE, minute);
-                    publishedTimeView.setText(DateFormatUtils.getRelativeTime(calendar.getTime()));
-                }, publishedHour, publishedMinute, DateFormat.is24HourFormat(this));
+                (view, hourOfDay, minute) -> presenter.updateTime(hourOfDay, minute),
+                publishedHour, publishedMinute, DateFormat.is24HourFormat(this));
         timePickerDialog.show();
     }
 
