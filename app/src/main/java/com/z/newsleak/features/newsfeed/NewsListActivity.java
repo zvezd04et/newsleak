@@ -136,7 +136,7 @@ public class NewsListActivity extends MvpAppCompatActivity implements NewsListVi
     }
 
     @Override
-    public void showNews(List<NewsItem> news) {
+    public void showNews(@NonNull List<NewsItem> news) {
         if (newsAdapter == null) {
             return;
         }
