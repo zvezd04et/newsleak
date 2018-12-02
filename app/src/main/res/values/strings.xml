@@ -37,5 +37,10 @@
     <string name="news_edit_et_url_photo_hint">Enter news photo url</string>
     <string name="news_edit_tv_published_date_text">Published date</string>
 
+    <string name="intro_action_skip">Skip</string>
+    <string name="intro_action_next">Next</string>
+    <string name="intro_action_done">Got it!</string>
+    <string name="intro_greeting">Welcome!</string>
+
 
 </resources>

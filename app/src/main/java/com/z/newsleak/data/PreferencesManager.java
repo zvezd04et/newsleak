@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 public class PreferencesManager {
 
     private static final String SHARED_PREF = "com.z.newsleak.SHARED_PREF";
-    private static final String SHARED_PREF_KEY_INTRO_VISIBILITY = SHARED_PREF + ".KEY_INTRO_VISIBILITY";
+    private static final String KEY_IS_FIRST_TIME_LAUNCH = SHARED_PREF + ".KEY_IS_FIRST_TIME_LAUNCH";
 
     private final SharedPreferences sharedPreferences;
     private static PreferencesManager manager;
@@ -24,22 +24,20 @@ public class PreferencesManager {
             }
         }
         return manager;
-
     }
 
     private PreferencesManager(@NonNull Context context) {
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
     }
 
-    public boolean isIntroVisible() {
-
-        boolean isIntroVisible = sharedPreferences.getBoolean(SHARED_PREF_KEY_INTRO_VISIBILITY, true);
-
+    public void setFirstTimeLaunch(boolean isFirstTime) {
         sharedPreferences.edit()
-                .putBoolean(SHARED_PREF_KEY_INTRO_VISIBILITY, !isIntroVisible)
-                .apply();
+        .putBoolean(KEY_IS_FIRST_TIME_LAUNCH, isFirstTime)
+        .apply();
+    }
 
-        return isIntroVisible;
+    public boolean isFirstTimeLaunch() {
+        return sharedPreferences.getBoolean(KEY_IS_FIRST_TIME_LAUNCH, true);
     }
 
 }

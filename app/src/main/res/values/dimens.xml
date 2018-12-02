@@ -37,5 +37,9 @@
     <dimen name="news_edit_margin">16dp</dimen>
     <dimen name="news_edit_margin_half">8dp</dimen>
     <dimen name="news_edit_tv_published_datetime_width">120dp</dimen>
+    <dimen name="intro_margin">8dp</dimen>
+    <dimen name="intro_indicator_height">24dp</dimen>
+    <dimen name="intro_greeting_margin_bottom">16dp</dimen>
+    <dimen name="intro_greeting_text_size">24sp</dimen>
 
 </resources>
