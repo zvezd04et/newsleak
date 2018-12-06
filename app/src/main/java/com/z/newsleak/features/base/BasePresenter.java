@@ -9,7 +9,7 @@ import com.z.newsleak.utils.SupportUtils;
 import androidx.annotation.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class BasePresenter<V extends MvpView> extends MvpPresenter<V> {
+public abstract class BasePresenter<V extends MvpView> extends MvpPresenter<V> {
 
     @NonNull
     protected final CompositeDisposable compositeDisposable = new CompositeDisposable();

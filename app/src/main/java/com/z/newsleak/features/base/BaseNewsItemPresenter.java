@@ -10,7 +10,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class BaseNewsItemPresenter<V extends BaseNewsItemView> extends BasePresenter<V> {
+public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends BasePresenter<V> {
 
     private static final String LOG_TAG = "BaseNewsItemPresenter";
 

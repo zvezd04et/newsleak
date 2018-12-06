@@ -32,11 +32,13 @@ public class LoadingScreenHolder {
         this.contentView = contentView;
 
         context = (Activity) contentView.getContext();
-        progressBar = context.findViewById(R.id.news_list_progress);
-        errorContent = context.findViewById(R.id.error_content);
-        tvError = context.findViewById(R.id.error_tv_text);
 
-        final Button retryBtn = context.findViewById(R.id.error_btn_retry);
+        final View rootView = contentView.getRootView();
+        progressBar = rootView.findViewById(R.id.news_list_progress);
+        errorContent = rootView.findViewById(R.id.error_content);
+        tvError = rootView.findViewById(R.id.error_tv_text);
+
+        final Button retryBtn = rootView.findViewById(R.id.error_btn_retry);
         retryBtn.setOnClickListener(clickListener);
     }
 

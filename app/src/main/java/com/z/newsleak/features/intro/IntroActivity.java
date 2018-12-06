@@ -8,7 +8,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.z.newsleak.R;
 import com.z.newsleak.data.PreferencesManager;
-import com.z.newsleak.features.newsfeed.NewsListActivity;
+import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.moxy.MvpAppCompatActivity;
 
 import androidx.annotation.NonNull;
@@ -74,7 +74,7 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
 
     @Override
     public void startNextActivity() {
-        NewsListActivity.start(this);
+        MainActivity.start(this);
         finish();
     }
 
