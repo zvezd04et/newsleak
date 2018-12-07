@@ -150,12 +150,8 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         newsAdapter = new NewsListAdapter(getContext(), newsItem -> listener.onNewsClicked(newsItem.getId()));
         recyclerView.setAdapter(newsAdapter);
 
-        final int columnsCount = SupportUtils.getNewsColumnsCount(getContext());
-        if (columnsCount == 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
-        }
+        final int columnsCount = getResources().getInteger(R.integer.news_columns_count);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
 
         final DividerItemDecoration verticalDivider
                 = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);

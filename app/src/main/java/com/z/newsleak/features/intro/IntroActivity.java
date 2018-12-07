@@ -23,7 +23,7 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class IntroActivity extends MvpAppCompatActivity implements IntroView {
 
-    private static final int[] drawables = new int[]{
+    private static final int[] DRAWABLES = new int[]{
             R.drawable.intro_screen_newsfeed,
             R.drawable.intro_screen_details,
             R.drawable.intro_screen_select_section};
@@ -64,7 +64,7 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
         nextBtn = findViewById(R.id.intro_btn_next);
         nextBtn.setOnClickListener(v -> {
             int nextItem = viewPager.getCurrentItem() + 1;
-            if (nextItem < drawables.length) {
+            if (nextItem < DRAWABLES.length) {
                 viewPager.setCurrentItem(nextItem);
             } else {
                 startNextActivity();
@@ -89,7 +89,7 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                if (position == drawables.length - 1) {
+                if (position == DRAWABLES.length - 1) {
                     nextBtn.setText(R.string.intro_action_done);
                     skipBtn.setVisibility(View.INVISIBLE);
                 } else {
@@ -119,12 +119,12 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
 
         @Override
         public Fragment getItem(int position) {
-            return PageFragment.newInstance(drawables[position]);
+            return PageFragment.newInstance(DRAWABLES[position]);
         }
 
         @Override
         public int getCount() {
-            return drawables.length;
+            return DRAWABLES.length;
         }
     }
 

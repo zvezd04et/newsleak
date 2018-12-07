@@ -15,12 +15,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity
         implements BaseFragmentListener, NewsListFragmentListener {
 
     private static final String FRAGMENT_LIST_TAG = "FRAGMENT_LIST_TAG";
     private static final String FRAGMENT_DETAILS_TAG = "FRAGMENT_DETAILS_TAG";
+
+    private boolean isTwoPanel;
+    @NonNull
+    private FragmentManager fragmentManager;
 
     public static void start(@NonNull Context context) {
         Intent startIntent = new Intent(context, MainActivity.class);
@@ -32,18 +37,30 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        isTwoPanel = findViewById(R.id.frame_detail) != null;
+        fragmentManager = getSupportFragmentManager();
+
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
+            fragmentManager
                     .beginTransaction()
                     .replace(R.id.frame_list, NewsListFragment.newInstance(), FRAGMENT_LIST_TAG)
                     .addToBackStack(null)
                     .commit();
+            return;
         }
+
+        final Fragment detailsFragment = fragmentManager.findFragmentByTag(FRAGMENT_DETAILS_TAG);
+        if (detailsFragment == null) {
+            return;
+        }
+
+        fragmentManager.popBackStackImmediate();
+        replaceDetailsFragment(detailsFragment);
     }
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+        if (fragmentManager.getBackStackEntryCount() <= 1) {
             finish();
         } else {
             super.onBackPressed();
@@ -52,22 +69,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void turnBack() {
-        getSupportFragmentManager().popBackStack();
-    }
-
-    @Override
-    public void onNewsClicked(int id) {
-
-        Fragment detailsFragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_DETAILS_TAG);
-        if (detailsFragment != null) {
-            getSupportFragmentManager().popBackStackImmediate();
-        }
-
-        int detailsFrameId = R.id.frame_list;
-        getSupportFragmentManager().beginTransaction()
-                .replace(detailsFrameId, NewsDetailsFragment.newInstance(id), FRAGMENT_DETAILS_TAG)
-                .addToBackStack(null)
-                .commit();
+        fragmentManager.popBackStack();
     }
 
     @Override
@@ -75,8 +77,24 @@ public class MainActivity extends AppCompatActivity
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setTitle(title);
-            ab.setDisplayHomeAsUpEnabled(displayHome);
+            ab.setDisplayHomeAsUpEnabled(displayHome & !isTwoPanel);
         }
     }
 
+    @Override
+    public void onNewsClicked(int id) {
+        final Fragment detailsFragment = fragmentManager.findFragmentByTag(FRAGMENT_DETAILS_TAG);
+        if (detailsFragment != null) {
+            fragmentManager.popBackStackImmediate();
+        }
+        replaceDetailsFragment(NewsDetailsFragment.newInstance(id));
+    }
+
+    private void replaceDetailsFragment(@NonNull Fragment fragment){
+        final int frameId = isTwoPanel ? R.id.frame_detail : R.id.frame_list;
+        fragmentManager.beginTransaction()
+                .replace(frameId, fragment, FRAGMENT_DETAILS_TAG)
+                .addToBackStack(null)
+                .commit();
+    }
 }

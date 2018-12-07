@@ -11,19 +11,6 @@ import io.reactivex.disposables.Disposable;
 
 public class SupportUtils {
 
-    private static final int COLUMN_WIDTH_DP = 270;
-
-    public static int getNewsColumnsCount(@NonNull Context context) {
-
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
-
-        if (screenWidthDp < COLUMN_WIDTH_DP) {
-            return 1;
-        }
-        return (int) (screenWidthDp / COLUMN_WIDTH_DP);
-    }
-
     public static void setVisible(@Nullable View view, boolean isVisible) {
         int visibility = isVisible ? View.VISIBLE : View.GONE;
         if (view != null) {

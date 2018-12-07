@@ -41,5 +41,6 @@
     <dimen name="intro_indicator_height">24dp</dimen>
     <dimen name="intro_greeting_margin_bottom">16dp</dimen>
     <dimen name="intro_greeting_text_size">24sp</dimen>
+    <dimen name="main_frame_list_width">300dp</dimen>
 
 </resources>

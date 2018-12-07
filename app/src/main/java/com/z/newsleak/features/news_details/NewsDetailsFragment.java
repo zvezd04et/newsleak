@@ -72,10 +72,6 @@ public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_details, container, false);
 
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
         titleView = view.findViewById(R.id.news_details_tv_title);
         fullTextView = view.findViewById(R.id.news_details_tv_full_text);
         photoView = view.findViewById(R.id.news_details_iv_photo);
