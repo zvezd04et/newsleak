@@ -4,24 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.z.newsleak.model.Category;
-import com.z.newsleak.moxy.MvpAppCompatActivity;
-import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.features.news_details.NewsDetailsActivity;
 import com.z.newsleak.R;
-import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.features.about_info.AboutActivity;
+import com.z.newsleak.features.base.BaseFragment;
+import com.z.newsleak.model.Category;
+import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.ui.LoadingScreenHolder;
 import com.z.newsleak.utils.SupportUtils;
 
@@ -35,10 +36,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NewsListActivity extends MvpAppCompatActivity implements NewsListView {
+public class NewsListFragment extends BaseFragment implements NewsListView {
 
-    private static final String LOG_TAG = "NewsListActivity";
-    private static final String BUNDLE_LIST_KEY = "BUNDLE_LIST_KEY";
+    private static final String LOG_TAG = "NewsListFragment";
 
     @NonNull
     private RecyclerView rvNewsfeed;
@@ -48,85 +48,80 @@ public class NewsListActivity extends MvpAppCompatActivity implements NewsListVi
     private LoadingScreenHolder loadingScreen;
 
     @Nullable
-    private Parcelable rvState;
-    @Nullable
     private NewsListAdapter newsAdapter;
+
+    @Nullable
+    private NewsListFragmentListener listener;
 
     @InjectPresenter
     public NewsListPresenter presenter;
 
     public static void start(@NonNull Context context) {
-        final Intent intent = new Intent(context, NewsListActivity.class);
+        final Intent intent = new Intent(context, NewsListFragment.class);
         context.startActivity(intent);
     }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_list);
+    public static NewsListFragment newInstance() {
+        return new NewsListFragment();
+    }
 
-        rvNewsfeed = findViewById(R.id.news_list_rv);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof NewsListFragmentListener) {
+            listener = (NewsListFragmentListener) context;
+        }
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        final View view = inflater.inflate(R.layout.fragment_news_list, container, false);
+
+        rvNewsfeed = view.findViewById(R.id.news_list_rv);
         setupRecyclerView(rvNewsfeed);
 
-        spinner = findViewById(R.id.news_list_sp_section);
+        spinner = view.findViewById(R.id.news_list_sp_section);
         setupSpinner(spinner);
 
         final View.OnClickListener clickListener = btn -> presenter.loadNews((Category) spinner.getSelectedItem());
 
-        final FloatingActionButton fab = findViewById(R.id.news_list_fab_refresh);
+        final FloatingActionButton fab = view.findViewById(R.id.news_list_fab_refresh);
         fab.setOnClickListener(clickListener);
 
         loadingScreen = new LoadingScreenHolder(rvNewsfeed, clickListener);
+
+        setTitle(getString(R.string.app_name), false);
+
+        return view;
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        loadingScreen.showState(LoadState.HAS_DATA);
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        final RecyclerView.LayoutManager layoutManager = rvNewsfeed.getLayoutManager();
-        if (layoutManager != null) {
-            outState.putParcelable(BUNDLE_LIST_KEY, layoutManager.onSaveInstanceState());
-        }
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            rvState = savedInstanceState.getParcelable(BUNDLE_LIST_KEY);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        final RecyclerView.LayoutManager layoutManager = rvNewsfeed.getLayoutManager();
-        if (rvState != null && layoutManager != null) {
-            layoutManager.onRestoreInstanceState(rvState);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_news_list, menu);
-        return true;
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_news_list, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_about:
-                AboutActivity.start(this);
+                AboutActivity.start(getContext());
                 return true;
 
             default:
@@ -142,6 +137,7 @@ public class NewsListActivity extends MvpAppCompatActivity implements NewsListVi
         }
         newsAdapter.replaceItems(news);
         loadingScreen.showState(LoadState.HAS_DATA);
+        SupportUtils.setVisible(rvNewsfeed, true);
     }
 
     @Override
@@ -150,19 +146,15 @@ public class NewsListActivity extends MvpAppCompatActivity implements NewsListVi
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        newsAdapter = new NewsListAdapter(this, newsItem -> NewsDetailsActivity.start(this, newsItem.getId()));
+        newsAdapter = new NewsListAdapter(getContext(), newsItem -> listener.onNewsClicked(newsItem.getId()));
         recyclerView.setAdapter(newsAdapter);
 
-        final int columnsCount = SupportUtils.getNewsColumnsCount(this);
-        if (columnsCount == 1) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        } else {
-            recyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount));
-        }
+        final int columnsCount = getResources().getInteger(R.integer.news_columns_count);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
 
         final DividerItemDecoration verticalDivider
-                = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        final Drawable dividerDrawable = ContextCompat.getDrawable(this, R.drawable.vertical_divider);
+                = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        final Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.vertical_divider);
         if (dividerDrawable != null) {
             verticalDivider.setDrawable(dividerDrawable);
         }
@@ -170,7 +162,7 @@ public class NewsListActivity extends MvpAppCompatActivity implements NewsListVi
     }
 
     private void setupSpinner(@NonNull Spinner spinner) {
-        final ArrayAdapter<Category> adapter = new ArrayAdapter<>(this, R.layout.section_spinner_item, Category.values());
+        final ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

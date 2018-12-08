@@ -30,12 +30,19 @@
 
     <dimen name="section_spinner_padding_vertical">8dp</dimen>
     <dimen name="section_spinner_padding_horizontal">16dp</dimen>
-    <dimen name="section_spinner_text_size">24sp</dimen>
+    <dimen name="section_spinner_text_size">16sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="news_fab_size">16dp</dimen>
 
     <dimen name="news_edit_margin">16dp</dimen>
     <dimen name="news_edit_margin_half">8dp</dimen>
     <dimen name="news_edit_tv_published_datetime_width">120dp</dimen>
+    <dimen name="intro_margin">8dp</dimen>
+    <dimen name="intro_indicator_height">24dp</dimen>
+    <dimen name="intro_greeting_margin_bottom">16dp</dimen>
+    <dimen name="intro_greeting_text_size">24sp</dimen>
+    <dimen name="main_frame_list_width">300dp</dimen>
+    <dimen name="news_spinner_margin">8dp</dimen>
+    <dimen name="news_spinner_height">36dp</dimen>
 
 </resources>

@@ -26,5 +26,9 @@
     <string name="news_edit_et_url_photo_hint">Введите url для фото новости</string>
     <string name="news_edit_tv_published_date_text">Дата публикации</string>
     <string name="news_edit_title">Редактор</string>
+    <string name="intro_action_skip">Скрыть</string>
+    <string name="intro_action_next">Далее</string>
+    <string name="intro_action_done">Готово!</string>
+    <string name="intro_greeting">Привет!</string>
 
 </resources>

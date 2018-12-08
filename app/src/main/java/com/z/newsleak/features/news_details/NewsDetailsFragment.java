@@ -1,11 +1,13 @@
 package com.z.newsleak.features.news_details;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,18 +15,20 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.RequestManager;
 import com.z.newsleak.R;
+import com.z.newsleak.features.base.BaseFragment;
 import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.moxy.MvpAppCompatActivity;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class NewsDetailsActivity extends MvpAppCompatActivity implements NewsDetailsView {
+public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView {
 
-    private static final String LOG_TAG = "NewsDetailsActivity";
+    private static final String LOG_TAG = "NewsDetailsFragment";
     private static final String EXTRA_NEWS_ID = "EXTRA_NEWS_ID";
 
     @NonNull
@@ -41,38 +45,51 @@ public class NewsDetailsActivity extends MvpAppCompatActivity implements NewsDet
 
     @ProvidePresenter
     public NewsDetailsPresenter providePresenter() {
-        final int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
+        final int newsId = getArguments().getInt(EXTRA_NEWS_ID, 0);
         return new NewsDetailsPresenter(newsId);
     }
 
-    public static void start(@NonNull Context context, int id) {
-        final Intent intent = new Intent(context, NewsDetailsActivity.class);
-        intent.putExtra(EXTRA_NEWS_ID, id);
-        context.startActivity(intent);
+    public static NewsDetailsFragment newInstance(int id) {
+        NewsDetailsFragment newsDetailsFragment = new NewsDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(EXTRA_NEWS_ID, id);
+        newsDetailsFragment.setArguments(bundle);
+
+        return newsDetailsFragment;
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_details);
+        setHasOptionsMenu(true);
+    }
 
-        titleView = findViewById(R.id.news_details_tv_title);
-        fullTextView = findViewById(R.id.news_details_tv_full_text);
-        photoView = findViewById(R.id.news_details_iv_photo);
-        publishDateView = findViewById(R.id.news_details_tv_publish_date);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_news_details, container, false);
+
+        titleView = view.findViewById(R.id.news_details_tv_title);
+        fullTextView = view.findViewById(R.id.news_details_tv_full_text);
+        photoView = view.findViewById(R.id.news_details_iv_photo);
+        publishDateView = view.findViewById(R.id.news_details_tv_publish_date);
+
+        return view;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_news_detail, menu);
-        return true;
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_news_detail, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                turnBack();
                 return true;
 
             case R.id.action_delete:
@@ -91,25 +108,25 @@ public class NewsDetailsActivity extends MvpAppCompatActivity implements NewsDet
 
     @Override
     public void setData(@NonNull NewsItem newsItem) {
-        setTitle(newsItem.getCategory().getName());
+        setTitle(newsItem.getCategory().getName(), true);
 
         titleView.setText(newsItem.getTitle());
         fullTextView.setText(newsItem.getPreviewText());
-        publishDateView.setText(DateFormatUtils.getRelativeDateTime(this,
+        publishDateView.setText(DateFormatUtils.getRelativeDateTime(getContext(),
                 newsItem.getPublishedDate()));
 
-        final RequestManager imageLoader = ImageLoadUtils.getImageLoader(this);
+        final RequestManager imageLoader = ImageLoadUtils.getImageLoader(getContext());
         imageLoader.load(newsItem.getLargeImageUrl()).into(photoView);
     }
 
     @Override
     public void close() {
-        finish();
+        turnBack();
     }
 
     @Override
     public void openEditorActivity(int newsId) {
-        NewsEditActivity.start(this, newsId);
+        NewsEditActivity.start(getContext(), newsId);
     }
 
 }

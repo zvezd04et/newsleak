@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorIntro">
+    android:background="@color/colorPrimary">
 
-    <ImageView
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/intro_vp_preview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/intro_margin"
+        android:layout_marginTop="@dimen/intro_margin"
+        android:layout_marginEnd="@dimen/intro_margin"
+        app:layout_constraintBottom_toTopOf="@+id/intro_indicator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/intro_screen_details" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/intro_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/intro_indicator_height"
+        android:layout_marginStart="@dimen/intro_margin"
+        android:layout_marginEnd="@dimen/intro_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/intro_btn_skip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/intro_btn_skip"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:scaleType="centerInside"
-        android:src="@drawable/logo_ny_times"
-        tools:ignore="ContentDescription" />
+        android:layout_marginStart="@dimen/intro_margin"
+        android:layout_marginBottom="@dimen/intro_margin"
+        android:text="@string/intro_action_skip"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/intro_tv_greeting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/intro_margin"
+        android:layout_marginEnd="@dimen/intro_margin"
+        android:layout_marginBottom="@dimen/intro_greeting_margin_bottom"
+        android:text="@string/intro_greeting"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/intro_greeting_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/intro_btn_next"
+        app:layout_constraintStart_toEndOf="@+id/intro_btn_skip" />
+
+    <Button
+        android:id="@+id/intro_btn_next"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/intro_margin"
+        android:layout_marginBottom="@dimen/intro_margin"
+        android:text="@string/intro_action_next"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
