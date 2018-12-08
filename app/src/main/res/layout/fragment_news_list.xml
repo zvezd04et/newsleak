@@ -13,10 +13,9 @@
         <Spinner
             android:id="@+id/news_list_sp_section"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:minHeight="36dp" />
+            android:layout_height="@dimen/news_spinner_height"
+            android:layout_marginStart="@dimen/news_spinner_margin"
+            android:layout_marginEnd="@dimen/news_spinner_margin" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
