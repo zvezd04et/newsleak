@@ -69,7 +69,6 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setRetainInstance(true);
     }
 
     @Override
