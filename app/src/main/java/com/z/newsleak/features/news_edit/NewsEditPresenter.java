@@ -32,11 +32,23 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
         newsItem.setUrl(newsEditItem.getUrl());
         newsItem.setNormalImageUrl(newsEditItem.getNormalImageUrl());
 
-        final Disposable disposable = database.update(newsItem)
+        final Disposable disposable = repository.saveItem(newsItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processSaving, this::handleError);
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    protected void processLoading(@NonNull NewsItem newsItem) {
+        super.processLoading(newsItem);
+
+        calendar.setTime(newsItem.getPublishedDate());
+        getViewState().setPublishedDateTime(calendar.getTime());
+    }
+
+    private void processSaving() {
+        getViewState().close();
     }
 
     public void onPublishedDateClicked() {
@@ -69,18 +81,6 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
         updatePublishedDate();
     }
 
-    @Override
-    protected void processLoading(@NonNull NewsItem newsItem) {
-        super.processLoading(newsItem);
-
-        calendar.setTime(newsItem.getPublishedDate());
-        getViewState().setPublishedDateTime(calendar.getTime());
-    }
-
-    private void processSaving() {
-        getViewState().close();
-    }
-
     private void updatePublishedDate() {
         if (newsItem == null) {
             return;
@@ -89,5 +89,4 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
         newsItem.setPublishedDate(calendar.getTime());
         getViewState().setPublishedDateTime(calendar.getTime());
     }
-
 }

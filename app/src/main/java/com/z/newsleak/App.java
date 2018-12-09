@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.z.newsleak.data.db.AppDatabase;
+import com.z.newsleak.data.db.NewsRepository;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -18,10 +19,17 @@ public class App extends Application {
     private static final String LOG_TAG = "RxErrorHandler";
     @NonNull
     private static AppDatabase database;
+    @NonNull
+    private static NewsRepository repository;
 
     @NonNull
     public static AppDatabase getDatabase() {
         return database;
+    }
+
+    @NonNull
+    public static NewsRepository getRepository() {
+        return repository;
     }
 
     @Override
@@ -51,6 +59,7 @@ public class App extends Application {
         });
 
         database = AppDatabase.getInstance(this);
+        repository = NewsRepository.getInstance();
     }
 
 }

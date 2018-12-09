@@ -3,7 +3,9 @@ package com.z.newsleak.features.newsfeed;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.z.newsleak.App;
 import com.z.newsleak.data.api.NYTimesApiProvider;
+import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.base.BasePresenter;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
@@ -36,11 +38,14 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
 
+    @NonNull
+    private NewsRepository repository = App.getRepository();
+
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        final Disposable disposable = database.getAll()
+        final Disposable disposable = repository.getDataObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processNews,
@@ -56,14 +61,13 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     }
 
     public void loadNews(@NonNull Category category) {
-
         getViewState().showState(LoadState.LOADING);
 
         disposable = NYTimesApiProvider.getInstance()
                 .createApi()
                 .getNews(category.getSection())
                 .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
-                .flatMapCompletable(this::saveData)
+                .flatMapCompletable(newsItems -> repository.saveData(newsItems))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> getViewState().showNews(newsList),
@@ -82,7 +86,6 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     }
 
     private void processNews(@Nullable List<NewsItem> news) {
-
         if (news == null || news.isEmpty()) {
             getViewState().showState(LoadState.HAS_NO_DATA);
             return;
@@ -96,14 +99,4 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         Log.e(LOG_TAG, th.getMessage(), th);
         getViewState().showState(LoadState.ERROR);
     }
-
-    private Completable saveData(final List<NewsItem> newsList) {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            database.deleteAll();
-            database.insertAll(newsList);
-
-            return null;
-        });
-    }
-
 }

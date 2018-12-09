@@ -2,6 +2,8 @@ package com.z.newsleak.features.base;
 
 import android.util.Log;
 
+import com.z.newsleak.App;
+import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.model.NewsItem;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,9 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends BasePresenter<V> {
 
     private static final String LOG_TAG = "BaseNewsItemPresenter";
+
+    @NonNull
+    protected NewsRepository repository = App.getRepository();
 
     @Nullable
     protected NewsItem newsItem;
@@ -29,12 +34,11 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
     }
 
     private void getData() {
-
         if (newsItem != null) {
             return;
         }
 
-        final Disposable disposable = database.getNewsById(id)
+        final Disposable disposable = repository.getItemObservable(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processLoading, this::handleError);
@@ -50,5 +54,4 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
         Log.e(LOG_TAG, th.getMessage(), th);
         getViewState().close();
     }
-
 }
