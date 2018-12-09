@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.z.newsleak.App;
+import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.base.BasePresenter;
@@ -41,6 +42,9 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @NonNull
     private NewsRepository repository = App.getRepository();
 
+    @NonNull
+    private final PreferencesManager preferencesManager = App.getPreferencesManager();
+
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
@@ -67,7 +71,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                 .createApi()
                 .getNews(category.getSection())
                 .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
-                .flatMapCompletable(newsItems -> repository.saveData(newsItems))
+                .flatMapCompletable(repository::saveData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> getViewState().showNews(newsList),
@@ -83,6 +87,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         }
         loadNews(category);
         currentCategory = category;
+        preferencesManager.setCurrentCategory(currentCategory);
     }
 
     private void processNews(@Nullable List<NewsItem> news) {

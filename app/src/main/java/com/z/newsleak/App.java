@@ -3,6 +3,7 @@ package com.z.newsleak;
 import android.app.Application;
 import android.util.Log;
 
+import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsRepository;
 
@@ -21,6 +22,8 @@ public class App extends Application {
     private static AppDatabase database;
     @NonNull
     private static NewsRepository repository;
+    @NonNull
+    private static PreferencesManager preferencesManager;
 
     @NonNull
     public static AppDatabase getDatabase() {
@@ -30,6 +33,11 @@ public class App extends Application {
     @NonNull
     public static NewsRepository getRepository() {
         return repository;
+    }
+
+    @NonNull
+    public static PreferencesManager getPreferencesManager() {
+        return preferencesManager;
     }
 
     @Override
@@ -60,6 +68,7 @@ public class App extends Application {
 
         database = AppDatabase.getInstance(this);
         repository = NewsRepository.getInstance();
+        preferencesManager = PreferencesManager.getInstance(this);
     }
 
 }

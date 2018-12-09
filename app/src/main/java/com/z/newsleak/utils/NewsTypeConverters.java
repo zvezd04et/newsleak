@@ -76,7 +76,7 @@ public class NewsTypeConverters {
     }
 
     @TypeConverter
-    public static String fromCategory(Category category) {
+    public static String fromCategory(@Nullable Category category) {
         return category == null ? null : category.getSection();
     }
 

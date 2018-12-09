@@ -30,6 +30,8 @@
         <activity
             android:name=".features.news_edit.NewsEditActivity"
             android:label="@string/news_edit_title" />
+
+        <service android:name=".service.NewsUpdateService" />
     </application>
 
 </manifest>
