@@ -30,5 +30,10 @@
     <string name="intro_action_next">Далее</string>
     <string name="intro_action_done">Готово!</string>
     <string name="intro_greeting">Привет!</string>
+    <string name="news_update_channel_description">Фоновая служба</string>
+    <string name="news_update_notification_text">Фоновая служба</string>
+    <string name="service_action_cancel">Отмена</string>
+    <string name="service_result_success">Новости успешно обновлены</string>
+    <string name="service_result_fail">При загрузке новостей произошла ошибка</string>
 
 </resources>
