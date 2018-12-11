@@ -28,6 +28,7 @@ dependencies {
     implementation "androidx.cardview:cardview:$jetVersion"
     implementation "androidx.coordinatorlayout:coordinatorlayout:$jetVersion"
     implementation "com.google.android.material:material:$jetVersion"
+    implementation "android.arch.work:work-runtime:1.0.0-alpha11"
 
     implementation 'me.relex:circleindicator:1.2.2'
 

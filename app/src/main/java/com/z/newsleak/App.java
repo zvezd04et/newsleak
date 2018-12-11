@@ -6,18 +6,24 @@ import android.util.Log;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsRepository;
+import com.z.newsleak.service.NewsUpdateWorker;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
+import androidx.work.Constraints;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
 
 public class App extends Application {
 
     private static final String LOG_TAG = "RxErrorHandler";
+    private static final String NEWS_UPDATE_TAG = "NEWS_UPDATE_TAG";
+
     @NonNull
     private static AppDatabase database;
     @NonNull
@@ -65,6 +71,17 @@ public class App extends Application {
             }
             Log.d(LOG_TAG, "Undeliverable exception received, not sure what to do", e);
         });
+
+        final Constraints constraints = new Constraints.Builder()
+                .setRequiresCharging(true)
+                .build();
+
+        final PeriodicWorkRequest newsUpdateWork = new PeriodicWorkRequest.Builder(NewsUpdateWorker.class, 3, TimeUnit.HOURS)
+                .addTag(NEWS_UPDATE_TAG)
+                .setConstraints(constraints)
+                .build();
+
+        WorkManager.getInstance().enqueue(newsUpdateWork);
 
         database = AppDatabase.getInstance(this);
         repository = NewsRepository.getInstance();
