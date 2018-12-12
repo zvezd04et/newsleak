@@ -1,12 +1,16 @@
 package com.z.newsleak;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.service.NewsUpdateWorker;
+import com.z.newsleak.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -30,6 +34,13 @@ public class App extends Application {
     private static NewsRepository repository;
     @NonNull
     private static PreferencesManager preferencesManager;
+    @NonNull
+    private static Context context;
+
+    @NonNull
+    public static Context getContext() {
+        return context;
+    }
 
     @NonNull
     public static AppDatabase getDatabase() {
@@ -49,6 +60,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context = this;
+        database = AppDatabase.getInstance(this);
+        repository = NewsRepository.getInstance();
+        preferencesManager = PreferencesManager.getInstance(this);
+
         RxJavaPlugins.setErrorHandler(e -> {
             if (e instanceof UndeliverableException) {
                 e.getCause();
@@ -83,9 +100,9 @@ public class App extends Application {
 
         WorkManager.getInstance().enqueue(newsUpdateWork);
 
-        database = AppDatabase.getInstance(this);
-        repository = NewsRepository.getInstance();
-        preferencesManager = PreferencesManager.getInstance(this);
+        registerReceiver(NetworkUtils.getInstance().getReceiver(),
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
     }
 
 }

@@ -165,6 +165,8 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         final ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelected(false);
+        spinner.setSelection(0,true);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -14,8 +14,12 @@ import android.util.Log;
 import com.z.newsleak.App;
 import com.z.newsleak.R;
 import com.z.newsleak.data.PreferencesManager;
+import com.z.newsleak.data.api.NYTimesApiProvider;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.main.MainActivity;
+import com.z.newsleak.model.Category;
+import com.z.newsleak.utils.NetworkUtils;
+import com.z.newsleak.utils.NewsTypeConverters;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -42,6 +46,8 @@ public class NewsUpdateService extends Service {
     @NonNull
     private final NewsRepository repository = App.getRepository();
     @NonNull
+    NetworkUtils networkUtils = NetworkUtils.getInstance();
+    @NonNull
     private PendingIntent contentIntent;
 
     public static void start(@NonNull Context context) {
@@ -60,9 +66,9 @@ public class NewsUpdateService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
-        if (ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
+        if (intent != null && ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
             Log.d(LOG_TAG,"called to cancel service");
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -70,8 +76,9 @@ public class NewsUpdateService extends Service {
             stopSelf();
         }
 
-        disposable = Completable.complete()
-                .delay(15, TimeUnit.SECONDS)
+        disposable = networkUtils.getOnlineNetwork()
+                .timeout(1, TimeUnit.MINUTES)
+                .flatMapCompletable(aBoolean -> updateNews())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {showResultNotification(getString(R.string.service_result_success));
@@ -144,4 +151,12 @@ public class NewsUpdateService extends Service {
         }
     }
 
+    private Completable updateNews() {
+        final Category currentCategory = preferencesManager.getCurrentCategory();
+
+        return NYTimesApiProvider.getInstance()
+                .createApi().getNews(currentCategory.getSection())
+                .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
+                .flatMapCompletable(repository::saveData);
+    }
 }
