@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.NetworkRequest;
 import android.util.Log;
 
 import com.z.newsleak.data.PreferencesManager;
@@ -17,6 +18,7 @@ import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.work.Constraints;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -35,12 +37,9 @@ public class App extends Application {
     @NonNull
     private static PreferencesManager preferencesManager;
     @NonNull
-    private static Context context;
-
-    @NonNull
-    public static Context getContext() {
-        return context;
-    }
+    private static NetworkUtils networkUtils;
+    @Nullable
+    private static ConnectivityManager connectivityManager;
 
     @NonNull
     public static AppDatabase getDatabase() {
@@ -57,15 +56,29 @@ public class App extends Application {
         return preferencesManager;
     }
 
+    @Nullable
+    public static ConnectivityManager getCConnectivityManager() {
+        return connectivityManager;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        context = this;
         database = AppDatabase.getInstance(this);
         repository = NewsRepository.getInstance();
         preferencesManager = PreferencesManager.getInstance(this);
+        networkUtils = NetworkUtils.getInstance();
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        setRxErrorHandler();
+
+        setupWorkManager();
+
+        registerNetworkCallback();
+    }
+
+    private void setRxErrorHandler() {
         RxJavaPlugins.setErrorHandler(e -> {
             if (e instanceof UndeliverableException) {
                 e.getCause();
@@ -88,7 +101,9 @@ public class App extends Application {
             }
             Log.d(LOG_TAG, "Undeliverable exception received, not sure what to do", e);
         });
+    }
 
+    private void setupWorkManager() {
         final Constraints constraints = new Constraints.Builder()
                 .setRequiresCharging(true)
                 .build();
@@ -99,10 +114,11 @@ public class App extends Application {
                 .build();
 
         WorkManager.getInstance().enqueue(newsUpdateWork);
-
-        registerReceiver(NetworkUtils.getInstance().getReceiver(),
-                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
     }
 
+    private void registerNetworkCallback() {
+        if (connectivityManager != null) {
+            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkUtils.getNetworkCallback());
+        }
+    }
 }

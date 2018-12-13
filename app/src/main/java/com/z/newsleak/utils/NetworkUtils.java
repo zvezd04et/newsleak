@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.NetworkInfo;
 
 import com.z.newsleak.App;
@@ -18,8 +19,20 @@ import io.reactivex.subjects.Subject;
 
 public class NetworkUtils {
 
-    private NetworkReceiver networkReceiver = new NetworkReceiver();
+    @NonNull
+    private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            networkState.onNext(isNetworkAvailable());
+        }
 
+        @Override
+        public void onLost(Network network) {
+            networkState.onNext(isNetworkAvailable());
+        }
+    };
+
+    @NonNull
     private Subject<Boolean> networkState = BehaviorSubject.createDefault(isNetworkAvailable());
 
     @Nullable
@@ -38,8 +51,8 @@ public class NetworkUtils {
     }
 
     @NonNull
-    public NetworkReceiver getReceiver() {
-        return networkReceiver;
+    public ConnectivityManager.NetworkCallback getNetworkCallback() {
+        return networkCallback;
     }
 
     @NonNull
@@ -51,8 +64,7 @@ public class NetworkUtils {
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager cm = (ConnectivityManager)
-                App.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = App.getCConnectivityManager();
         if (cm == null) {
             return false;
         }
