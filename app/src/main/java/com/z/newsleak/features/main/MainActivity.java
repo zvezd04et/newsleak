@@ -1,5 +1,6 @@
 package com.z.newsleak.features.main;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import com.z.newsleak.features.base.BaseFragmentListener;
 import com.z.newsleak.features.news_details.NewsDetailsFragment;
 import com.z.newsleak.features.newsfeed.NewsListFragment;
 import com.z.newsleak.features.newsfeed.NewsListFragmentListener;
+import com.z.newsleak.service.NewsUpdateService;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +32,12 @@ public class MainActivity extends AppCompatActivity
     public static void start(@NonNull Context context) {
         Intent startIntent = new Intent(context, MainActivity.class);
         context.startActivity(startIntent);
+    }
+
+    public static PendingIntent getPendingIntent(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return PendingIntent.getActivity(context, 0, intent, 0);
     }
 
     @Override

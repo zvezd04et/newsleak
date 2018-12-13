@@ -46,10 +46,8 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
     private Spinner spinner;
     @NonNull
     private LoadingScreenHolder loadingScreen;
-
     @Nullable
     private NewsListAdapter newsAdapter;
-
     @Nullable
     private NewsListFragmentListener listener;
 
@@ -88,10 +86,9 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         final View view = inflater.inflate(R.layout.fragment_news_list, container, false);
 
         rvNewsfeed = view.findViewById(R.id.news_list_rv);
-        setupRecyclerView(rvNewsfeed);
+        setupRecyclerView();
 
         spinner = view.findViewById(R.id.news_list_sp_section);
-        setupSpinner(spinner);
 
         final View.OnClickListener clickListener = btn -> presenter.loadNews((Category) spinner.getSelectedItem());
 
@@ -145,28 +142,14 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         loadingScreen.showState(state);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        newsAdapter = new NewsListAdapter(getContext(), newsItem -> listener.onNewsClicked(newsItem.getId()));
-        recyclerView.setAdapter(newsAdapter);
-
-        final int columnsCount = getResources().getInteger(R.integer.news_columns_count);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
-
-        final DividerItemDecoration verticalDivider
-                = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        final Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.vertical_divider);
-        if (dividerDrawable != null) {
-            verticalDivider.setDrawable(dividerDrawable);
-        }
-        recyclerView.addItemDecoration(verticalDivider);
-    }
-
-    private void setupSpinner(@NonNull Spinner spinner) {
+    @Override
+    public void setupSpinner(@Nullable Category category) {
         final ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
+        final int position = (category == null) ? 0 : adapter.getPosition(category);
         spinner.setAdapter(adapter);
         spinner.setSelected(false);
-        spinner.setSelection(0,true);
+        spinner.setSelection(position);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -180,4 +163,19 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         });
     }
 
+    private void setupRecyclerView() {
+        newsAdapter = new NewsListAdapter(getContext(), newsItem -> listener.onNewsClicked(newsItem.getId()));
+        rvNewsfeed.setAdapter(newsAdapter);
+
+        final int columnsCount = getResources().getInteger(R.integer.news_columns_count);
+        rvNewsfeed.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
+
+        final DividerItemDecoration verticalDivider
+                = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        final Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.vertical_divider);
+        if (dividerDrawable != null) {
+            verticalDivider.setDrawable(dividerDrawable);
+        }
+        rvNewsfeed.addItemDecoration(verticalDivider);
+    }
 }

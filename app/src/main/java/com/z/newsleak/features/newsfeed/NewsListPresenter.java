@@ -49,6 +49,9 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
+        currentCategory = preferencesManager.getCurrentCategory();
+        getViewState().setupSpinner(currentCategory);
+
         final Disposable disposable = repository.getDataObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
