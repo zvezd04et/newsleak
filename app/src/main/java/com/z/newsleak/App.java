@@ -29,6 +29,8 @@ public class App extends Application {
 
     private static final String LOG_TAG = "RxErrorHandler";
     private static final String NEWS_UPDATE_TAG = "NEWS_UPDATE_TAG";
+    private static final int NEWS_UPDATE_REPEAT_INTERVAL_IN_HOURS = 3;
+
 
     @NonNull
     private static AppDatabase database;
@@ -108,7 +110,9 @@ public class App extends Application {
                 .setRequiresCharging(true)
                 .build();
 
-        final PeriodicWorkRequest newsUpdateWork = new PeriodicWorkRequest.Builder(NewsUpdateWorker.class, 3, TimeUnit.HOURS)
+        final PeriodicWorkRequest newsUpdateWork = new PeriodicWorkRequest.Builder(NewsUpdateWorker.class,
+                                                            NEWS_UPDATE_REPEAT_INTERVAL_IN_HOURS,
+                                                            TimeUnit.HOURS)
                 .addTag(NEWS_UPDATE_TAG)
                 .setConstraints(constraints)
                 .build();
@@ -118,7 +122,8 @@ public class App extends Application {
 
     private void registerNetworkCallback() {
         if (connectivityManager != null) {
-            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(), networkUtils.getNetworkCallback());
+            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(),
+                    networkUtils.getNetworkCallback());
         }
     }
 }
