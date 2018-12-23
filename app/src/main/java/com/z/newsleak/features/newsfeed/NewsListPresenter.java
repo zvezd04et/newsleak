@@ -5,7 +5,7 @@ import android.util.Log;
 import com.arellomobile.mvp.InjectViewState;
 import com.z.newsleak.App;
 import com.z.newsleak.data.PreferencesManager;
-import com.z.newsleak.data.api.NYTimesApiProvider;
+import com.z.newsleak.data.api.NYTimesApi;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.base.BasePresenter;
 import com.z.newsleak.model.Category;
@@ -16,11 +16,11 @@ import com.z.newsleak.utils.SupportUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -45,9 +45,15 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @NonNull
     private final PreferencesManager preferencesManager = App.getPreferencesManager();
 
+    @Inject
+    @NonNull
+    NYTimesApi api;
+
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
+
+        App.getNetworkComponent().inject(this);
 
         currentCategory = preferencesManager.getCurrentCategory();
         getViewState().setupSpinner(currentCategory);
@@ -70,8 +76,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     public void loadNews(@NonNull Category category) {
         getViewState().showState(LoadState.LOADING);
 
-        disposable = NYTimesApiProvider.getInstance()
-                .createApi()
+        disposable = api
                 .getNews(category.getSection())
                 .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
                 .flatMapCompletable(repository::saveData)

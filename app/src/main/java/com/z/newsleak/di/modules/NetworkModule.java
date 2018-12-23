@@ -1,41 +1,31 @@
-package com.z.newsleak.data.api;
+package com.z.newsleak.di.modules;
 
 import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
+import com.z.newsleak.data.api.ApiKeyInterceptor;
+import com.z.newsleak.data.api.NYTimesApi;
+import com.z.newsleak.di.scopes.NetworkScope;
 
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public final class NYTimesApiProvider {
+@Module
+public class NetworkModule {
 
     private static final int TIMEOUT_IN_SECONDS = 15;
-    private static NYTimesApiProvider apiProvider;
 
-    private final NYTimesApi Api;
-
-    public static synchronized NYTimesApiProvider getInstance() {
-        if (apiProvider == null) {
-            apiProvider = new NYTimesApiProvider();
-        }
-        return apiProvider;
-    }
-
-    private NYTimesApiProvider() {
-        final OkHttpClient httpClient = buildOkHttpClient();
-        final Retrofit retrofit = buildRetrofitClient(httpClient);
-
-        //init endpoints here. It's can be more then one endpoint
-        Api = retrofit.create(NYTimesApi.class);
-    }
-
+    @Provides
+    @NetworkScope
     @NonNull
-    private Retrofit buildRetrofitClient(@NonNull OkHttpClient client) {
+    public Retrofit provideRetrofitClient(@NonNull OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(Constant.API_HOST)
                 .client(client)
@@ -44,8 +34,10 @@ public final class NYTimesApiProvider {
                 .build();
     }
 
+    @Provides
+    @NetworkScope
     @NonNull
-    private OkHttpClient buildOkHttpClient() {
+    public OkHttpClient provideOkHttpClient() {
 
         if (BuildConfig.DEBUG) {
             final HttpLoggingInterceptor networkLogInterceptor = new HttpLoggingInterceptor();
@@ -60,9 +52,10 @@ public final class NYTimesApiProvider {
                 .build();
     }
 
-    public NYTimesApi createApi() {
-        return Api;
+    @Provides
+    @NetworkScope
+    @NonNull
+    public NYTimesApi provideNYTimesApi(Retrofit retrofit) {
+        return retrofit.create(NYTimesApi.class);
     }
-
-
 }

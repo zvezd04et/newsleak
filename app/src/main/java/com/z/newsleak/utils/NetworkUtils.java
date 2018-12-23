@@ -64,7 +64,7 @@ public class NetworkUtils {
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager cm = App.getCConnectivityManager();
+        ConnectivityManager cm = App.getConnectivityManager();
         if (cm == null) {
             return false;
         }

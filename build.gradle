@@ -6,6 +6,7 @@ buildscript {
         jetVersion = '1.0.0'
         retrofitVersion = '2.4.0'
         moxyVersion = '1.5.5'
+        daggerVersion = '2.20'
         roomVersion = '2.1.0-alpha02'
     }
     

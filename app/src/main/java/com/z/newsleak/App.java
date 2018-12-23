@@ -2,7 +2,6 @@ package com.z.newsleak;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkRequest;
 import android.util.Log;
@@ -10,6 +9,8 @@ import android.util.Log;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsRepository;
+import com.z.newsleak.di.components.DaggerNetworkComponent;
+import com.z.newsleak.di.components.NetworkComponent;
 import com.z.newsleak.service.NewsUpdateWorker;
 import com.z.newsleak.utils.NetworkUtils;
 
@@ -40,6 +41,9 @@ public class App extends Application {
     private static PreferencesManager preferencesManager;
     @NonNull
     private static NetworkUtils networkUtils;
+    @NonNull
+    private static NetworkComponent networkComponent;
+
     @Nullable
     private static ConnectivityManager connectivityManager;
 
@@ -59,8 +63,13 @@ public class App extends Application {
     }
 
     @Nullable
-    public static ConnectivityManager getCConnectivityManager() {
+    public static ConnectivityManager getConnectivityManager() {
         return connectivityManager;
+    }
+
+    @NonNull
+    public static NetworkComponent getNetworkComponent() {
+        return networkComponent;
     }
 
     @Override
@@ -72,6 +81,8 @@ public class App extends Application {
         preferencesManager = PreferencesManager.getInstance(this);
         networkUtils = NetworkUtils.getInstance();
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        networkComponent = DaggerNetworkComponent.builder().build();
 
         setRxErrorHandler();
 

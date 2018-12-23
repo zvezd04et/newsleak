@@ -14,7 +14,7 @@ import android.util.Log;
 import com.z.newsleak.App;
 import com.z.newsleak.R;
 import com.z.newsleak.data.PreferencesManager;
-import com.z.newsleak.data.api.NYTimesApiProvider;
+import com.z.newsleak.data.api.NYTimesApi;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.model.Category;
@@ -23,6 +23,8 @@ import com.z.newsleak.utils.NewsTypeConverters;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,8 +38,9 @@ public class NewsUpdateService extends Service {
 
     private static final String LOG_TAG = "NewsUpdateService";
     private static final String CHANNEL_NEWS_UPDATE_ID = "CHANNEL_NEWS_UPDATE_ID";
-    private static final int NOTIFICATION_NEWS_UPDATE_ID = 25;
     private static final String ACTION_STOP_NEWS_UPDATE = "com.z.newsleak.STOP_SELF";
+    private static final int NOTIFICATION_NEWS_UPDATE_ID = 25;
+    private static final int TIMEOUT_IN_MINUTES = 1;
 
     @Nullable
     private Disposable disposable;
@@ -50,6 +53,10 @@ public class NewsUpdateService extends Service {
     @NonNull
     private PendingIntent contentIntent;
 
+    @Inject
+    @NonNull
+    NYTimesApi api;
+
     public static void start(@NonNull Context context) {
         Intent intent = new Intent(context, NewsUpdateService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -57,6 +64,12 @@ public class NewsUpdateService extends Service {
         } else {
             context.startService(intent);
         }
+    }
+
+    private static PendingIntent getStopPendingIntent(Context context) {
+        final Intent stopSelfIntent = new Intent(context, NewsUpdateService.class);
+        stopSelfIntent.setAction(ACTION_STOP_NEWS_UPDATE);
+        return PendingIntent.getService(context, 0, stopSelfIntent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Nullable
@@ -69,7 +82,7 @@ public class NewsUpdateService extends Service {
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
         if (intent != null && ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
-            Log.d(LOG_TAG,"called to cancel service");
+            Log.d(LOG_TAG, "called to cancel service");
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(NOTIFICATION_NEWS_UPDATE_ID);
@@ -77,12 +90,14 @@ public class NewsUpdateService extends Service {
         }
 
         disposable = networkUtils.getOnlineNetwork()
-                .timeout(1, TimeUnit.MINUTES)
+                .timeout(TIMEOUT_IN_MINUTES, TimeUnit.MINUTES)
                 .flatMapCompletable(aBoolean -> updateNews())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {showResultNotification(getString(R.string.service_result_success));
-                    stopForeground(false);},
+                .subscribe(() -> {
+                            showResultNotification(getString(R.string.service_result_success));
+                            stopForeground(false);
+                        },
                         th -> {
                             Log.e(LOG_TAG, th.getMessage(), th);
                             showResultNotification(getString(R.string.service_result_fail));
@@ -96,11 +111,11 @@ public class NewsUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        App.getNetworkComponent().inject(this);
+
         contentIntent = MainActivity.getPendingIntent(this);
 
-        Intent stopSelfIntent = new Intent(this, NewsUpdateService.class);
-        stopSelfIntent.setAction(ACTION_STOP_NEWS_UPDATE);
-        PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, stopSelfIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        final PendingIntent stopPendingIntent = getStopPendingIntent(this);
 
         createNotificationChannel();
 
@@ -154,8 +169,7 @@ public class NewsUpdateService extends Service {
     private Completable updateNews() {
         final Category currentCategory = preferencesManager.getCurrentCategory();
 
-        return NYTimesApiProvider.getInstance()
-                .createApi().getNews(currentCategory.getSection())
+        return api.getNews(currentCategory.getSection())
                 .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
                 .flatMapCompletable(repository::saveData);
     }
