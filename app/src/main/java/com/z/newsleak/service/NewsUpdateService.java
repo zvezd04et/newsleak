@@ -45,13 +45,17 @@ public class NewsUpdateService extends Service {
     @Nullable
     private Disposable disposable;
     @NonNull
-    private final PreferencesManager preferencesManager = App.getPreferencesManager();
-    @NonNull
-    private final NewsRepository repository = App.getRepository();
-    @NonNull
     NetworkUtils networkUtils = NetworkUtils.getInstance();
     @NonNull
     private PendingIntent contentIntent;
+
+    @Inject
+    @NonNull
+    NewsRepository repository;
+
+    @Inject
+    @NonNull
+    PreferencesManager preferencesManager;
 
     @Inject
     @NonNull
@@ -111,7 +115,7 @@ public class NewsUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        App.getNetworkComponent().inject(this);
+        App.getNewsUpdateComponent().inject(this);
 
         contentIntent = MainActivity.getPendingIntent(this);
 

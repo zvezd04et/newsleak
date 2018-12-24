@@ -9,8 +9,11 @@ import android.util.Log;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsRepository;
-import com.z.newsleak.di.components.DaggerNetworkComponent;
-import com.z.newsleak.di.components.NetworkComponent;
+import com.z.newsleak.di.components.DaggerNewsUpdateComponent;
+import com.z.newsleak.di.components.NewsUpdateComponent;
+import com.z.newsleak.di.modules.AppModule;
+import com.z.newsleak.di.modules.NetworkModule;
+import com.z.newsleak.di.modules.PersistenceModule;
 import com.z.newsleak.service.NewsUpdateWorker;
 import com.z.newsleak.utils.NetworkUtils;
 
@@ -34,32 +37,18 @@ public class App extends Application {
 
 
     @NonNull
-    private static AppDatabase database;
-    @NonNull
     private static NewsRepository repository;
-    @NonNull
-    private static PreferencesManager preferencesManager;
     @NonNull
     private static NetworkUtils networkUtils;
     @NonNull
-    private static NetworkComponent networkComponent;
+    private static NewsUpdateComponent newsUpdateComponent;
 
     @Nullable
     private static ConnectivityManager connectivityManager;
 
     @NonNull
-    public static AppDatabase getDatabase() {
-        return database;
-    }
-
-    @NonNull
     public static NewsRepository getRepository() {
         return repository;
-    }
-
-    @NonNull
-    public static PreferencesManager getPreferencesManager() {
-        return preferencesManager;
     }
 
     @Nullable
@@ -68,21 +57,24 @@ public class App extends Application {
     }
 
     @NonNull
-    public static NetworkComponent getNetworkComponent() {
-        return networkComponent;
+    public static NewsUpdateComponent getNewsUpdateComponent() {
+        return newsUpdateComponent;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        database = AppDatabase.getInstance(this);
-        repository = NewsRepository.getInstance();
-        preferencesManager = PreferencesManager.getInstance(this);
+        AppDatabase database = AppDatabase.getInstance(this);
+        repository = NewsRepository.getInstance(database);
         networkUtils = NetworkUtils.getInstance();
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        networkComponent = DaggerNetworkComponent.builder().build();
+        newsUpdateComponent = DaggerNewsUpdateComponent.builder()
+                .appModule(new AppModule(this))
+                .networkModule(new NetworkModule())
+                .persistenceModule(new PersistenceModule())
+                .build();
 
         setRxErrorHandler();
 

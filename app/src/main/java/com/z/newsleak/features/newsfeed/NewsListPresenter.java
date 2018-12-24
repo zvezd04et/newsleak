@@ -39,11 +39,13 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
 
+    @Inject
     @NonNull
-    private NewsRepository repository = App.getRepository();
+    NewsRepository repository;
 
+    @Inject
     @NonNull
-    private final PreferencesManager preferencesManager = App.getPreferencesManager();
+    PreferencesManager preferencesManager;
 
     @Inject
     @NonNull
@@ -53,7 +55,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        App.getNetworkComponent().inject(this);
+        App.getNewsUpdateComponent().inject(this);
 
         currentCategory = preferencesManager.getCurrentCategory();
         getViewState().setupSpinner(currentCategory);

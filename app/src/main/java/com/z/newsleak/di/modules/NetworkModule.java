@@ -4,7 +4,7 @@ import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
 import com.z.newsleak.data.api.ApiKeyInterceptor;
 import com.z.newsleak.data.api.NYTimesApi;
-import com.z.newsleak.di.scopes.NetworkScope;
+import com.z.newsleak.di.scopes.NewsUpdateScope;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +23,7 @@ public class NetworkModule {
     private static final int TIMEOUT_IN_SECONDS = 15;
 
     @Provides
-    @NetworkScope
+    @NewsUpdateScope
     @NonNull
     public Retrofit provideRetrofitClient(@NonNull OkHttpClient client) {
         return new Retrofit.Builder()
@@ -35,7 +35,7 @@ public class NetworkModule {
     }
 
     @Provides
-    @NetworkScope
+    @NewsUpdateScope
     @NonNull
     public OkHttpClient provideOkHttpClient() {
 
@@ -53,7 +53,7 @@ public class NetworkModule {
     }
 
     @Provides
-    @NetworkScope
+    @NewsUpdateScope
     @NonNull
     public NYTimesApi provideNYTimesApi(Retrofit retrofit) {
         return retrofit.create(NYTimesApi.class);

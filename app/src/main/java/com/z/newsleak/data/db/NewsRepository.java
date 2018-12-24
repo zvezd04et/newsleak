@@ -14,20 +14,24 @@ import io.reactivex.Observable;
 public class NewsRepository {
 
     @NonNull
-    private static final NewsDao newsDao = App.getDatabase().getNewsDao();
+    private NewsDao newsDao ;
     @Nullable
     private static NewsRepository repository;
 
     @NonNull
-    public static NewsRepository getInstance() {
+    public static NewsRepository getInstance(AppDatabase appDatabase) {
         if (repository == null) {
             synchronized (NewsRepository.class) {
                 if (repository == null) {
-                    repository = new NewsRepository();
+                    repository = new NewsRepository(appDatabase);
                 }
             }
         }
         return repository;
+    }
+
+    public NewsRepository(AppDatabase appDatabase) {
+        this.newsDao = appDatabase.getNewsDao();
     }
 
     public Completable saveData(final List<NewsItem> newsList) {

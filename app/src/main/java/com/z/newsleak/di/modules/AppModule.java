@@ -2,7 +2,7 @@ package com.z.newsleak.di.modules;
 
 import android.content.Context;
 
-import javax.inject.Singleton;
+import com.z.newsleak.di.scopes.NewsUpdateScope;
 
 import androidx.annotation.NonNull;
 import dagger.Module;
@@ -18,7 +18,7 @@ public class AppModule {
     }
 
     @Provides
-    @Singleton
+    @NewsUpdateScope
     @NonNull
     public Context provideContext() {
         return appContext;
