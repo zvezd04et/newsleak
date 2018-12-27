@@ -5,18 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.z.newsleak.R;
-import com.z.newsleak.model.NewsEditItem;
-import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.moxy.MvpAppCompatActivity;
-import com.z.newsleak.utils.DateFormatUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +12,22 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.z.newsleak.App;
+import com.z.newsleak.R;
+import com.z.newsleak.di.modules.NewsItemModule;
+import com.z.newsleak.model.NewsEditItem;
+import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.moxy.MvpAppCompatActivity;
+import com.z.newsleak.utils.DateFormatUtils;
+
 import java.util.Date;
+
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditView {
 
@@ -45,13 +48,15 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     private TextView publishedTimeView;
 
 
+    @Inject
     @InjectPresenter
     public NewsEditPresenter presenter;
 
     @ProvidePresenter
     public NewsEditPresenter providePresenter() {
         int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        return new NewsEditPresenter(newsId);
+        App.getNewsUpdateComponent().plus(new NewsItemModule(newsId)).inject(this);
+        return presenter;
     }
 
     public static void start(@NonNull Context context, int id) {

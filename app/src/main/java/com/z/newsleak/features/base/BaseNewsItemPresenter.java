@@ -2,7 +2,6 @@ package com.z.newsleak.features.base;
 
 import android.util.Log;
 
-import com.z.newsleak.App;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.model.NewsItem;
 
@@ -17,14 +16,15 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
     private static final String LOG_TAG = "BaseNewsItemPresenter";
 
     @NonNull
-    protected NewsRepository repository = App.getRepository();
+    protected NewsRepository repository;// = App.getRepository();
 
     @Nullable
     protected NewsItem newsItem;
     protected int id;
 
-    public BaseNewsItemPresenter(int id) {
+    public BaseNewsItemPresenter(int id, @NonNull NewsRepository repository) {
         this.id = id;
+        this.repository = repository;
     }
 
     @Override

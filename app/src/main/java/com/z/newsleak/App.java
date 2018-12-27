@@ -3,8 +3,6 @@ package com.z.newsleak;
 import android.app.Application;
 import android.util.Log;
 
-import com.z.newsleak.data.db.AppDatabase;
-import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.di.components.DaggerNewsUpdateComponent;
 import com.z.newsleak.di.components.NewsUpdateComponent;
 import com.z.newsleak.di.modules.AppModule;
@@ -33,18 +31,12 @@ public class App extends Application {
     private static final int NEWS_UPDATE_REPEAT_INTERVAL_IN_HOURS = 3;
 
 
-    @NonNull
-    private static NewsRepository repository;
     @Inject
     @NonNull
     NetworkUtils networkUtils;
     @NonNull
     private static NewsUpdateComponent newsUpdateComponent;
 
-    @NonNull
-    public static NewsRepository getRepository() {
-        return repository;
-    }
 
     @NonNull
     public static NewsUpdateComponent getNewsUpdateComponent() {
@@ -54,9 +46,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        AppDatabase database = AppDatabase.getInstance(this);
-        repository = NewsRepository.getInstance(database);
 
         newsUpdateComponent = DaggerNewsUpdateComponent.builder()
                 .appModule(new AppModule(this))
