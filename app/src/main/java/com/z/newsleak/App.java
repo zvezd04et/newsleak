@@ -1,12 +1,8 @@
 package com.z.newsleak;
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkRequest;
 import android.util.Log;
 
-import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.di.components.DaggerNewsUpdateComponent;
@@ -21,8 +17,9 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.work.Constraints;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -38,22 +35,15 @@ public class App extends Application {
 
     @NonNull
     private static NewsRepository repository;
+    @Inject
     @NonNull
-    private static NetworkUtils networkUtils;
+    NetworkUtils networkUtils;
     @NonNull
     private static NewsUpdateComponent newsUpdateComponent;
-
-    @Nullable
-    private static ConnectivityManager connectivityManager;
 
     @NonNull
     public static NewsRepository getRepository() {
         return repository;
-    }
-
-    @Nullable
-    public static ConnectivityManager getConnectivityManager() {
-        return connectivityManager;
     }
 
     @NonNull
@@ -67,20 +57,18 @@ public class App extends Application {
 
         AppDatabase database = AppDatabase.getInstance(this);
         repository = NewsRepository.getInstance(database);
-        networkUtils = NetworkUtils.getInstance();
-        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         newsUpdateComponent = DaggerNewsUpdateComponent.builder()
                 .appModule(new AppModule(this))
                 .networkModule(new NetworkModule())
                 .persistenceModule(new PersistenceModule())
                 .build();
+        newsUpdateComponent.inject(this);
+
+        networkUtils.registerNetworkCallback();
 
         setRxErrorHandler();
-
         setupWorkManager();
-
-        registerNetworkCallback();
     }
 
     private void setRxErrorHandler() {
@@ -121,12 +109,5 @@ public class App extends Application {
                 .build();
 
         WorkManager.getInstance().enqueue(newsUpdateWork);
-    }
-
-    private void registerNetworkCallback() {
-        if (connectivityManager != null) {
-            connectivityManager.registerNetworkCallback(new NetworkRequest.Builder().build(),
-                    networkUtils.getNetworkCallback());
-        }
     }
 }

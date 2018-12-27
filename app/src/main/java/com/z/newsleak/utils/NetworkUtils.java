@@ -7,8 +7,11 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 
 import com.z.newsleak.App;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +21,9 @@ import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.Subject;
 
 public class NetworkUtils {
+
+    @Nullable
+    private ConnectivityManager cm;
 
     @NonNull
     private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
@@ -39,15 +45,20 @@ public class NetworkUtils {
     private static NetworkUtils networkUtils;
 
     @NonNull
-    public static NetworkUtils getInstance() {
+    public static NetworkUtils getInstance(ConnectivityManager cm) {
         if (networkUtils == null) {
             synchronized (NetworkUtils.class) {
                 if (networkUtils == null) {
-                    networkUtils = new NetworkUtils();
+                    networkUtils = new NetworkUtils(cm);
                 }
             }
         }
         return networkUtils;
+    }
+
+    @Inject
+    public NetworkUtils(@Nullable ConnectivityManager cm) {
+        this.cm = cm;
     }
 
     @NonNull
@@ -64,7 +75,7 @@ public class NetworkUtils {
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager cm = App.getConnectivityManager();
+
         if (cm == null) {
             return false;
         }
@@ -72,6 +83,13 @@ public class NetworkUtils {
         // if no network is available networkInfo will be null
         // otherwise check if we are connected
         return networkInfo != null && networkInfo.isConnected();
+    }
+
+    public void registerNetworkCallback() {
+        if (cm != null) {
+            cm.registerNetworkCallback(new NetworkRequest.Builder().build(),
+                    getNetworkCallback());
+        }
     }
 
     public class NetworkReceiver extends BroadcastReceiver {

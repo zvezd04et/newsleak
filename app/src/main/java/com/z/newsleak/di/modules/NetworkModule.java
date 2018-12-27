@@ -1,5 +1,8 @@
 package com.z.newsleak.di.modules;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
 import com.z.newsleak.data.api.ApiKeyInterceptor;
@@ -57,5 +60,11 @@ public class NetworkModule {
     @NonNull
     public NYTimesApi provideNYTimesApi(Retrofit retrofit) {
         return retrofit.create(NYTimesApi.class);
+    }
+
+    @Provides
+    @NewsUpdateScope
+    public ConnectivityManager provideConnectivityManager(Context context) {
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

@@ -42,12 +42,9 @@ public class NewsUpdateService extends Service {
     private static final int NOTIFICATION_NEWS_UPDATE_ID = 25;
     private static final int TIMEOUT_IN_MINUTES = 1;
 
-    @Nullable
-    private Disposable disposable;
+    @Inject
     @NonNull
-    NetworkUtils networkUtils = NetworkUtils.getInstance();
-    @NonNull
-    private PendingIntent contentIntent;
+    NYTimesApi api;
 
     @Inject
     @NonNull
@@ -59,7 +56,12 @@ public class NewsUpdateService extends Service {
 
     @Inject
     @NonNull
-    NYTimesApi api;
+    NetworkUtils networkUtils;
+
+    @Nullable
+    private Disposable disposable;
+    @NonNull
+    private PendingIntent contentIntent;
 
     public static void start(@NonNull Context context) {
         Intent intent = new Intent(context, NewsUpdateService.class);
