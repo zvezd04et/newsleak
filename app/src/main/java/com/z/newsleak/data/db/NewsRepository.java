@@ -1,37 +1,24 @@
 package com.z.newsleak.data.db;
 
-import com.z.newsleak.App;
 import com.z.newsleak.model.NewsItem;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 public class NewsRepository {
 
     @NonNull
-    private NewsDao newsDao ;
-    @Nullable
-    private static NewsRepository repository;
+    private NewsDao newsDao;
 
-    @NonNull
-    public static NewsRepository getInstance(AppDatabase appDatabase) {
-        if (repository == null) {
-            synchronized (NewsRepository.class) {
-                if (repository == null) {
-                    repository = new NewsRepository(appDatabase);
-                }
-            }
-        }
-        return repository;
-    }
-
-    public NewsRepository(AppDatabase appDatabase) {
-        this.newsDao = appDatabase.getNewsDao();
+    @Inject
+    public NewsRepository(@NonNull NewsDao newsDao) {
+        this.newsDao = newsDao;
     }
 
     public Completable saveData(final List<NewsItem> newsList) {

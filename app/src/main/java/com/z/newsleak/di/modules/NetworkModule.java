@@ -1,15 +1,13 @@
 package com.z.newsleak.di.modules;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-
 import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
 import com.z.newsleak.data.api.ApiKeyInterceptor;
 import com.z.newsleak.data.api.NYTimesApi;
-import com.z.newsleak.di.scopes.NewsUpdateScope;
 
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Singleton;
 
 import androidx.annotation.NonNull;
 import dagger.Module;
@@ -26,19 +24,7 @@ public class NetworkModule {
     private static final int TIMEOUT_IN_SECONDS = 15;
 
     @Provides
-    @NewsUpdateScope
-    @NonNull
-    public Retrofit provideRetrofitClient(@NonNull OkHttpClient client) {
-        return new Retrofit.Builder()
-                .baseUrl(Constant.API_HOST)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-    }
-
-    @Provides
-    @NewsUpdateScope
+    @Singleton
     @NonNull
     public OkHttpClient provideOkHttpClient() {
 
@@ -56,15 +42,21 @@ public class NetworkModule {
     }
 
     @Provides
-    @NewsUpdateScope
+    @Singleton
     @NonNull
-    public NYTimesApi provideNYTimesApi(Retrofit retrofit) {
-        return retrofit.create(NYTimesApi.class);
+    public Retrofit provideRetrofitClient(@NonNull OkHttpClient client) {
+        return new Retrofit.Builder()
+                .baseUrl(Constant.API_HOST)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
     }
 
     @Provides
-    @NewsUpdateScope
-    public ConnectivityManager provideConnectivityManager(Context context) {
-        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    @Singleton
+    @NonNull
+    public NYTimesApi provideNYTimesApi(Retrofit retrofit) {
+        return retrofit.create(NYTimesApi.class);
     }
 }

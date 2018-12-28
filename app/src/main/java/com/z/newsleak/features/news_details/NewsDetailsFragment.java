@@ -49,7 +49,7 @@ public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView
     @ProvidePresenter
     public NewsDetailsPresenter providePresenter() {
         final int newsId = getArguments().getInt(EXTRA_NEWS_ID, 0);
-        App.getNewsUpdateComponent().plus(new NewsItemModule(newsId)).inject(this);
+        App.getAppComponent().plus(new NewsItemModule(newsId)).inject(this);
         return presenter;
     }
 

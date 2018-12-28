@@ -16,7 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.z.newsleak.App;
 import com.z.newsleak.R;
 import com.z.newsleak.features.about_info.AboutActivity;
 import com.z.newsleak.features.base.BaseFragment;
@@ -27,6 +29,8 @@ import com.z.newsleak.ui.LoadingScreenHolder;
 import com.z.newsleak.utils.SupportUtils;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,8 +55,15 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
     @Nullable
     private NewsListFragmentListener listener;
 
+    @Inject
     @InjectPresenter
     public NewsListPresenter presenter;
+
+    @ProvidePresenter
+    public NewsListPresenter providePresenter() {
+        App.getAppComponent().inject(this);
+        return presenter;
+    }
 
     public static void start(@NonNull Context context) {
         final Intent intent = new Intent(context, NewsListFragment.class);

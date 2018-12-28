@@ -47,7 +47,6 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     @NonNull
     private TextView publishedTimeView;
 
-
     @Inject
     @InjectPresenter
     public NewsEditPresenter presenter;
@@ -55,7 +54,7 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     @ProvidePresenter
     public NewsEditPresenter providePresenter() {
         int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        App.getNewsUpdateComponent().plus(new NewsItemModule(newsId)).inject(this);
+        App.getAppComponent().plus(new NewsItemModule(newsId)).inject(this);
         return presenter;
     }
 
@@ -151,5 +150,4 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
                 publishedHour, publishedMinute, DateFormat.is24HourFormat(this));
         timePickerDialog.show();
     }
-
 }

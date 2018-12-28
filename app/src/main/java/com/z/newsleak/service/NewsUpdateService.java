@@ -117,7 +117,7 @@ public class NewsUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        App.getNewsUpdateComponent().inject(this);
+        App.getAppComponent().inject(this);
 
         contentIntent = MainActivity.getPendingIntent(this);
 

@@ -3,11 +3,9 @@ package com.z.newsleak;
 import android.app.Application;
 import android.util.Log;
 
-import com.z.newsleak.di.components.DaggerNewsUpdateComponent;
-import com.z.newsleak.di.components.NewsUpdateComponent;
+import com.z.newsleak.di.components.AppComponent;
+import com.z.newsleak.di.components.DaggerAppComponent;
 import com.z.newsleak.di.modules.AppModule;
-import com.z.newsleak.di.modules.NetworkModule;
-import com.z.newsleak.di.modules.PersistenceModule;
 import com.z.newsleak.service.NewsUpdateWorker;
 import com.z.newsleak.utils.NetworkUtils;
 
@@ -30,29 +28,25 @@ public class App extends Application {
     private static final String NEWS_UPDATE_TAG = "NEWS_UPDATE_TAG";
     private static final int NEWS_UPDATE_REPEAT_INTERVAL_IN_HOURS = 3;
 
-
     @Inject
     @NonNull
     NetworkUtils networkUtils;
     @NonNull
-    private static NewsUpdateComponent newsUpdateComponent;
-
+    private static AppComponent appComponent;
 
     @NonNull
-    public static NewsUpdateComponent getNewsUpdateComponent() {
-        return newsUpdateComponent;
+    public static AppComponent getAppComponent() {
+        return appComponent;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        newsUpdateComponent = DaggerNewsUpdateComponent.builder()
+        appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .networkModule(new NetworkModule())
-                .persistenceModule(new PersistenceModule())
                 .build();
-        newsUpdateComponent.inject(this);
+        appComponent.inject(this);
 
         networkUtils.registerNetworkCallback();
 

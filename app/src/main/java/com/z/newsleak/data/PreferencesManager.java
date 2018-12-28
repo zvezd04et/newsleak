@@ -17,22 +17,8 @@ public class PreferencesManager {
 
     @NonNull
     private final SharedPreferences sharedPreferences;
-    @Nullable
-    private static PreferencesManager manager;
 
-    @NonNull
-    public static PreferencesManager getInstance(@NonNull Context context) {
-        if (manager == null) {
-            synchronized (PreferencesManager.class) {
-                if (manager == null) {
-                    manager = new PreferencesManager(context.getApplicationContext());
-                }
-            }
-        }
-        return manager;
-    }
-
-    private PreferencesManager(@NonNull Context context) {
+    public PreferencesManager(@NonNull Context context) {
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
     }
 

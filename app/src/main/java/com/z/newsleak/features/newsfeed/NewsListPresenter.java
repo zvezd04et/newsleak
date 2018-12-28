@@ -39,23 +39,27 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
 
-    @Inject
     @NonNull
-    NewsRepository repository;
+    private NewsRepository repository;
+
+    @NonNull
+    private PreferencesManager preferencesManager;
+
+    @NonNull
+    private NYTimesApi api;
 
     @Inject
-    @NonNull
-    PreferencesManager preferencesManager;
-
-    @Inject
-    @NonNull
-    NYTimesApi api;
+    public NewsListPresenter(@NonNull NYTimesApi api,
+                             @NonNull NewsRepository repository,
+                             @NonNull PreferencesManager preferencesManager) {
+        this.repository = repository;
+        this.preferencesManager = preferencesManager;
+        this.api = api;
+    }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-
-        App.getNewsUpdateComponent().inject(this);
 
         currentCategory = preferencesManager.getCurrentCategory();
         getViewState().setupSpinner(currentCategory);

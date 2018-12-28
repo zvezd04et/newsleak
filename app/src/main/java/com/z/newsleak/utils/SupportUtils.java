@@ -1,7 +1,5 @@
 package com.z.newsleak.utils;
 
-import android.content.Context;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,6 +27,7 @@ public class SupportUtils {
             disposable.dispose();
         }
     }
+
     private SupportUtils() {
         throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
