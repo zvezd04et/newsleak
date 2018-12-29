@@ -7,5 +7,4 @@ public interface BaseFragmentListener {
     void setTitle(@NonNull String title, boolean displayHome);
 
     void turnBack();
-
 }

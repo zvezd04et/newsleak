@@ -9,9 +9,9 @@ import androidx.annotation.Nullable;
 
 public abstract class BaseFragment extends MvpAppCompatFragment {
 
+    @NonNull
     private String title;
     private boolean displayHome;
-
     @Nullable
     private BaseFragmentListener listener;
 
@@ -36,7 +36,7 @@ public abstract class BaseFragment extends MvpAppCompatFragment {
         }
     }
 
-    public void turnBack() {
+    protected void turnBack() {
         if (listener != null) {
             listener.turnBack();
         }
@@ -47,7 +47,4 @@ public abstract class BaseFragment extends MvpAppCompatFragment {
         this.displayHome = displayHome;
         showTitle();
     }
-
-
-
 }

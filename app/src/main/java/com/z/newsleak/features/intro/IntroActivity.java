@@ -84,7 +84,7 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
         finish();
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(@NonNull ViewPager viewPager) {
         final IntroPagerAdapter adapter = new IntroPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
@@ -133,5 +133,4 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
             return DRAWABLES.length;
         }
     }
-
 }

@@ -1,9 +1,6 @@
 package com.z.newsleak.utils;
 
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -24,30 +21,33 @@ public class NetworkUtils {
     private ConnectivityManager cm;
 
     @NonNull
-    private ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-            networkState.onNext(isNetworkAvailable());
-        }
-
-        @Override
-        public void onLost(Network network) {
-            networkState.onNext(isNetworkAvailable());
-        }
-    };
-
-    @NonNull
-    private Subject<Boolean> networkState = BehaviorSubject.createDefault(isNetworkAvailable());
+    private Subject<Boolean> networkState;
 
     @Inject
     public NetworkUtils(@Nullable ConnectivityManager cm) {
         this.cm = cm;
+        networkState = BehaviorSubject.createDefault(isNetworkAvailable());
+    }
+
+    @NonNull
+    private ConnectivityManager.NetworkCallback getNetworkCallback() {
+        return new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                networkState.onNext(isNetworkAvailable());
+            }
+
+            @Override
+            public void onLost(Network network) {
+                networkState.onNext(isNetworkAvailable());
+            }
+        };
     }
 
     public void registerNetworkCallback() {
         if (cm != null) {
             cm.registerNetworkCallback(new NetworkRequest.Builder().build(),
-                    networkCallback);
+                    getNetworkCallback());
         }
     }
 
@@ -67,14 +67,5 @@ public class NetworkUtils {
         // if no network is available networkInfo will be null
         // otherwise check if we are connected
         return networkInfo != null && networkInfo.isConnected();
-    }
-
-    public class NetworkReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            networkState.onNext(isNetworkAvailable());
-        }
-
     }
 }

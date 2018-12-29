@@ -12,7 +12,7 @@ import com.z.newsleak.R;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
-import com.z.newsleak.utils.SupportUtils;
+import com.z.newsleak.utils.ViewUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,6 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
     private final OnItemClickListener clickListener;
     @NonNull
     private final RequestManager imageLoader;
-
 
     public NewsListAdapter(@NonNull Context context, @Nullable OnItemClickListener clickListener) {
         this.clickListener = clickListener;
@@ -67,6 +66,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         switch (newsItems.get(position).getCategory()) {
             case SPORTS:
                 return R.layout.sports_item_news;
+
             default:
                 return R.layout.default_item_news;
         }
@@ -105,9 +105,8 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.ViewHo
         }
 
         private void bind(@NonNull NewsItem newsItem) {
-
             final boolean hasUrl = (newsItem.getNormalImageUrl() != null);
-            SupportUtils.setVisible(photoView, hasUrl);
+            ViewUtils.setVisible(photoView, hasUrl);
             if (hasUrl) {
                 imageLoader.load(newsItem.getNormalImageUrl()).into(photoView);
             }

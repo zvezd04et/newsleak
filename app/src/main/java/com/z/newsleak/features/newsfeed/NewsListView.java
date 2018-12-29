@@ -11,7 +11,6 @@ import com.z.newsleak.ui.LoadState;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 public interface NewsListView extends MvpView {
 
@@ -22,5 +21,5 @@ public interface NewsListView extends MvpView {
     void showState(@NonNull LoadState state);
 
     @StateStrategyType(SingleStateStrategy.class)
-    void setupSpinner(@Nullable Category category);
+    void setupSpinner(@NonNull Category category);
 }

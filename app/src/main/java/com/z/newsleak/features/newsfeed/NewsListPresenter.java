@@ -3,7 +3,6 @@ package com.z.newsleak.features.newsfeed;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.z.newsleak.App;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.api.NYTimesApi;
 import com.z.newsleak.data.db.NewsRepository;
@@ -12,7 +11,7 @@ import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.utils.NewsTypeConverters;
-import com.z.newsleak.utils.SupportUtils;
+import com.z.newsleak.utils.RxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +31,14 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
 
     @Nullable
     private Disposable disposable;
-
     @Nullable
     private Category currentCategory = null;
-
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
-
     @NonNull
     private NewsRepository repository;
-
     @NonNull
     private PreferencesManager preferencesManager;
-
     @NonNull
     private NYTimesApi api;
 
@@ -76,7 +70,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SupportUtils.disposeSafely(disposable);
+        RxUtils.disposeSafely(disposable);
     }
 
     public void loadNews(@NonNull Category category) {

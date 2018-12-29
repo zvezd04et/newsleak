@@ -21,7 +21,7 @@ public class NewsRepository {
         this.newsDao = newsDao;
     }
 
-    public Completable saveData(final List<NewsItem> newsList) {
+    public Completable saveData(@NonNull List<NewsItem> newsList) {
         return Completable.fromCallable((Callable<Void>) () -> {
             newsDao.deleteAll();
             newsDao.insertAll(newsList);
@@ -30,7 +30,7 @@ public class NewsRepository {
         });
     }
 
-    public Completable saveItem(final NewsItem newsItem) {
+    public Completable saveItem(@NonNull NewsItem newsItem) {
         return newsDao.update(newsItem);
     }
 

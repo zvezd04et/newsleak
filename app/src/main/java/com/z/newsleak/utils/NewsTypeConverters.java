@@ -20,7 +20,6 @@ public class NewsTypeConverters {
 
     @Nullable
     public static List<NewsItem> convertFromNetworkToDb(@Nullable List<NewsItemNetwork> newsItemsNetwork, @Nullable Category currentCategory) {
-
         if (newsItemsNetwork == null) {
             return null;
         }
@@ -61,7 +60,6 @@ public class NewsTypeConverters {
 
     @TypeConverter
     public static Category toCategory(@Nullable String section) {
-
         if (section == null) {
             return Category.HOME;
         }
@@ -72,7 +70,7 @@ public class NewsTypeConverters {
             }
         }
 
-        return null;
+        return Category.HOME;
     }
 
     @TypeConverter
@@ -82,7 +80,6 @@ public class NewsTypeConverters {
 
     @Nullable
     private static String getImageUrl(@Nullable List<ImageNetwork> multimedia, @NonNull String format) {
-
         if (multimedia == null) {
             return null;
         }
@@ -103,7 +100,6 @@ public class NewsTypeConverters {
 
     @NonNull
     private static Category toCategory(@Nullable String section, @Nullable Category currentCategory) {
-
         final Category category = toCategory(section);
         if (category != null) {
             return category;

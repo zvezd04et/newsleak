@@ -5,10 +5,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.reactivex.disposables.Disposable;
 
-public class SupportUtils {
-
+public class ViewUtils {
     public static void setVisible(@Nullable View view, boolean isVisible) {
         int visibility = isVisible ? View.VISIBLE : View.GONE;
         if (view != null) {
@@ -22,14 +20,7 @@ public class SupportUtils {
         }
     }
 
-    public static void disposeSafely(@Nullable Disposable disposable) {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-        }
-    }
-
-    private SupportUtils() {
+    private ViewUtils() {
         throw new IllegalAccessError("Attempt to instantiate utility class.");
     }
-
 }

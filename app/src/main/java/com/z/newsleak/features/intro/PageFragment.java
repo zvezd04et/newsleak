@@ -29,7 +29,7 @@ public class PageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_intro_page, container, false);
+        final View view = inflater.inflate(R.layout.fragment_intro_page, container, false);
 
         final Bundle args = getArguments();
         if (args == null) {
@@ -37,10 +37,9 @@ public class PageFragment extends Fragment {
         }
 
         final int drawableRes = args.getInt(BUNDLE_IMAGE_KEY);
-        ImageView imageView = view.findViewById(R.id.intro_page_iv_screen);
+        final ImageView imageView = view.findViewById(R.id.intro_page_iv_screen);
         imageView.setImageResource(drawableRes);
 
         return view;
     }
-
 }

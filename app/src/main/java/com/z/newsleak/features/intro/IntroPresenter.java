@@ -30,5 +30,4 @@ public class IntroPresenter extends MvpPresenter<IntroView> {
             getViewState().startNextActivity();
         }
     }
-
 }

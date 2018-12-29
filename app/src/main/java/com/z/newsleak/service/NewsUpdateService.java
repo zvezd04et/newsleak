@@ -20,7 +20,7 @@ import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.utils.NetworkUtils;
 import com.z.newsleak.utils.NewsTypeConverters;
-import com.z.newsleak.utils.SupportUtils;
+import com.z.newsleak.utils.RxUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,23 +45,21 @@ public class NewsUpdateService extends Service {
     @Inject
     @NonNull
     NYTimesApi api;
-
     @Inject
     @NonNull
     NewsRepository repository;
-
     @Inject
     @NonNull
     PreferencesManager preferencesManager;
-
     @Inject
     @NonNull
     NetworkUtils networkUtils;
-
-    @Nullable
-    private Disposable disposable;
     @NonNull
     private PendingIntent contentIntent;
+    @Nullable
+    private Disposable disposable;
+    @Nullable
+    private NotificationManager notificationManager;
 
     public static void start(@NonNull Context context) {
         Intent intent = new Intent(context, NewsUpdateService.class);
@@ -87,12 +85,12 @@ public class NewsUpdateService extends Service {
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
 
-        if (intent != null && ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
+        if (notificationManager != null && intent != null
+                && ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
             Log.d(LOG_TAG, "called to cancel service");
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(NOTIFICATION_NEWS_UPDATE_ID);
             stopSelf();
+            return START_STICKY;
         }
 
         disposable = networkUtils.getOnlineNetwork()
@@ -120,6 +118,7 @@ public class NewsUpdateService extends Service {
         App.getAppComponent().inject(this);
 
         contentIntent = MainActivity.getPendingIntent(this);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         final PendingIntent stopPendingIntent = getStopPendingIntent(this);
 
@@ -140,22 +139,24 @@ public class NewsUpdateService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SupportUtils.disposeSafely(disposable);
+        RxUtils.disposeSafely(disposable);
     }
 
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (notificationManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.news_update_channel_name);
             String description = getString(R.string.news_update_channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_NEWS_UPDATE_ID, name, importance);
             channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }
 
     private void showResultNotification(@NonNull String message) {
+        if (notificationManager == null) {
+            return;
+        }
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_NEWS_UPDATE_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(getString(R.string.news_update_channel_name))
@@ -164,12 +165,7 @@ public class NewsUpdateService extends Service {
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true)
                 .build();
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (notificationManager != null) {
-            notificationManager.notify(NOTIFICATION_NEWS_UPDATE_ID, notification);
-        }
+        notificationManager.notify(NOTIFICATION_NEWS_UPDATE_ID, notification);
     }
 
     private Completable updateNews() {

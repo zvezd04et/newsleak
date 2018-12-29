@@ -38,7 +38,7 @@ public class PreferencesManager {
                 .apply();
     }
 
-    @Nullable
+    @NonNull
     public Category getCurrentCategory() {
         final String section = sharedPreferences.getString(KEY_CURRENT_CATEGORY, null);
         return NewsTypeConverters.toCategory(section);

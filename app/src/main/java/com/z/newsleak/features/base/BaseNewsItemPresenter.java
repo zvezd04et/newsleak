@@ -16,8 +16,7 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
     private static final String LOG_TAG = "BaseNewsItemPresenter";
 
     @NonNull
-    protected NewsRepository repository;// = App.getRepository();
-
+    protected NewsRepository repository;
     @Nullable
     protected NewsItem newsItem;
     protected int id;

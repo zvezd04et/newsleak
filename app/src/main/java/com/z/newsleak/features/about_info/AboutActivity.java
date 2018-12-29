@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 public class AboutActivity extends AppCompatActivity {
 
+    @NonNull
     private RelativeLayout rlBase;
 
     public static void start(@NonNull Context context) {
@@ -58,12 +59,10 @@ public class AboutActivity extends AppCompatActivity {
 
         final ImageView gitLogo = findViewById(R.id.about_iv_github_logo);
         gitLogo.setOnClickListener(iv -> openSocialNetwork(SocialNetworks.GITHUB));
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -74,11 +73,9 @@ public class AboutActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
-
     }
 
     private void addDisclaimer() {
-
         final RelativeLayout myLayout = findViewById(R.id.rl_content);
         final int margin = getResources().getDimensionPixelOffset(R.dimen.space_half_size);
         final int size = getResources().getDimensionPixelOffset(R.dimen.disclaimer_size);
@@ -98,11 +95,9 @@ public class AboutActivity extends AppCompatActivity {
         tv.setLayoutParams(layoutParams);
 
         myLayout.addView(tv);
-
     }
 
     private void openEmailApp(@NonNull String messageString) {
-
         final String mailto = "mailto:" + getString(R.string.email_address) + "?cc=" +
                 "&subject=" + Uri.encode(getString(R.string.email_subject)) +
                 "&body=" + Uri.encode(messageString);
@@ -130,7 +125,6 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private boolean openSpecificApp(@NonNull String stringUrl, @NonNull String appPackage) {
-
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(stringUrl));
         intent.setPackage(appPackage);
@@ -144,7 +138,6 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void openSocialNetwork(@NonNull SocialNetworks socialNetwork) {
-
         final String[] appPackages = socialNetwork.getAppPackages();
         final String url = socialNetwork.getUrl();
         if (appPackages == null) {
@@ -159,5 +152,4 @@ public class AboutActivity extends AppCompatActivity {
         }
         openBrowser(url);
     }
-
 }

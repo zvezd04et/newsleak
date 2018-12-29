@@ -26,7 +26,7 @@ import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.ui.LoadingScreenHolder;
-import com.z.newsleak.utils.SupportUtils;
+import com.z.newsleak.utils.ViewUtils;
 
 import java.util.List;
 
@@ -37,7 +37,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListFragment extends BaseFragment implements NewsListView {
@@ -70,6 +69,7 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         context.startActivity(intent);
     }
 
+    @NonNull
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
     }
@@ -145,7 +145,7 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         }
         newsAdapter.replaceItems(news);
         loadingScreen.showState(LoadState.HAS_DATA);
-        SupportUtils.setVisible(rvNewsfeed, true);
+        ViewUtils.setVisible(rvNewsfeed, true);
     }
 
     @Override
@@ -154,10 +154,10 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
     }
 
     @Override
-    public void setupSpinner(@Nullable Category category) {
+    public void setupSpinner(@NonNull Category category) {
         final ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
-        final int position = (category == null) ? 0 : adapter.getPosition(category);
+        final int position = adapter.getPosition(category);
         spinner.setAdapter(adapter);
         spinner.setSelected(false);
         spinner.setSelection(position);

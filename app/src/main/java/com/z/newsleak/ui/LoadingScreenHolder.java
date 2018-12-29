@@ -8,7 +8,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.z.newsleak.R;
-import com.z.newsleak.utils.SupportUtils;
+import com.z.newsleak.utils.ViewUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,29 +46,29 @@ public class LoadingScreenHolder {
 
         switch (state) {
             case HAS_DATA:
-                SupportUtils.setVisible(contentView, true);
-                SupportUtils.setVisible(progressBar, false);
-                SupportUtils.setVisible(errorContent, false);
+                ViewUtils.setVisible(contentView, true);
+                ViewUtils.setVisible(progressBar, false);
+                ViewUtils.setVisible(errorContent, false);
                 break;
 
             case HAS_NO_DATA:
-                SupportUtils.setVisible(contentView, false);
-                SupportUtils.setVisible(progressBar, false);
-                SupportUtils.setVisible(errorContent, true);
-                SupportUtils.setText(tvError, context.getText(R.string.state_loading_msg_no_data));
+                ViewUtils.setVisible(contentView, false);
+                ViewUtils.setVisible(progressBar, false);
+                ViewUtils.setVisible(errorContent, true);
+                ViewUtils.setText(tvError, context.getText(R.string.state_loading_msg_no_data));
                 break;
 
             case ERROR:
-                SupportUtils.setVisible(contentView, false);
-                SupportUtils.setVisible(progressBar, false);
-                SupportUtils.setVisible(errorContent, true);
-                SupportUtils.setText(tvError, context.getText(R.string.state_loading_msg_error));
+                ViewUtils.setVisible(contentView, false);
+                ViewUtils.setVisible(progressBar, false);
+                ViewUtils.setVisible(errorContent, true);
+                ViewUtils.setText(tvError, context.getText(R.string.state_loading_msg_error));
                 break;
 
             case LOADING:
-                SupportUtils.setVisible(contentView, false);
-                SupportUtils.setVisible(progressBar, true);
-                SupportUtils.setVisible(errorContent, false);
+                ViewUtils.setVisible(contentView, false);
+                ViewUtils.setVisible(progressBar, true);
+                ViewUtils.setVisible(errorContent, false);
                 break;
 
             default:

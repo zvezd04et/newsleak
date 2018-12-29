@@ -132,5 +132,4 @@ public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView
     public void openEditorActivity(int newsId) {
         NewsEditActivity.start(getContext(), newsId);
     }
-
 }

@@ -8,5 +8,4 @@ public interface NewsDetailsView extends BaseNewsItemView {
 
     @StateStrategyType(SkipStrategy.class)
     void openEditorActivity(int newsId);
-
 }
