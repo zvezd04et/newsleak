@@ -2,9 +2,8 @@ package com.z.newsleak.features.newsfeed;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
-import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy;
+import com.arellomobile.mvp.viewstate.strategy.OneExecutionStateStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
-import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
 
@@ -20,6 +19,6 @@ public interface NewsListView extends MvpView {
     @StateStrategyType(AddToEndSingleStrategy.class)
     void showState(@NonNull LoadState state);
 
-    @StateStrategyType(SingleStateStrategy.class)
-    void setupSpinner(@NonNull Category category);
+    @StateStrategyType(OneExecutionStateStrategy.class)
+    void setSpinnerSelection(int position);
 }

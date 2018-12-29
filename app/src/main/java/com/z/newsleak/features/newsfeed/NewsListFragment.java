@@ -100,6 +100,7 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         setupRecyclerView();
 
         spinner = view.findViewById(R.id.news_list_sp_section);
+        setupSpinner();
 
         final View.OnClickListener clickListener = btn -> presenter.loadNews((Category) spinner.getSelectedItem());
 
@@ -154,13 +155,17 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
     }
 
     @Override
-    public void setupSpinner(@NonNull Category category) {
+    public void setSpinnerSelection(int position) {
+        spinner.setSelection(position);
+    }
+
+
+    public void setupSpinner() {
         final ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
-        final int position = adapter.getPosition(category);
         spinner.setAdapter(adapter);
         spinner.setSelected(false);
-        spinner.setSelection(position);
+        presenter.onSetupSpinnerSelection();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

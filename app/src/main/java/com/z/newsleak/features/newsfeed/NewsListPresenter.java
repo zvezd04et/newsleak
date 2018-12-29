@@ -31,8 +31,8 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
 
     @Nullable
     private Disposable disposable;
-    @Nullable
-    private Category currentCategory = null;
+    @NonNull
+    private Category currentCategory;
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
     @NonNull
@@ -49,14 +49,13 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         this.repository = repository;
         this.preferencesManager = preferencesManager;
         this.api = api;
+
+        currentCategory = preferencesManager.getCurrentCategory();
     }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-
-        currentCategory = preferencesManager.getCurrentCategory();
-        getViewState().setupSpinner(currentCategory);
 
         final Disposable disposable = repository.getDataObservable()
                 .subscribeOn(Schedulers.io())
@@ -84,6 +83,10 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> getViewState().showNews(newsList),
                         this::handleError);
+    }
+
+    public void onSetupSpinnerSelection() {
+        getViewState().setSpinnerSelection(currentCategory.ordinal());
     }
 
     public void onSpinnerCategorySelected(@Nullable Category category) {
