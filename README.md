@@ -1,5 +1,5 @@
 # newsleak
-Android news aggregator app.
+Android news aggregator app using [NY Times Api](https://developer.nytimes.com/).
 
 This is an educational project of the [Android Academy MSK](https://habr.com/post/420573/) in order to learn the Android SDK and relevant Android libraries.
 This repository contains a detailed sample app that implements MVP architecture.
