@@ -25,11 +25,4 @@ public class AppModule {
     public Context provideContext() {
         return appContext;
     }
-
-    @Provides
-    @Singleton
-    @Nullable
-    public ConnectivityManager provideConnectivityManager(Context context) {
-        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
 }

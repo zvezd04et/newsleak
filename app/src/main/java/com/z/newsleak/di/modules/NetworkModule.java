@@ -1,15 +1,20 @@
 package com.z.newsleak.di.modules;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+
 import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
 import com.z.newsleak.data.api.ApiKeyInterceptor;
 import com.z.newsleak.data.api.NYTimesApi;
+import com.z.newsleak.utils.NetworkUtils;
 
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -56,7 +61,14 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public NYTimesApi provideNYTimesApi(Retrofit retrofit) {
+    public NYTimesApi provideNYTimesApi(@NonNull Retrofit retrofit) {
         return retrofit.create(NYTimesApi.class);
+    }
+
+    @Provides
+    @Singleton
+    @NonNull
+    public NetworkUtils provideNetworkUtils(@NonNull Context context) {
+        return new NetworkUtils(context);
     }
 }

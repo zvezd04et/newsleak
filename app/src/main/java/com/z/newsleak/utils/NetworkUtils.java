@@ -1,12 +1,11 @@
 package com.z.newsleak.utils;
 
 
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.NetworkRequest;
-
-import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,13 +18,11 @@ public class NetworkUtils {
 
     @Nullable
     private ConnectivityManager cm;
-
     @NonNull
     private Subject<Boolean> networkState;
 
-    @Inject
-    public NetworkUtils(@Nullable ConnectivityManager cm) {
-        this.cm = cm;
+    public NetworkUtils(@NonNull Context context) {
+        cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         networkState = BehaviorSubject.createDefault(isNetworkAvailable());
     }
 
