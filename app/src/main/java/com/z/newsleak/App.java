@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import io.reactivex.exceptions.UndeliverableException;
@@ -91,6 +92,7 @@ public class App extends Application {
                 .setConstraints(constraints)
                 .build();
 
-        WorkManager.getInstance().enqueue(newsUpdateWork);
+        WorkManager.getInstance().enqueueUniquePeriodicWork(NEWS_UPDATE_TAG,
+                ExistingPeriodicWorkPolicy.REPLACE, newsUpdateWork);
     }
 }
