@@ -11,23 +11,16 @@ import com.z.newsleak.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.net.SocketException;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.work.Constraints;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
 
 public class App extends Application {
 
     private static final String LOG_TAG = "RxErrorHandler";
-    private static final String NEWS_UPDATE_TAG = "NEWS_UPDATE_TAG";
-    private static final int NEWS_UPDATE_REPEAT_INTERVAL_IN_HOURS = 3;
 
     @Inject
     @NonNull
@@ -51,8 +44,8 @@ public class App extends Application {
 
         networkUtils.registerNetworkCallback();
 
+        NewsUpdateWorker.enqueueWorker();
         setRxErrorHandler();
-        setupWorkManager();
     }
 
     private void setRxErrorHandler() {
@@ -80,19 +73,4 @@ public class App extends Application {
         });
     }
 
-    private void setupWorkManager() {
-        final Constraints constraints = new Constraints.Builder()
-                .setRequiresCharging(true)
-                .build();
-
-        final PeriodicWorkRequest newsUpdateWork = new PeriodicWorkRequest.Builder(NewsUpdateWorker.class,
-                                                            NEWS_UPDATE_REPEAT_INTERVAL_IN_HOURS,
-                                                            TimeUnit.HOURS)
-                .addTag(NEWS_UPDATE_TAG)
-                .setConstraints(constraints)
-                .build();
-
-        WorkManager.getInstance().enqueueUniquePeriodicWork(NEWS_UPDATE_TAG,
-                ExistingPeriodicWorkPolicy.REPLACE, newsUpdateWork);
-    }
 }
