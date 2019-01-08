@@ -14,7 +14,7 @@ import io.reactivex.Observable;
 public class NewsRepository {
 
     @NonNull
-    private NewsDao newsDao;
+    private final NewsDao newsDao;
 
     @Inject
     public NewsRepository(@NonNull NewsDao newsDao) {

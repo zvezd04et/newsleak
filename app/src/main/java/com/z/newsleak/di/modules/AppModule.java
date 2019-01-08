@@ -13,7 +13,7 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    private Context appContext;
+    private final Context appContext;
 
     public AppModule(@NonNull Context appContext) {
         this.appContext = appContext;

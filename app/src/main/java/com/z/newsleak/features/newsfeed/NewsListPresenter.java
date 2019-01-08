@@ -11,7 +11,6 @@ import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.utils.NewsTypeConverters;
-import com.z.newsleak.utils.RxUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,6 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
 
     private static final String LOG_TAG = "NewsListPresenter";
 
-    @Nullable
-    private Disposable disposable;
     @NonNull
     private Category currentCategory;
     @NonNull
@@ -66,16 +63,10 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         compositeDisposable.add(disposable);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        RxUtils.disposeSafely(disposable);
-    }
-
     public void loadNews(@NonNull Category category) {
         getViewState().showState(LoadState.LOADING);
 
-        disposable = api
+        final Disposable disposable = api
                 .getNews(category.getSection())
                 .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
                 .flatMapCompletable(repository::saveData)
@@ -83,6 +74,8 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> getViewState().showNews(newsList),
                         this::handleError);
+
+        compositeDisposable.add(disposable);
     }
 
     public void onSetupSpinnerSelection() {
