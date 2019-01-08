@@ -11,11 +11,11 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.z.newsleak.App;
 import com.z.newsleak.R;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.data.api.NYTimesApi;
 import com.z.newsleak.data.db.NewsRepository;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.utils.NetworkUtils;
@@ -115,7 +115,7 @@ public class NewsUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        App.getAppComponent().inject(this);
+        DI.getAppComponent().inject(this);
 
         contentIntent = MainActivity.getPendingIntent(this);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

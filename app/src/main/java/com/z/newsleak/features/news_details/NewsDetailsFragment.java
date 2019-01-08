@@ -14,9 +14,8 @@ import android.widget.TextView;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.RequestManager;
-import com.z.newsleak.App;
 import com.z.newsleak.R;
-import com.z.newsleak.di.modules.NewsItemModule;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.base.BaseFragment;
 import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.model.NewsItem;
@@ -49,7 +48,7 @@ public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView
     @ProvidePresenter
     public NewsDetailsPresenter providePresenter() {
         final int newsId = getArguments().getInt(EXTRA_NEWS_ID, 0);
-        App.getAppComponent().plus(new NewsItemModule(newsId)).inject(this);
+        DI.getNewsItemComponent(newsId).inject(this);
         return presenter;
     }
 

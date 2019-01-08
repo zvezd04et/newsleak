@@ -3,6 +3,7 @@ package com.z.newsleak;
 import android.app.Application;
 import android.util.Log;
 
+import com.z.newsleak.di.DI;
 import com.z.newsleak.di.components.AppComponent;
 import com.z.newsleak.di.components.DaggerAppComponent;
 import com.z.newsleak.di.modules.AppModule;
@@ -25,22 +26,13 @@ public class App extends Application {
     @Inject
     @NonNull
     NetworkUtils networkUtils;
-    @NonNull
-    private static AppComponent appComponent;
-
-    @NonNull
-    public static AppComponent getAppComponent() {
-        return appComponent;
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(this))
-                .build();
-        appComponent.inject(this);
+        DI.init(this);
+        DI.getAppComponent().inject(this);
 
         networkUtils.registerNetworkCallback();
 

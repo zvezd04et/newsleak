@@ -18,8 +18,8 @@ import android.widget.Spinner;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.z.newsleak.App;
 import com.z.newsleak.R;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.about_info.AboutActivity;
 import com.z.newsleak.features.base.BaseFragment;
 import com.z.newsleak.model.Category;
@@ -60,7 +60,7 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
 
     @ProvidePresenter
     public NewsListPresenter providePresenter() {
-        App.getAppComponent().inject(this);
+        DI.getAppComponent().inject(this);
         return presenter;
     }
 

@@ -6,10 +6,8 @@ import android.widget.Button;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.z.newsleak.App;
 import com.z.newsleak.R;
-import com.z.newsleak.data.PreferencesManager;
-import com.z.newsleak.di.modules.NewsItemModule;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.moxy.MvpAppCompatActivity;
 
@@ -43,7 +41,7 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
 
     @ProvidePresenter
     public IntroPresenter providePresenter() {
-        App.getAppComponent().inject(this);
+        DI.getAppComponent().inject(this);
         return presenter;
     }
 

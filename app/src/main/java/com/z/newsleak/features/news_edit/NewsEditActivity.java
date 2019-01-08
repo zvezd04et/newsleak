@@ -14,9 +14,8 @@ import android.widget.TextView;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.z.newsleak.App;
 import com.z.newsleak.R;
-import com.z.newsleak.di.modules.NewsItemModule;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.model.NewsEditItem;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.moxy.MvpAppCompatActivity;
@@ -54,7 +53,7 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     @ProvidePresenter
     public NewsEditPresenter providePresenter() {
         int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        App.getAppComponent().plus(new NewsItemModule(newsId)).inject(this);
+        DI.getNewsItemComponent(newsId).inject(this);
         return presenter;
     }
 
