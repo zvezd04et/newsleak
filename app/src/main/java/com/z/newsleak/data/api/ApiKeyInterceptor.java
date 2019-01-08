@@ -15,12 +15,7 @@ public final class ApiKeyInterceptor implements Interceptor {
     @NonNull
     private final String apiKey;
 
-    @NonNull
-    public static Interceptor create(@NonNull String apiKey) {
-        return new ApiKeyInterceptor(apiKey);
-    }
-
-    private ApiKeyInterceptor(@NonNull String apiKey) {
+    public ApiKeyInterceptor(@NonNull String apiKey) {
         this.apiKey = apiKey;
     }
 

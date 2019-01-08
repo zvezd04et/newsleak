@@ -31,7 +31,14 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public OkHttpClient provideOkHttpClient() {
+    public ApiKeyInterceptor provideInterceptor() {
+        return new ApiKeyInterceptor(Constant.API_KEY);
+    }
+
+    @Provides
+    @Singleton
+    @NonNull
+    public OkHttpClient provideOkHttpClient(ApiKeyInterceptor interceptor) {
 
         if (BuildConfig.DEBUG) {
             final HttpLoggingInterceptor networkLogInterceptor = new HttpLoggingInterceptor();
@@ -39,7 +46,7 @@ public class NetworkModule {
         }
 
         return new OkHttpClient.Builder()
-                .addInterceptor(ApiKeyInterceptor.create(Constant.API_KEY))
+                .addInterceptor(interceptor)
                 .connectTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .writeTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
                 .readTimeout(TIMEOUT_IN_SECONDS, TimeUnit.SECONDS)
