@@ -19,10 +19,16 @@ public class DbModule {
     @Provides
     @Singleton
     @NonNull
-    NewsDao provideNewsDao(Context context) {
-        final AppDatabase database = Room.databaseBuilder(context.getApplicationContext(),
+    AppDatabase provideDatabase(Context context) {
+        return Room.databaseBuilder(context.getApplicationContext(),
                 AppDatabase.class, Constant.DATABASE_NAME)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    @NonNull
+    NewsDao provideNewsDao(AppDatabase database) {
         return database.getNewsDao();
     }
 }
