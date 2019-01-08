@@ -20,6 +20,6 @@ public class NewsUpdateWorker extends Worker {
     @Override
     public Result doWork() {
         NewsUpdateService.start(context);
-        return Result.SUCCESS;
+        return Result.success();
     }
 }
