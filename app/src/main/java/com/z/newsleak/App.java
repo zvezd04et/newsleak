@@ -35,7 +35,6 @@ public class App extends Application {
         DI.getAppComponent().inject(this);
 
         networkUtils.registerNetworkCallback();
-
         NewsUpdateWorker.enqueueWorker();
         setRxErrorHandler();
     }
@@ -64,5 +63,4 @@ public class App extends Application {
             Log.d(LOG_TAG, "Undeliverable exception received, not sure what to do", e);
         });
     }
-
 }

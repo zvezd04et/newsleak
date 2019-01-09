@@ -14,34 +14,30 @@ import androidx.annotation.Nullable;
 public class DI {
 
     @Nullable
-    private static Context context;
-
-    @Nullable
     private static AppComponent appComponent;
 
-    public static void init(Context appContext) {
-        context = appContext;
-
+    public static void init(@NonNull Context appContext) {
         appComponent = DaggerAppComponent.builder()
-                .appModule(new AppModule(context))
+                .appModule(new AppModule(appContext))
                 .build();
     }
 
     @NonNull
     public static AppComponent getAppComponent() {
-        if (appComponent == null) {
-            throw new RuntimeException("DI was not initialized correctly. You should " +
-                    "initialize DI by calling method DI.init().");
-        }
+        checkInit();
         return appComponent;
     }
 
     @NonNull
     public static NewsItemComponent getNewsItemComponent(int id) {
+        checkInit();
+        return appComponent.plus(new NewsItemModule(id));
+    }
+
+    private static void checkInit() {
         if (appComponent == null) {
             throw new RuntimeException("DI was not initialized correctly. You should " +
                     "initialize DI by calling method DI.init().");
         }
-        return appComponent.plus(new NewsItemModule(id));
     }
 }
