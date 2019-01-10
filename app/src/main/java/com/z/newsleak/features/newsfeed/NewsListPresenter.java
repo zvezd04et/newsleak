@@ -3,14 +3,12 @@ package com.z.newsleak.features.newsfeed;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.z.newsleak.data.NewsInteractor;
 import com.z.newsleak.data.PreferencesManager;
-import com.z.newsleak.data.api.NYTimesApi;
-import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.base.BasePresenter;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.utils.NewsTypeConverters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,19 +31,15 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
     @NonNull
-    private NewsRepository repository;
-    @NonNull
     private PreferencesManager preferencesManager;
     @NonNull
-    private NYTimesApi api;
+    private NewsInteractor interactor;
 
     @Inject
-    public NewsListPresenter(@NonNull NYTimesApi api,
-                             @NonNull NewsRepository repository,
+    public NewsListPresenter(@NonNull NewsInteractor interactor,
                              @NonNull PreferencesManager preferencesManager) {
-        this.repository = repository;
+        this.interactor = interactor;
         this.preferencesManager = preferencesManager;
-        this.api = api;
 
         currentCategory = preferencesManager.getCurrentCategory();
     }
@@ -54,7 +48,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        final Disposable disposable = repository.getDataObservable()
+        final Disposable disposable = interactor.getDataObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processNews,
@@ -66,10 +60,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     public void loadNews(@NonNull Category category) {
         getViewState().showState(LoadState.LOADING);
 
-        final Disposable disposable = api
-                .getNews(category.getSection())
-                .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
-                .flatMapCompletable(repository::saveData)
+        final Disposable disposable = interactor.loadNews(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> getViewState().showNews(newsList),

@@ -12,24 +12,18 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.z.newsleak.R;
+import com.z.newsleak.data.NewsInteractor;
 import com.z.newsleak.data.PreferencesManager;
-import com.z.newsleak.data.api.NYTimesApi;
-import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.di.DI;
 import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.model.Category;
-import com.z.newsleak.utils.NetworkUtils;
-import com.z.newsleak.utils.NewsTypeConverters;
 import com.z.newsleak.utils.RxUtils;
-
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -40,20 +34,14 @@ public class NewsUpdateService extends Service {
     private static final String CHANNEL_NEWS_UPDATE_ID = "CHANNEL_NEWS_UPDATE_ID";
     private static final String ACTION_STOP_NEWS_UPDATE = "com.z.newsleak.STOP_SELF";
     private static final int NOTIFICATION_NEWS_UPDATE_ID = 25;
-    private static final int TIMEOUT_IN_MINUTES = 1;
 
-    @Inject
-    @NonNull
-    NYTimesApi api;
-    @Inject
-    @NonNull
-    NewsRepository repository;
     @Inject
     @NonNull
     PreferencesManager preferencesManager;
     @Inject
     @NonNull
-    NetworkUtils networkUtils;
+    NewsInteractor interactor;
+
     @NonNull
     private PendingIntent contentIntent;
     @Nullable
@@ -93,20 +81,12 @@ public class NewsUpdateService extends Service {
             return START_STICKY;
         }
 
-        disposable = networkUtils.getOnlineNetwork()
-                .timeout(TIMEOUT_IN_MINUTES, TimeUnit.MINUTES)
-                .flatMapCompletable(aBoolean -> updateNews())
+        final Category currentCategory = preferencesManager.getCurrentCategory();
+        disposable = interactor.loadNews(currentCategory)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                            showResultNotification(getString(R.string.service_result_success));
-                            stopForeground(false);
-                        },
-                        th -> {
-                            Log.e(LOG_TAG, th.getMessage(), th);
-                            showResultNotification(getString(R.string.service_result_fail));
-                            stopForeground(false);
-                        });
+                .subscribe(this::processLoading,
+                        this::handleError);
 
         return START_STICKY;
     }
@@ -142,6 +122,17 @@ public class NewsUpdateService extends Service {
         RxUtils.disposeSafely(disposable);
     }
 
+    private void processLoading() {
+        showResultNotification(getString(R.string.service_result_success));
+        stopForeground(false);
+    }
+
+    private void handleError(Throwable th) {
+        Log.e(LOG_TAG, th.getMessage(), th);
+        showResultNotification(getString(R.string.service_result_fail));
+        stopForeground(false);
+    }
+
     private void createNotificationChannel() {
         if (notificationManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.news_update_channel_name);
@@ -166,13 +157,5 @@ public class NewsUpdateService extends Service {
                 .setAutoCancel(true)
                 .build();
         notificationManager.notify(NOTIFICATION_NEWS_UPDATE_ID, notification);
-    }
-
-    private Completable updateNews() {
-        final Category currentCategory = preferencesManager.getCurrentCategory();
-
-        return api.getNews(currentCategory.getSection())
-                .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
-                .flatMapCompletable(repository::saveData);
     }
 }
