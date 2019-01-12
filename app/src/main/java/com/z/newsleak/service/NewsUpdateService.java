@@ -1,8 +1,6 @@
 package com.z.newsleak.service;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -15,15 +13,14 @@ import com.z.newsleak.R;
 import com.z.newsleak.data.NewsInteractor;
 import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.di.DI;
-import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.model.Category;
+import com.z.newsleak.utils.NotificationHelper;
 import com.z.newsleak.utils.RxUtils;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -31,7 +28,6 @@ import io.reactivex.schedulers.Schedulers;
 public class NewsUpdateService extends Service {
 
     private static final String LOG_TAG = "NewsUpdateService";
-    private static final String CHANNEL_NEWS_UPDATE_ID = "CHANNEL_NEWS_UPDATE_ID";
     private static final String ACTION_STOP_NEWS_UPDATE = "com.z.newsleak.STOP_SELF";
     private static final int NOTIFICATION_NEWS_UPDATE_ID = 25;
 
@@ -41,16 +37,14 @@ public class NewsUpdateService extends Service {
     @Inject
     @NonNull
     NewsInteractor interactor;
-
+    @Inject
     @NonNull
-    private PendingIntent contentIntent;
+    NotificationHelper notificationHelper;
     @Nullable
     private Disposable disposable;
-    @Nullable
-    private NotificationManager notificationManager;
 
     public static void start(@NonNull Context context) {
-        Intent intent = new Intent(context, NewsUpdateService.class);
+        final Intent intent = new Intent(context, NewsUpdateService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
         } else {
@@ -58,7 +52,8 @@ public class NewsUpdateService extends Service {
         }
     }
 
-    private static PendingIntent getStopPendingIntent(Context context) {
+    @NonNull
+    public static PendingIntent getStopPendingIntent(@NonNull Context context) {
         final Intent stopSelfIntent = new Intent(context, NewsUpdateService.class);
         stopSelfIntent.setAction(ACTION_STOP_NEWS_UPDATE);
         return PendingIntent.getService(context, 0, stopSelfIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -66,17 +61,15 @@ public class NewsUpdateService extends Service {
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(@NonNull Intent intent) {
         return null;
     }
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-
-        if (notificationManager != null && intent != null
-                && ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
+        if (intent != null && ACTION_STOP_NEWS_UPDATE.equals(intent.getAction())) {
             Log.d(LOG_TAG, "called to cancel service");
-            notificationManager.cancel(NOTIFICATION_NEWS_UPDATE_ID);
+            notificationHelper.cancelNotification(NOTIFICATION_NEWS_UPDATE_ID);
             stopSelf();
             return START_STICKY;
         }
@@ -95,24 +88,9 @@ public class NewsUpdateService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        DI.getAppComponent().inject(this);
+        DI.getUpdateServiceComponent(this).inject(this);
 
-        contentIntent = MainActivity.getPendingIntent(this);
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        final PendingIntent stopPendingIntent = getStopPendingIntent(this);
-
-        createNotificationChannel();
-
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_NEWS_UPDATE_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(getString(R.string.news_update_channel_name))
-                .setContentText(getString(R.string.news_update_notification_text))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(contentIntent)
-                .addAction(R.drawable.ic_error_outline, getString(R.string.service_action_cancel), stopPendingIntent)
-                .build();
-
+        final Notification notification = notificationHelper.getNewsUpdateNotification();
         startForeground(NOTIFICATION_NEWS_UPDATE_ID, notification);
     }
 
@@ -123,39 +101,13 @@ public class NewsUpdateService extends Service {
     }
 
     private void processLoading() {
-        showResultNotification(getString(R.string.service_result_success));
+        notificationHelper.showResultNotification(NOTIFICATION_NEWS_UPDATE_ID, getString(R.string.service_result_success));
         stopForeground(false);
     }
 
-    private void handleError(Throwable th) {
+    private void handleError(@NonNull Throwable th) {
         Log.e(LOG_TAG, th.getMessage(), th);
-        showResultNotification(getString(R.string.service_result_fail));
+        notificationHelper.showResultNotification(NOTIFICATION_NEWS_UPDATE_ID, getString(R.string.service_result_fail));
         stopForeground(false);
-    }
-
-    private void createNotificationChannel() {
-        if (notificationManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.news_update_channel_name);
-            String description = getString(R.string.news_update_channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_NEWS_UPDATE_ID, name, importance);
-            channel.setDescription(description);
-            notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    private void showResultNotification(@NonNull String message) {
-        if (notificationManager == null) {
-            return;
-        }
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_NEWS_UPDATE_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(getString(R.string.news_update_channel_name))
-                .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(contentIntent)
-                .setAutoCancel(true)
-                .build();
-        notificationManager.notify(NOTIFICATION_NEWS_UPDATE_ID, notification);
     }
 }

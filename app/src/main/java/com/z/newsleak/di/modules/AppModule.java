@@ -1,12 +1,12 @@
 package com.z.newsleak.di.modules;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
+
+import com.z.newsleak.di.qualifiers.ForApplication;
 
 import javax.inject.Singleton;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import dagger.Module;
 import dagger.Provides;
 
@@ -21,6 +21,7 @@ public class AppModule {
 
     @Provides
     @Singleton
+    @ForApplication
     @NonNull
     public Context provideContext() {
         return appContext;

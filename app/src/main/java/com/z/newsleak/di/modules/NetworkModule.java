@@ -1,12 +1,12 @@
 package com.z.newsleak.di.modules;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
 
 import com.z.newsleak.BuildConfig;
 import com.z.newsleak.Constant;
 import com.z.newsleak.data.api.ApiKeyInterceptor;
 import com.z.newsleak.data.api.NYTimesApi;
+import com.z.newsleak.di.qualifiers.ForApplication;
 import com.z.newsleak.utils.NetworkUtils;
 
 import java.util.concurrent.TimeUnit;
@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -38,7 +37,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public OkHttpClient provideOkHttpClient(ApiKeyInterceptor interceptor) {
+    public OkHttpClient provideOkHttpClient(@NonNull ApiKeyInterceptor interceptor) {
 
         if (BuildConfig.DEBUG) {
             final HttpLoggingInterceptor networkLogInterceptor = new HttpLoggingInterceptor();
@@ -75,7 +74,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public NetworkUtils provideNetworkUtils(@NonNull Context context) {
+    public NetworkUtils provideNetworkUtils(@ForApplication @NonNull Context context) {
         return new NetworkUtils(context);
     }
 }

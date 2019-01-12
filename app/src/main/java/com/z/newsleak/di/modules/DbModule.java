@@ -5,6 +5,7 @@ import android.content.Context;
 import com.z.newsleak.Constant;
 import com.z.newsleak.data.db.AppDatabase;
 import com.z.newsleak.data.db.NewsDao;
+import com.z.newsleak.di.qualifiers.ForApplication;
 
 import javax.inject.Singleton;
 
@@ -19,7 +20,7 @@ public class DbModule {
     @Provides
     @Singleton
     @NonNull
-    AppDatabase provideDatabase(Context context) {
+    AppDatabase provideDatabase(@ForApplication @NonNull Context context) {
         return Room.databaseBuilder(context.getApplicationContext(),
                 AppDatabase.class, Constant.DATABASE_NAME)
                 .build();
@@ -28,7 +29,7 @@ public class DbModule {
     @Provides
     @Singleton
     @NonNull
-    NewsDao provideNewsDao(AppDatabase database) {
+    NewsDao provideNewsDao(@NonNull AppDatabase database) {
         return database.getNewsDao();
     }
 }

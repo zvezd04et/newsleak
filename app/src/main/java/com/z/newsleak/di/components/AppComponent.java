@@ -6,9 +6,9 @@ import com.z.newsleak.di.modules.DbModule;
 import com.z.newsleak.di.modules.NetworkModule;
 import com.z.newsleak.di.modules.NewsItemModule;
 import com.z.newsleak.di.modules.PreferencesModule;
+import com.z.newsleak.di.modules.UpdateServiceModule;
 import com.z.newsleak.features.intro.IntroActivity;
 import com.z.newsleak.features.newsfeed.NewsListFragment;
-import com.z.newsleak.service.NewsUpdateService;
 
 import javax.inject.Singleton;
 
@@ -27,11 +27,11 @@ public interface AppComponent {
 
     void inject(App app);
 
-    void inject(NewsUpdateService newsUpdateService);
-
     void inject(NewsListFragment newsListFragment);
 
     void inject(IntroActivity introActivity);
 
     NewsItemComponent plus(NewsItemModule module);
+
+    UpdateServiceComponent plus(UpdateServiceModule module);
 }
