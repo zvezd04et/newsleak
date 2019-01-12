@@ -15,16 +15,17 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.bumptech.glide.RequestManager;
 import com.z.newsleak.R;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.base.BaseFragment;
 import com.z.newsleak.features.news_edit.NewsEditActivity;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.utils.DateFormatUtils;
 import com.z.newsleak.utils.ImageLoadUtils;
 
+import javax.inject.Inject;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView {
 
@@ -40,13 +41,15 @@ public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView
     @NonNull
     private TextView publishDateView;
 
+    @Inject
     @InjectPresenter
     public NewsDetailsPresenter presenter;
 
     @ProvidePresenter
     public NewsDetailsPresenter providePresenter() {
         final int newsId = getArguments().getInt(EXTRA_NEWS_ID, 0);
-        return new NewsDetailsPresenter(newsId);
+        DI.getNewsItemComponent(newsId).inject(this);
+        return presenter;
     }
 
     public static NewsDetailsFragment newInstance(int id) {
@@ -128,5 +131,4 @@ public class NewsDetailsFragment extends BaseFragment implements NewsDetailsView
     public void openEditorActivity(int newsId) {
         NewsEditActivity.start(getContext(), newsId);
     }
-
 }

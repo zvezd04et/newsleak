@@ -1,11 +1,14 @@
 package com.z.newsleak.features.news_edit;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.features.base.BaseNewsItemPresenter;
 import com.z.newsleak.model.NewsEditItem;
 import com.z.newsleak.model.NewsItem;
 
 import java.util.Calendar;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,8 +21,9 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
     @NonNull
     private Calendar calendar = Calendar.getInstance();
 
-    public NewsEditPresenter(int id) {
-        super(id);
+    @Inject
+    public NewsEditPresenter(int id, @NonNull NewsRepository repository) {
+        super(id, repository);
     }
 
     public void saveData(@NonNull NewsEditItem newsEditItem) {
@@ -32,11 +36,23 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
         newsItem.setUrl(newsEditItem.getUrl());
         newsItem.setNormalImageUrl(newsEditItem.getNormalImageUrl());
 
-        final Disposable disposable = database.update(newsItem)
+        final Disposable disposable = repository.saveItem(newsItem)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processSaving, this::handleError);
         compositeDisposable.add(disposable);
+    }
+
+    @Override
+    protected void processLoading(@NonNull NewsItem newsItem) {
+        super.processLoading(newsItem);
+
+        calendar.setTime(newsItem.getPublishedDate());
+        getViewState().setPublishedDateTime(calendar.getTime());
+    }
+
+    private void processSaving() {
+        getViewState().close();
     }
 
     public void onPublishedDateClicked() {
@@ -69,18 +85,6 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
         updatePublishedDate();
     }
 
-    @Override
-    protected void processLoading(@NonNull NewsItem newsItem) {
-        super.processLoading(newsItem);
-
-        calendar.setTime(newsItem.getPublishedDate());
-        getViewState().setPublishedDateTime(calendar.getTime());
-    }
-
-    private void processSaving() {
-        getViewState().close();
-    }
-
     private void updatePublishedDate() {
         if (newsItem == null) {
             return;
@@ -89,5 +93,4 @@ public class NewsEditPresenter extends BaseNewsItemPresenter<NewsEditView> {
         newsItem.setPublishedDate(calendar.getTime());
         getViewState().setPublishedDateTime(calendar.getTime());
     }
-
 }

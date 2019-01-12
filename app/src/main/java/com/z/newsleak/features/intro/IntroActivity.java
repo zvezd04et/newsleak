@@ -7,9 +7,11 @@ import android.widget.Button;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.z.newsleak.R;
-import com.z.newsleak.data.PreferencesManager;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.main.MainActivity;
 import com.z.newsleak.moxy.MvpAppCompatActivity;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,12 +35,14 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
     @NonNull
     private Button nextBtn;
 
+    @Inject
     @InjectPresenter
     public IntroPresenter presenter;
 
     @ProvidePresenter
     public IntroPresenter providePresenter() {
-        return new IntroPresenter(PreferencesManager.getInstance(this));
+        DI.getAppComponent().inject(this);
+        return presenter;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
         finish();
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(@NonNull ViewPager viewPager) {
         final IntroPagerAdapter adapter = new IntroPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
@@ -127,5 +131,4 @@ public class IntroActivity extends MvpAppCompatActivity implements IntroView {
             return DRAWABLES.length;
         }
     }
-
 }

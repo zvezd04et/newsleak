@@ -12,18 +12,14 @@ public final class ApiKeyInterceptor implements Interceptor {
 
     private static final String PARAM_API_KEY = "api_key";
 
+    @NonNull
     private final String apiKey;
 
-    private ApiKeyInterceptor(String apiKey) {
+    public ApiKeyInterceptor(@NonNull String apiKey) {
         this.apiKey = apiKey;
     }
 
-
-    public static Interceptor create(@NonNull String apiKey) {
-        return new ApiKeyInterceptor(apiKey);
-    }
-
-
+    @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         final Request requestWithoutApiKey = chain.request();

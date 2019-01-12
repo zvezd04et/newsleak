@@ -13,7 +13,7 @@ public class ImageLoadUtils {
 
     @NonNull
     public static RequestManager getImageLoader(@NonNull Context context) {
-        RequestOptions imageOption = new RequestOptions()
+        final RequestOptions imageOption = new RequestOptions()
                 .placeholder(R.drawable.preview_placeholder)
                 .fallback(R.drawable.preview_placeholder)
                 .centerCrop();

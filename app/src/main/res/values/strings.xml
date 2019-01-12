@@ -42,5 +42,12 @@
     <string name="intro_action_done">Got it!</string>
     <string name="intro_greeting">Welcome!</string>
 
+    <string name="news_update_channel_name" translatable="false">NY Times</string>
+    <string name="news_update_channel_description">Background service</string>
+    <string name="news_update_notification_text">Background service</string>
+    <string name="service_action_cancel">Cancel</string>
+    <string name="service_result_success">News has been successfully updated</string>
+    <string name="service_result_fail">An error occurred while updating the news</string>
+
 
 </resources>

@@ -3,30 +3,30 @@ package com.z.newsleak;
 import android.app.Application;
 import android.util.Log;
 
-import com.z.newsleak.data.db.AppDatabase;
+import com.z.newsleak.di.DI;
+import com.z.newsleak.service.NewsUpdateWorker;
 
 import java.io.IOException;
 import java.net.SocketException;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
 
 public class App extends Application {
 
     private static final String LOG_TAG = "RxErrorHandler";
-    @NonNull
-    private static AppDatabase database;
-
-    @NonNull
-    public static AppDatabase getDatabase() {
-        return database;
-    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        DI.init(this);
+
+        NewsUpdateWorker.enqueueWorker();
+        setRxErrorHandler();
+    }
+
+    private void setRxErrorHandler() {
         RxJavaPlugins.setErrorHandler(e -> {
             if (e instanceof UndeliverableException) {
                 e.getCause();
@@ -49,8 +49,5 @@ public class App extends Application {
             }
             Log.d(LOG_TAG, "Undeliverable exception received, not sure what to do", e);
         });
-
-        database = AppDatabase.getInstance(this);
     }
-
 }

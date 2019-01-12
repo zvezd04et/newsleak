@@ -12,5 +12,4 @@ interface IntroView extends MvpView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void startNextActivity();
-
 }

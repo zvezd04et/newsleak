@@ -15,5 +15,4 @@ public interface BaseNewsItemView extends MvpView {
 
     @StateStrategyType(OneExecutionStateStrategy.class)
     void close();
-
 }

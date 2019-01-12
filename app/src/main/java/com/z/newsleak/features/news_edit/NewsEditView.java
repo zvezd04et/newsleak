@@ -18,5 +18,4 @@ public interface NewsEditView extends BaseNewsItemView {
 
     @StateStrategyType(SingleStateStrategy .class)
     void setPublishedDateTime(@Nullable Date relativeDate);
-
 }

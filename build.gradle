@@ -5,8 +5,16 @@ buildscript {
     ext {
         jetVersion = '1.0.0'
         retrofitVersion = '2.4.0'
+        okhttpVersion = '3.11.0'
         moxyVersion = '1.5.5'
+        daggerVersion = '2.20'
         roomVersion = '2.1.0-alpha02'
+        constraintVersion = '1.1.3'
+        workVersion = '1.0.0-beta01'
+        ciVersion = '1.2.2'
+        rxVersion = '2.2.2'
+        rxAndroidVersion = '2.1.0'
+        glideVersion = '4.8.0'
     }
     
     repositories {

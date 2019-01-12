@@ -5,18 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.arellomobile.mvp.presenter.InjectPresenter;
-import com.arellomobile.mvp.presenter.ProvidePresenter;
-import com.z.newsleak.R;
-import com.z.newsleak.model.NewsEditItem;
-import com.z.newsleak.model.NewsItem;
-import com.z.newsleak.moxy.MvpAppCompatActivity;
-import com.z.newsleak.utils.DateFormatUtils;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +12,21 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+import com.z.newsleak.R;
+import com.z.newsleak.di.DI;
+import com.z.newsleak.model.NewsEditItem;
+import com.z.newsleak.model.NewsItem;
+import com.z.newsleak.moxy.MvpAppCompatActivity;
+import com.z.newsleak.utils.DateFormatUtils;
+
 import java.util.Date;
+
+import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditView {
 
@@ -44,14 +46,15 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     @NonNull
     private TextView publishedTimeView;
 
-
+    @Inject
     @InjectPresenter
     public NewsEditPresenter presenter;
 
     @ProvidePresenter
     public NewsEditPresenter providePresenter() {
         int newsId = getIntent().getIntExtra(EXTRA_NEWS_ID, 0);
-        return new NewsEditPresenter(newsId);
+        DI.getNewsItemComponent(newsId).inject(this);
+        return presenter;
     }
 
     public static void start(@NonNull Context context, int id) {
@@ -61,7 +64,7 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_edit);
 
@@ -77,13 +80,13 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
         getMenuInflater().inflate(R.menu.menu_news_edit, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
 
             case android.R.id.home:
@@ -146,5 +149,4 @@ public class NewsEditActivity extends MvpAppCompatActivity implements NewsEditVi
                 publishedHour, publishedMinute, DateFormat.is24HourFormat(this));
         timePickerDialog.show();
     }
-
 }

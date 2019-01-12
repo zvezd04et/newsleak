@@ -3,21 +3,20 @@ package com.z.newsleak.features.newsfeed;
 import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
-import com.z.newsleak.data.api.NYTimesApiProvider;
+import com.z.newsleak.data.NewsInteractor;
+import com.z.newsleak.data.PreferencesManager;
 import com.z.newsleak.features.base.BasePresenter;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
-import com.z.newsleak.utils.NewsTypeConverters;
-import com.z.newsleak.utils.SupportUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -27,20 +26,29 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
 
     private static final String LOG_TAG = "NewsListPresenter";
 
-    @Nullable
-    private Disposable disposable;
-
-    @Nullable
-    private Category currentCategory = null;
-
+    @NonNull
+    private Category currentCategory;
     @NonNull
     private List<NewsItem> newsList = new ArrayList<>();
+    @NonNull
+    private PreferencesManager preferencesManager;
+    @NonNull
+    private NewsInteractor interactor;
+
+    @Inject
+    public NewsListPresenter(@NonNull NewsInteractor interactor,
+                             @NonNull PreferencesManager preferencesManager) {
+        this.interactor = interactor;
+        this.preferencesManager = preferencesManager;
+
+        currentCategory = preferencesManager.getCurrentCategory();
+    }
 
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
 
-        final Disposable disposable = database.getAll()
+        final Disposable disposable = interactor.getDataObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processNews,
@@ -49,25 +57,20 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         compositeDisposable.add(disposable);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        SupportUtils.disposeSafely(disposable);
-    }
-
     public void loadNews(@NonNull Category category) {
-
         getViewState().showState(LoadState.LOADING);
 
-        disposable = NYTimesApiProvider.getInstance()
-                .createApi()
-                .getNews(category.getSection())
-                .map(response -> NewsTypeConverters.convertFromNetworkToDb(response.getResults(), currentCategory))
-                .flatMapCompletable(this::saveData)
+        final Disposable disposable = interactor.loadNews(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> getViewState().showNews(newsList),
                         this::handleError);
+
+        compositeDisposable.add(disposable);
+    }
+
+    public void onSetupSpinnerSelection() {
+        getViewState().setSpinnerSelection(currentCategory.ordinal());
     }
 
     public void onSpinnerCategorySelected(@Nullable Category category) {
@@ -79,10 +82,10 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         }
         loadNews(category);
         currentCategory = category;
+        preferencesManager.setCurrentCategory(currentCategory);
     }
 
     private void processNews(@Nullable List<NewsItem> news) {
-
         if (news == null || news.isEmpty()) {
             getViewState().showState(LoadState.HAS_NO_DATA);
             return;
@@ -96,14 +99,4 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
         Log.e(LOG_TAG, th.getMessage(), th);
         getViewState().showState(LoadState.ERROR);
     }
-
-    private Completable saveData(final List<NewsItem> newsList) {
-        return Completable.fromCallable((Callable<Void>) () -> {
-            database.deleteAll();
-            database.insertAll(newsList);
-
-            return null;
-        });
-    }
-
 }

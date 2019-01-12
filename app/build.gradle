@@ -28,27 +28,31 @@ dependencies {
     implementation "androidx.cardview:cardview:$jetVersion"
     implementation "androidx.coordinatorlayout:coordinatorlayout:$jetVersion"
     implementation "com.google.android.material:material:$jetVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintVersion"
+    implementation "android.arch.work:work-runtime:$workVersion"
 
-    implementation 'me.relex:circleindicator:1.2.2'
+    implementation "me.relex:circleindicator:$ciVersion"
 
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation "io.reactivex.rxjava2:rxjava:$rxVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
 
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
 
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.6.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
     implementation "com.arello-mobile:moxy:$moxyVersion"
     implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
     annotationProcessor "com.arello-mobile:moxy-compiler:$moxyVersion"
 
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.room:room-rxjava2:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }
 
 android.applicationVariants.all { variant ->

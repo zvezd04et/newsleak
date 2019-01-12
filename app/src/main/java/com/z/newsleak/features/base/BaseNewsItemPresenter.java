@@ -2,6 +2,7 @@ package com.z.newsleak.features.base;
 
 import android.util.Log;
 
+import com.z.newsleak.data.db.NewsRepository;
 import com.z.newsleak.model.NewsItem;
 
 import androidx.annotation.NonNull;
@@ -14,12 +15,15 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
 
     private static final String LOG_TAG = "BaseNewsItemPresenter";
 
+    @NonNull
+    protected NewsRepository repository;
     @Nullable
     protected NewsItem newsItem;
     protected int id;
 
-    public BaseNewsItemPresenter(int id) {
+    public BaseNewsItemPresenter(int id, @NonNull NewsRepository repository) {
         this.id = id;
+        this.repository = repository;
     }
 
     @Override
@@ -29,12 +33,11 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
     }
 
     private void getData() {
-
         if (newsItem != null) {
             return;
         }
 
-        final Disposable disposable = database.getNewsById(id)
+        final Disposable disposable = repository.getItemObservable(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processLoading, this::handleError);
@@ -50,5 +53,4 @@ public abstract class BaseNewsItemPresenter<V extends BaseNewsItemView> extends 
         Log.e(LOG_TAG, th.getMessage(), th);
         getViewState().close();
     }
-
 }

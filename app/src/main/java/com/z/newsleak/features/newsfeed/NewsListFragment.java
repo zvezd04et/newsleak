@@ -16,24 +16,27 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.z.newsleak.R;
+import com.z.newsleak.di.DI;
 import com.z.newsleak.features.about_info.AboutActivity;
 import com.z.newsleak.features.base.BaseFragment;
 import com.z.newsleak.model.Category;
 import com.z.newsleak.model.NewsItem;
 import com.z.newsleak.ui.LoadState;
 import com.z.newsleak.ui.LoadingScreenHolder;
-import com.z.newsleak.utils.SupportUtils;
+import com.z.newsleak.utils.ViewUtils;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsListFragment extends BaseFragment implements NewsListView {
@@ -46,21 +49,27 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
     private Spinner spinner;
     @NonNull
     private LoadingScreenHolder loadingScreen;
-
     @Nullable
     private NewsListAdapter newsAdapter;
-
     @Nullable
     private NewsListFragmentListener listener;
 
+    @Inject
     @InjectPresenter
     public NewsListPresenter presenter;
+
+    @ProvidePresenter
+    public NewsListPresenter providePresenter() {
+        DI.getAppComponent().inject(this);
+        return presenter;
+    }
 
     public static void start(@NonNull Context context) {
         final Intent intent = new Intent(context, NewsListFragment.class);
         context.startActivity(intent);
     }
 
+    @NonNull
     public static NewsListFragment newInstance() {
         return new NewsListFragment();
     }
@@ -88,10 +97,10 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         final View view = inflater.inflate(R.layout.fragment_news_list, container, false);
 
         rvNewsfeed = view.findViewById(R.id.news_list_rv);
-        setupRecyclerView(rvNewsfeed);
+        setupRecyclerView();
 
         spinner = view.findViewById(R.id.news_list_sp_section);
-        setupSpinner(spinner);
+        setupSpinner();
 
         final View.OnClickListener clickListener = btn -> presenter.loadNews((Category) spinner.getSelectedItem());
 
@@ -137,7 +146,7 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         }
         newsAdapter.replaceItems(news);
         loadingScreen.showState(LoadState.HAS_DATA);
-        SupportUtils.setVisible(rvNewsfeed, true);
+        ViewUtils.setVisible(rvNewsfeed, true);
     }
 
     @Override
@@ -145,26 +154,18 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         loadingScreen.showState(state);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        newsAdapter = new NewsListAdapter(getContext(), newsItem -> listener.onNewsClicked(newsItem.getId()));
-        recyclerView.setAdapter(newsAdapter);
-
-        final int columnsCount = getResources().getInteger(R.integer.news_columns_count);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
-
-        final DividerItemDecoration verticalDivider
-                = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-        final Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.vertical_divider);
-        if (dividerDrawable != null) {
-            verticalDivider.setDrawable(dividerDrawable);
-        }
-        recyclerView.addItemDecoration(verticalDivider);
+    @Override
+    public void setSpinnerSelection(int position) {
+        spinner.setSelection(position);
     }
 
-    private void setupSpinner(@NonNull Spinner spinner) {
+
+    public void setupSpinner() {
         final ArrayAdapter<Category> adapter = new ArrayAdapter<>(getContext(), R.layout.section_spinner_item, Category.values());
         adapter.setDropDownViewResource(R.layout.section_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        spinner.setSelected(false);
+        presenter.onSetupSpinnerSelection();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -178,4 +179,19 @@ public class NewsListFragment extends BaseFragment implements NewsListView {
         });
     }
 
+    private void setupRecyclerView() {
+        newsAdapter = new NewsListAdapter(getContext(), newsItem -> listener.onNewsClicked(newsItem.getId()));
+        rvNewsfeed.setAdapter(newsAdapter);
+
+        final int columnsCount = getResources().getInteger(R.integer.news_columns_count);
+        rvNewsfeed.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
+
+        final DividerItemDecoration verticalDivider
+                = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        final Drawable dividerDrawable = ContextCompat.getDrawable(getContext(), R.drawable.vertical_divider);
+        if (dividerDrawable != null) {
+            verticalDivider.setDrawable(dividerDrawable);
+        }
+        rvNewsfeed.addItemDecoration(verticalDivider);
+    }
 }
