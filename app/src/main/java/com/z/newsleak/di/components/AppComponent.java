@@ -1,6 +1,5 @@
 package com.z.newsleak.di.components;
 
-import com.z.newsleak.App;
 import com.z.newsleak.di.modules.AppModule;
 import com.z.newsleak.di.modules.DbModule;
 import com.z.newsleak.di.modules.NetworkModule;
@@ -24,8 +23,6 @@ import dagger.Component;
         }
 )
 public interface AppComponent {
-
-    void inject(App app);
 
     void inject(NewsListFragment newsListFragment);
 

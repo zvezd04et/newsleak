@@ -4,18 +4,11 @@ import android.app.Application;
 import android.util.Log;
 
 import com.z.newsleak.di.DI;
-import com.z.newsleak.di.components.AppComponent;
-import com.z.newsleak.di.components.DaggerAppComponent;
-import com.z.newsleak.di.modules.AppModule;
 import com.z.newsleak.service.NewsUpdateWorker;
-import com.z.newsleak.utils.NetworkUtils;
 
 import java.io.IOException;
 import java.net.SocketException;
 
-import javax.inject.Inject;
-
-import androidx.annotation.NonNull;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
 
@@ -23,18 +16,12 @@ public class App extends Application {
 
     private static final String LOG_TAG = "RxErrorHandler";
 
-    @Inject
-    @NonNull
-    NetworkUtils networkUtils;
-
     @Override
     public void onCreate() {
         super.onCreate();
 
         DI.init(this);
-        DI.getAppComponent().inject(this);
 
-        networkUtils.registerNetworkCallback();
         NewsUpdateWorker.enqueueWorker();
         setRxErrorHandler();
     }

@@ -24,6 +24,15 @@ public class NetworkUtils {
     public NetworkUtils(@NonNull Context context) {
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         networkState = BehaviorSubject.createDefault(isNetworkAvailable());
+        registerNetworkCallback();
+    }
+
+    @NonNull
+    public Single<Boolean> getOnlineNetwork() {
+        return networkState
+                .subscribeOn(Schedulers.io())
+                .filter(online -> online)
+                .firstOrError();
     }
 
     @NonNull
@@ -41,19 +50,11 @@ public class NetworkUtils {
         };
     }
 
-    public void registerNetworkCallback() {
+    private void registerNetworkCallback() {
         if (cm != null) {
             cm.registerNetworkCallback(new NetworkRequest.Builder().build(),
                     getNetworkCallback());
         }
-    }
-
-    @NonNull
-    public Single<Boolean> getOnlineNetwork() {
-        return networkState
-                .subscribeOn(Schedulers.io())
-                .filter(online -> online)
-                .firstOrError();
     }
 
     private boolean isNetworkAvailable() {
