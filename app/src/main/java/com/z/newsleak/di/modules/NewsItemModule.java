@@ -16,7 +16,7 @@ public class NewsItemModule {
 
     @Provides
     @NewsItemScope
-    public int provideNewsItemId() {
+    int provideNewsItemId() {
         return currentItemId;
     }
 }

@@ -30,14 +30,14 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public ApiKeyInterceptor provideInterceptor() {
+    ApiKeyInterceptor provideInterceptor() {
         return new ApiKeyInterceptor(Constant.API_KEY);
     }
 
     @Provides
     @Singleton
     @NonNull
-    public OkHttpClient provideOkHttpClient(@NonNull ApiKeyInterceptor interceptor) {
+    OkHttpClient provideOkHttpClient(@NonNull ApiKeyInterceptor interceptor) {
 
         if (BuildConfig.DEBUG) {
             final HttpLoggingInterceptor networkLogInterceptor = new HttpLoggingInterceptor();
@@ -55,7 +55,7 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public Retrofit provideRetrofitClient(@NonNull OkHttpClient client) {
+    Retrofit provideRetrofitClient(@NonNull OkHttpClient client) {
         return new Retrofit.Builder()
                 .baseUrl(Constant.API_HOST)
                 .client(client)
@@ -67,14 +67,14 @@ public class NetworkModule {
     @Provides
     @Singleton
     @NonNull
-    public NYTimesApi provideNYTimesApi(@NonNull Retrofit retrofit) {
+    NYTimesApi provideNYTimesApi(@NonNull Retrofit retrofit) {
         return retrofit.create(NYTimesApi.class);
     }
 
     @Provides
     @Singleton
     @NonNull
-    public NetworkUtils provideNetworkUtils(@ForApplication @NonNull Context context) {
+    NetworkUtils provideNetworkUtils(@ForApplication @NonNull Context context) {
         return new NetworkUtils(context);
     }
 }
